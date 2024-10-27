@@ -1,0 +1,5 @@
+{
+  "metadata": {
+    "time": format-time(.metadata.timestamp/1000, "yyyy-MM-dd'T'HH:mm:ss")
+  } + .metadata
+} + .

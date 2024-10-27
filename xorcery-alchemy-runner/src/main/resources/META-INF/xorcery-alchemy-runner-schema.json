@@ -1,0 +1,27 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-runner/schema",
+  "title" : "xorcery-alchemy-runner configuration JSON Schema",
+  "properties" : {
+    "alchemist" : {
+      "$ref" : "#/$defs/alchemist"
+    }
+  },
+  "$defs" : {
+    "alchemist" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : "string",
+          "default" : "defaults.enabled",
+          "description" : "Default: defaults.enabled"
+        },
+        "transmutations" : {
+          "type" : [ "array", "string" ]
+        }
+      }
+    }
+  }
+}
