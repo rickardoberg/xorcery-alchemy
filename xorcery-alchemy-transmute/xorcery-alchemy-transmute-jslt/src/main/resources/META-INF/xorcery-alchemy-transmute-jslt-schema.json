@@ -1,0 +1,24 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-transmute-jslt/schema",
+  "title" : "xorcery-alchemy-transmute-jslt configuration JSON Schema",
+  "properties" : {
+    "plugin" : {
+      "$ref" : "#/$defs/plugin"
+    }
+  },
+  "$defs" : {
+    "plugin" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "json" : {
+          "type" : "object",
+          "additionalProperties" : true,
+          "properties" : { }
+        }
+      }
+    }
+  }
+}
