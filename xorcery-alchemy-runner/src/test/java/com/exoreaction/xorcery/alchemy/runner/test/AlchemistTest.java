@@ -20,7 +20,7 @@ alchemist:
       transmutes:
       - name: "addtimestamp"
         plugin: jslt
-        jslt: "{{ RESOURCE.string.transform.jslt }}"  
+        jslt: "{{ RESOURCE.string.transform.jslt }}"
       output:
         plugin: log
                         """)

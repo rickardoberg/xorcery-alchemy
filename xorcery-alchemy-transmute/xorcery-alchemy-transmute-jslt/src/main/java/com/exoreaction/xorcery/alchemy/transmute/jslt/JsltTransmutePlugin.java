@@ -10,21 +10,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.schibsted.spt.data.jslt.Expression;
+import com.schibsted.spt.data.jslt.Function;
 import com.schibsted.spt.data.jslt.Parser;
 import jakarta.inject.Inject;
+import org.apache.logging.log4j.Logger;
 import org.jvnet.hk2.annotations.Service;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 import reactor.util.context.ContextView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.ServiceLoader;
 import java.util.function.BiFunction;
 
 @Service(name = "plugin.jslt")
 public class JsltTransmutePlugin
         implements TransmutePlugin {
+
+    private final Collection<Function> customFunctions = new ArrayList<>();
+
     @Inject
-    public JsltTransmutePlugin() {
+    public JsltTransmutePlugin(Logger logger) {
+        ServiceLoader<Function> functions = ServiceLoader.load(Function.class);
+        functions.forEach(customFunctions::add);
+        if (!customFunctions.isEmpty())
+            logger.info("Custom functions: "+String.join(",", customFunctions.stream().map(Function::getName).toList()));
     }
 
     @Override
@@ -32,7 +44,7 @@ public class JsltTransmutePlugin
 
         return configuration.getJson("jslt").<BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>>>map(jslt ->
                 {
-                    Expression expression = Parser.compileString(jslt.asText());
+                    Expression expression = Parser.compileString(jslt.asText(), customFunctions);
                     return new JsltTransmute(expression);
                 }
         ).orElse((metadataJsonNodeFlux, contextView) -> Flux.error(new IllegalArgumentException("Missing 'jslt' transformation plugin configuration")));

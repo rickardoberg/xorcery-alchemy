@@ -1,5 +1,6 @@
 {
   "metadata": {
-    "time": format-time(.metadata.timestamp/1000, "yyyy-MM-dd'T'HH:mm:ss")
+    "time": format-time(.metadata.timestamp/1000, "yyyy-MM-dd'T'HH:mm:ss"),
+    "twentyseven": power(3,.data.test)
   } + .metadata
 } + .

@@ -1,5 +1,8 @@
-module xorcery.alchemy.transmute.jslt {
+open module xorcery.alchemy.transmute.jslt {
     exports com.exoreaction.xorcery.alchemy.transmute.jslt;
+    exports com.exoreaction.xorcery.alchemy.transmute.jslt.functions;
+
+    uses com.schibsted.spt.data.jslt.Function;
 
     requires xorcery.alchemy.plugin;
     requires xorcery.configuration.api;
@@ -9,4 +12,8 @@ module xorcery.alchemy.transmute.jslt {
     requires org.reactivestreams;
     requires reactor.core;
     requires jslt;
+    requires org.apache.logging.log4j;
+
+    provides com.schibsted.spt.data.jslt.Function with
+            com.exoreaction.xorcery.alchemy.transmute.jslt.functions.PowerFunction;
 }
