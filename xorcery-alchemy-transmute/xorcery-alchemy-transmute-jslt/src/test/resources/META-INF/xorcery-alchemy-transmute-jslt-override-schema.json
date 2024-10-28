@@ -2,43 +2,45 @@
   "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-transmute-jslt/override-schema",
   "title" : "xorcery-alchemy-transmute-jslt configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
-  "type" : "object",
-  "properties" : {
-    "instance" : {
-      "$ref" : "#/$defs/instance"
-    },
-    "application" : {
-      "$ref" : "#/$defs/application"
-    },
-    "system" : {
-      "$ref" : "#/$defs/system"
-    },
-    "defaults" : {
-      "$ref" : "#/$defs/defaults"
-    },
-    "hk2" : {
-      "$ref" : "#/$defs/hk2"
-    },
-    "DefaultRunLevelContext" : {
-      "$ref" : "#/$defs/DefaultRunLevelContext"
-    },
-    "configuration" : {
-      "$ref" : "#/$defs/configuration"
-    },
-    "log4j2" : {
-      "$ref" : "#/$defs/log4j2"
-    },
-    "opentelemetry" : {
-      "$ref" : "#/$defs/opentelemetry"
-    },
-    "jars" : {
-      "$ref" : "#/$defs/jars"
-    },
-    "plugin" : {
-      "$ref" : "#/$defs/plugin"
-    }
-  },
   "$defs" : {
+    "jar" : {
+      "type" : "object",
+      "required" : [ "jar" ],
+      "additionalProperties" : false,
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "Jar name in this recipe"
+        },
+        "jar" : {
+          "type" : "string",
+          "description" : "Jar type"
+        }
+      }
+    },
+    "sourcejar" : {
+      "anyOf" : [ ]
+    },
+    "transmutejar" : {
+      "anyOf" : [ {
+        "allOf" : [ {
+          "$ref" : "#/$defs/jar"
+        }, {
+          "properties" : {
+            "jar" : {
+              "const" : "jslt"
+            },
+            "jslt" : {
+              "type" : "string",
+              "description" : "JSLT transformation as a string"
+            }
+          }
+        } ]
+      } ]
+    },
+    "resultjar" : {
+      "anyOf" : [ ]
+    },
     "instance" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -330,17 +332,36 @@
           }
         }
       }
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "instance" : {
+      "$ref" : "#/$defs/instance"
     },
-    "jars" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "jslt" : {
-          "type" : "object",
-          "additionalProperties" : true,
-          "properties" : { }
-        }
-      }
+    "application" : {
+      "$ref" : "#/$defs/application"
+    },
+    "system" : {
+      "$ref" : "#/$defs/system"
+    },
+    "defaults" : {
+      "$ref" : "#/$defs/defaults"
+    },
+    "hk2" : {
+      "$ref" : "#/$defs/hk2"
+    },
+    "DefaultRunLevelContext" : {
+      "$ref" : "#/$defs/DefaultRunLevelContext"
+    },
+    "configuration" : {
+      "$ref" : "#/$defs/configuration"
+    },
+    "log4j2" : {
+      "$ref" : "#/$defs/log4j2"
+    },
+    "opentelemetry" : {
+      "$ref" : "#/$defs/opentelemetry"
     }
   }
 }

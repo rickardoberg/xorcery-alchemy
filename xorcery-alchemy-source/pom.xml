@@ -29,7 +29,9 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>xorcery-alchemy-source-common</module>
         <module>xorcery-alchemy-source-file-yaml</module>
+        <module>xorcery-alchemy-source-all</module>
     </modules>
 
     <dependencies>
@@ -38,5 +40,4 @@
             <artifactId>xorcery-alchemy-jar</artifactId>
         </dependency>
     </dependencies>
-
 </project>

@@ -20,6 +20,47 @@
                 <artifactId>xorcery-alchemy-jar</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-source-all</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-source-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-source-file-yaml</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-transmute-all</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-transmute-jslt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-result-all</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-result-log</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

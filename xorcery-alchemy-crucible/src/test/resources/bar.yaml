@@ -1,0 +1,6 @@
+- bar: foo1
+  test: 3
+- bar: foo2
+  test: 4
+- bar: foo3
+  test: 5

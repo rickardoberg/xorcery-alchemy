@@ -1,10 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-transmute-jslt/schema",
-  "title": "xorcery-alchemy-transmute-jslt configuration JSON Schema",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-source-file-yaml/schema",
+  "title": "xorcery-alchemy-source-file-yaml configuration JSON Schema",
   "$defs": {
-    "transmutejar": {
+    "sourcejar": {
       "anyOf": [
         {
           "allOf": [
@@ -14,11 +13,11 @@
             {
               "properties": {
                 "jar": {
-                  "const": "jslt"
+                  "const": "yaml"
                 },
-                "jslt": {
+                "file": {
                   "type": "string",
-                  "description": "JSLT transformation as a string"
+                  "description": "Resource name in project or URL to YAML file"
                 }
               }
             }

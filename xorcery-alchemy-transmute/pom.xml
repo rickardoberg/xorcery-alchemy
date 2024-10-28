@@ -30,6 +30,7 @@
 
     <modules>
         <module>xorcery-alchemy-transmute-jslt</module>
+        <module>xorcery-alchemy-transmute-all</module>
     </modules>
 
     <dependencies>
@@ -38,5 +39,4 @@
             <artifactId>xorcery-alchemy-jar</artifactId>
         </dependency>
     </dependencies>
-
 </project>

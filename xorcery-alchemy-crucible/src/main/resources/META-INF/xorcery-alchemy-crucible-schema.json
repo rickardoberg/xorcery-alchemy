@@ -1,0 +1,54 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-crucible/schema",
+  "title" : "xorcery-alchemy-crucible configuration JSON Schema",
+  "properties" : {
+    "crucible" : {
+      "$ref" : "#/$defs/crucible"
+    }
+  },
+  "$defs" : {
+    "crucible" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "recipes" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : false,
+            "properties" : {
+              "enabled" : {
+                "type" : [ "boolean", "string" ],
+                "default" : "{{ defaults.enabled }}",
+                "description" : "Default: {{ defaults.enabled }} (true)"
+              },
+              "name" : {
+                "type" : [ "null", "string" ],
+                "description" : "Name of recipe (optional)"
+              },
+              "source" : {
+                "$ref" : "#/$defs/sourcejar"
+              },
+              "transmutes" : {
+                "type" : [ "array", "string" ],
+                "items" : {
+                  "$ref" : "#/$defs/transmutejar"
+                }
+              },
+              "result" : {
+                "$ref" : "#/$defs/resultjar"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

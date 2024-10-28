@@ -1,6 +1,6 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-transmute-jslt/override-schema",
-  "title" : "xorcery-alchemy-transmute-jslt configuration override JSON Schema",
+  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-result-log/override-schema",
+  "title" : "xorcery-alchemy-result-log configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
   "$defs" : {
     "jar" : {
@@ -22,24 +22,20 @@
       "anyOf" : [ ]
     },
     "transmutejar" : {
+      "anyOf" : [ ]
+    },
+    "resultjar" : {
       "anyOf" : [ {
         "allOf" : [ {
           "$ref" : "#/$defs/jar"
         }, {
           "properties" : {
             "jar" : {
-              "const" : "jslt"
-            },
-            "jslt" : {
-              "type" : "string",
-              "description" : "JSLT transformation as a string"
+              "const" : "log"
             }
           }
         } ]
       } ]
-    },
-    "resultjar" : {
-      "anyOf" : [ ]
     },
     "instance" : {
       "type" : "object",

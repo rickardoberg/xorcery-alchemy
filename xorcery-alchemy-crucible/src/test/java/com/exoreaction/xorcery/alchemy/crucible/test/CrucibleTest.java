@@ -5,28 +5,18 @@ import com.exoreaction.xorcery.configuration.builder.ConfigurationBuilder;
 import com.exoreaction.xorcery.core.Xorcery;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 class CrucibleTest {
 
     @Test
     public void testCrucible() throws Exception {
-        try (Xorcery crucible = new Xorcery(new ConfigurationBuilder().addTestDefaults()
-                .addYaml("""
-crucible:
-  recipes:
-    - name: "test"
-      source:
-        jar: yaml
-        file: "foo.yaml"
-      transmutes:
-      - name: "addtimestamp"
-        jar: jslt
-        jslt: "{{ RESOURCE.string.transform.jslt }}"
-      result:
-        jar: log
-                        """)
+        try (Xorcery crucible = new Xorcery(new ConfigurationBuilder()
+                .addTestDefaults()
+                .addResource("recipe1.yaml")
                 .build()))
         {
-            crucible.getServiceLocator().getService(Crucible.class).getResult().join();
+            crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
 }

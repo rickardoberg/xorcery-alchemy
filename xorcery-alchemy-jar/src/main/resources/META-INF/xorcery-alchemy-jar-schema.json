@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-jar/schema",
+  "title": "xorcery-alchemy-jar configuration JSON Schema",
+  "$defs": {
+    "jar": {
+      "type": "object",
+      "required": ["jar"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Jar name in this recipe"
+        },
+        "jar": {
+          "type": "string",
+          "description": "Jar type"
+        }
+      }
+    },
+    "sourcejar": {
+      "anyOf": []
+    },
+    "transmutejar": {
+      "anyOf": []
+    },
+    "resultjar": {
+      "anyOf": []
+    }
+  }
+}

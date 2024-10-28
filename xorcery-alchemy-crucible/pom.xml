@@ -22,21 +22,6 @@
             <groupId>com.exoreaction.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-jar</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-transmute-jslt</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-source-file-yaml</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-result-log</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>com.exoreaction.xorcery</groupId>
@@ -66,8 +51,24 @@
             <groupId>com.exoreaction.xorcery</groupId>
             <artifactId>xorcery-reactivestreams-client</artifactId>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-source-all</artifactId>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-transmute-all</artifactId>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-result-all</artifactId>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
     </dependencies>
 
 </project>

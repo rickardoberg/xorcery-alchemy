@@ -11,8 +11,8 @@ public record CrucibleConfiguration(Configuration configuration) {
         return new CrucibleConfiguration(configuration.getConfiguration("crucible"));
     }
 
-    public List<RecipeConfiguration> getTransmutations() {
-        return configuration.getObjectListAs("transmutations", json -> new RecipeConfiguration(new Configuration(json)))
+    public List<RecipeConfiguration> getRecipes() {
+        return configuration.getObjectListAs("recipes", json -> new RecipeConfiguration(new Configuration(json)))
                 .orElse(Collections.emptyList());
     }
 }

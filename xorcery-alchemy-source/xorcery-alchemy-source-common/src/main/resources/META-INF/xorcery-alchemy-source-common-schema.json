@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-source-common-schema/schema",
+  "title": "xorcery-alchemy-source-common configuration JSON Schema",
+  "$defs": {
+    "sourcejar": {
+      "anyOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "concat"
+                },
+                "sources": {
+                  "type": [
+                    "array",
+                    "string"
+                  ],
+                  "items": {
+                    "$ref": "#/$defs/sourcejar"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -16,7 +16,7 @@ import reactor.util.retry.Retry;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
-@Service(name = "alchemist")
+@Service(name = "crucible")
 @RunLevel(20)
 public class Crucible {
 
@@ -34,8 +34,8 @@ public class Crucible {
         logger.info("Starting Crucible");
 
         CrucibleConfiguration crucibleConfiguration = CrucibleConfiguration.get(configuration);
-        crucibleConfiguration.getTransmutations().forEach(transmutationConfiguration ->
-                addTransmutation(transmutationConfiguration).whenComplete(CompletableFutures.transfer(result)));
+        crucibleConfiguration.getRecipes().forEach(recipe ->
+                addTransmutation(recipe).whenComplete(CompletableFutures.transfer(result)));
     }
 
     public CompletableFuture<Void> addTransmutation(RecipeConfiguration transmutation) {
