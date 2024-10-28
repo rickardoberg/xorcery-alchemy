@@ -1,4 +1,4 @@
-$schema: META-INF/xorcery-alchemy-crucible-override-schema.json
+$schema: xorcery-alchemy-crucible-override-schema.json
 
 jetty:
   client:

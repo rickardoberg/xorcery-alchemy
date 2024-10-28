@@ -1,7 +1,7 @@
 package com.exoreaction.xorcery.alchemy.result.log;
 
-import com.exoreaction.xorcery.alchemy.jar.ResultJar;
 import com.exoreaction.xorcery.alchemy.jar.RecipeConfiguration;
+import com.exoreaction.xorcery.alchemy.jar.ResultJar;
 import com.exoreaction.xorcery.configuration.Configuration;
 import com.exoreaction.xorcery.reactivestreams.api.MetadataJsonNode;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,6 +32,10 @@ public class LogResultJar
 
         Logger logger = loggerContext.getLogger(recipeConfiguration.getName());
         Level level = org.apache.logging.log4j.Level.toLevel(configuration.getString("level").orElse("info"));
-        return (flux,context)->flux.doOnNext(json -> logger.log(level, json.metadata().json().toPrettyString()+":"+(CharSequence) json.data().toPrettyString()));
+        return (flux,context)->flux.doOnNext(json -> logger.log(level, toMessage(json)));
+    }
+
+    private String toMessage(MetadataJsonNode<JsonNode> json) {
+        return (!json.metadata().json().isEmpty() ? json.metadata().json().toPrettyString()+":":"")+(!json.data().isEmpty() ? json.data().toPrettyString():"");
     }
 }

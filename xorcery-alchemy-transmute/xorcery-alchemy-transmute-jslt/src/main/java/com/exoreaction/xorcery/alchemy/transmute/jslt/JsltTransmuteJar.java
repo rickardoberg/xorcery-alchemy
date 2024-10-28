@@ -68,8 +68,21 @@ public class JsltTransmuteJar
                 metaDataJson.set("metadata", item.metadata().json());
                 metaDataJson.set("data", item.data());
                 JsonNode output = expression.apply(metaDataJson);
-                item.set(new Metadata((ObjectNode)output.get("metadata")), output.get("data"));
-                sink.next(item);
+                if (!output.isNull())
+                {
+                    ObjectNode metadata = (ObjectNode) output.get("metadata");
+                    if (metadata == null)
+                    {
+                        metadata = JsonNodeFactory.instance.objectNode();
+                    }
+                    JsonNode data = output.get("data");
+                    if (data == null)
+                    {
+                        data = JsonNodeFactory.instance.objectNode();
+                    }
+                    item.set(new Metadata(metadata), data);
+                    sink.next(item);
+                }
             } catch (Exception e) {
                 sink.error(e);
             }

@@ -1,7 +1,7 @@
 $schema: META-INF/xorcery-alchemy-crucible-override-schema.json
 crucible:
   recipes:
-    - name: "test"
+    - name: "jsltfilter"
       source:
         name: "merged-source-files"
         jar: concat
@@ -11,8 +11,8 @@ crucible:
           - file: "bar.yaml"
             jar: yaml
       transmutes:
-        - name: "jslt-transform"
+        - name: "dropevents"
           jar: jslt
-          jslt: "{{ RESOURCE.string.transform.jslt }}"
+          jslt: "if (.data.test >= 3) . else null"
       result:
         jar: log

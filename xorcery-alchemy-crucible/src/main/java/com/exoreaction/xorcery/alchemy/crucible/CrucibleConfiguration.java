@@ -11,6 +11,11 @@ public record CrucibleConfiguration(Configuration configuration) {
         return new CrucibleConfiguration(configuration.getConfiguration("crucible"));
     }
 
+    public boolean isCloseWhenDone()
+    {
+        return configuration.getBoolean("closeWhenDone").orElse(true);
+    }
+
     public List<RecipeConfiguration> getRecipes() {
         return configuration.getObjectListAs("recipes", json -> new RecipeConfiguration(new Configuration(json)))
                 .orElse(Collections.emptyList());

@@ -1091,6 +1091,11 @@
           "default" : "{{ defaults.enabled }}",
           "description" : "Default: {{ defaults.enabled }} (true)"
         },
+        "closeWhenDone" : {
+          "type" : [ "boolean", "string" ],
+          "default" : true,
+          "description" : "Default: true"
+        },
         "recipes" : {
           "type" : [ "array", "string" ],
           "items" : {

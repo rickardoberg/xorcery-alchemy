@@ -4,6 +4,7 @@ package com.exoreaction.xorcery.alchemy.crucible;
 import com.exoreaction.xorcery.alchemy.jar.*;
 import com.exoreaction.xorcery.concurrent.CompletableFutures;
 import com.exoreaction.xorcery.configuration.Configuration;
+import com.exoreaction.xorcery.core.Xorcery;
 import com.exoreaction.xorcery.reactivestreams.api.MetadataJsonNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.inject.Inject;
@@ -15,25 +16,29 @@ import reactor.util.retry.Retry;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 @Service(name = "crucible")
 @RunLevel(20)
 public class Crucible {
 
-    private final Configuration configuration;
     private final Logger logger;
     private final Cabinet cabinet;
     private final CompletableFuture<Void> result;
 
     @Inject
-    public Crucible(Configuration configuration, Cabinet cabinet, Logger logger) {
-        this.configuration = configuration;
+    public Crucible(Configuration configuration, Cabinet cabinet, Xorcery xorcery, Logger logger) {
         this.cabinet = cabinet;
         this.logger = logger;
         this.result = new CompletableFuture<>();
         logger.info("Starting Crucible");
 
         CrucibleConfiguration crucibleConfiguration = CrucibleConfiguration.get(configuration);
+        if (crucibleConfiguration.isCloseWhenDone())
+            result.whenCompleteAsync((r, t) -> {
+                if (t == null) xorcery.close();
+                else xorcery.close(t);
+            });
         crucibleConfiguration.getRecipes().forEach(recipe ->
                 addTransmutation(recipe).whenComplete(CompletableFutures.transfer(result)));
     }
@@ -47,7 +52,19 @@ public class Crucible {
         resultFlux.retryWhen(getRetry(transmutation));
         resultFlux.subscribe(item -> {
         }, result::completeExceptionally, () -> result.complete(null));
+        result.whenCompleteAsync(this.logResult(transmutation.getName()));
         return result;
+    }
+
+    private BiConsumer<Void, Throwable> logResult(String name) {
+        return (result, throwable) ->
+        {
+            if (throwable == null) {
+                logger.info("Finished transmutation: " + name);
+            } else {
+                logger.error("Transmutation failed: " + name, throwable);
+            }
+        };
     }
 
     public CompletableFuture<Void> getResult() {
