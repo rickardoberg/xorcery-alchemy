@@ -4,7 +4,7 @@ open module xorcery.alchemy.transmute.jslt {
 
     uses com.schibsted.spt.data.jslt.Function;
 
-    requires xorcery.alchemy.plugin;
+    requires xorcery.alchemy.jar;
     requires xorcery.configuration.api;
     requires xorcery.reactivestreams.api;
     requires jakarta.inject;

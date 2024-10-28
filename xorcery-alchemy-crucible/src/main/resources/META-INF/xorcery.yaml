@@ -1,0 +1,3 @@
+crucible:
+  enabled: "{{ defaults.enabled }}"
+  recipes: []

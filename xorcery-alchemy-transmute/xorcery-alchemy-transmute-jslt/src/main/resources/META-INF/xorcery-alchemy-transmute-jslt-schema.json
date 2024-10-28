@@ -4,16 +4,19 @@
   "$id" : "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-transmute-jslt/schema",
   "title" : "xorcery-alchemy-transmute-jslt configuration JSON Schema",
   "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    },
     "plugin" : {
       "$ref" : "#/$defs/plugin"
     }
   },
   "$defs" : {
-    "plugin" : {
+    "jars" : {
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
-        "json" : {
+        "jslt" : {
           "type" : "object",
           "additionalProperties" : true,
           "properties" : { }

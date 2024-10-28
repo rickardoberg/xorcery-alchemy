@@ -25,11 +25,11 @@
         <relativePath>../xorcery-alchemy-parent</relativePath>
     </parent>
 
-    <artifactId>xorcery-alchemy-transmute</artifactId>
+    <artifactId>xorcery-alchemy-result</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>xorcery-alchemy-transmute-jslt</module>
+        <module>xorcery-alchemy-result-log</module>
     </modules>
 
     <dependencies>
