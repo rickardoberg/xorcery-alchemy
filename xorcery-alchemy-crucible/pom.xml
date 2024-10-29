@@ -55,19 +55,16 @@
             <groupId>com.exoreaction.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-source-all</artifactId>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>com.exoreaction.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-transmute-all</artifactId>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
         <dependency>
             <groupId>com.exoreaction.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-result-all</artifactId>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
     </dependencies>
 

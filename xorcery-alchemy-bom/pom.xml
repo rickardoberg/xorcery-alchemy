@@ -49,6 +49,11 @@
                 <artifactId>xorcery-alchemy-transmute-jslt</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-transmute-script</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>

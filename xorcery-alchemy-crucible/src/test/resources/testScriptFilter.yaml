@@ -1,0 +1,29 @@
+$schema: META-INF/xorcery-alchemy-crucible-override-schema.json
+crucible:
+  recipes:
+    - name: "scriptfilter"
+      source:
+        name: "merged-source-files"
+        jar: concat
+        sources:
+          - file: "foo.yaml"
+            jar: yaml
+          - file: "bar.yaml"
+            jar: yaml
+      transmutes:
+        - name: "javascript"
+          jar: script
+          bindings:
+            "abc": 123
+            "inc": 3
+          script: |+
+            data.xyz="abc:"+abc;
+            data.struct = {"foo":inc+data.test,"bar":true};
+            print('test:'+data.test);
+      result:
+        jar: log
+
+log4j2:
+  Configuration:
+    thresholdFilter:
+      level: info

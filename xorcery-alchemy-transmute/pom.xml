@@ -30,6 +30,7 @@
 
     <modules>
         <module>xorcery-alchemy-transmute-jslt</module>
+        <module>xorcery-alchemy-transmute-script</module>
         <module>xorcery-alchemy-transmute-all</module>
     </modules>
 

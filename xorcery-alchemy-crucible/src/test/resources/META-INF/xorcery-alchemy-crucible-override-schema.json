@@ -66,6 +66,29 @@
             }
           }
         } ]
+      }, {
+        "allOf" : [ {
+          "$ref" : "#/$defs/jar"
+        }, {
+          "properties" : {
+            "jar" : {
+              "const" : "script"
+            },
+            "engine" : {
+              "type" : "string",
+              "default" : "nashorn",
+              "description" : "Script engine name"
+            },
+            "script" : {
+              "type" : "string",
+              "description" : "JSLT transformation as a string"
+            },
+            "bindings" : {
+              "type" : "object",
+              "description" : "Bindings available to the script during evaluation"
+            }
+          }
+        } ]
       } ]
     },
     "resultjar" : {

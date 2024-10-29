@@ -8,17 +8,14 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>xorcery-alchemy-transmute-all</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>xorcery-alchemy-transmute-script</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-transmute-jslt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-transmute-script</artifactId>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
         </dependency>
     </dependencies>
+
 </project>

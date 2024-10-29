@@ -30,4 +30,15 @@ class CrucibleTest {
             crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
+
+    @Test
+    public void testScriptFilter() throws Exception {
+        try (Xorcery crucible = new Xorcery(new ConfigurationBuilder()
+                .addTestDefaults()
+                .addResource("testScriptFilter.yaml")
+                .build()))
+        {
+            crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
+        }
+    }
 }
