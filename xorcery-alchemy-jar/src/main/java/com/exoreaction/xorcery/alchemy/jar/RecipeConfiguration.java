@@ -1,9 +1,11 @@
 package com.exoreaction.xorcery.alchemy.jar;
 
 import com.exoreaction.xorcery.configuration.Configuration;
+import com.exoreaction.xorcery.json.JsonElement;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public record RecipeConfiguration(Configuration configuration) {
     public String getName() {
@@ -12,6 +14,11 @@ public record RecipeConfiguration(Configuration configuration) {
 
     public boolean isEnabled(){
         return configuration.getBoolean("enabled").orElse(true);
+    }
+
+    public Map<String, Object> getContext()
+    {
+        return JsonElement.toMap(configuration.getConfiguration("context").json());
     }
 
     public JarConfiguration getSource() {

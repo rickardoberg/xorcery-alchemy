@@ -5,6 +5,20 @@
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-bom/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-bom/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-cabinet-all/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-cabinet-all/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-file-yaml/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-file-yaml/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-jslt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-jslt/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-log/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-log/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-script/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-cabinet/xorcery-alchemy-script/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-crucible/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-crucible/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-jar/src/main/java" charset="UTF-8" />
@@ -13,25 +27,15 @@
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-result/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-result/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-result/xorcery-alchemy-result-all/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-result/xorcery-alchemy-result-all/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-result/xorcery-alchemy-result-log/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-result/xorcery-alchemy-result-log/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/xorcery-alchemy-source-all/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/xorcery-alchemy-source-all/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/xorcery-alchemy-source-common/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/xorcery-alchemy-source-common/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/xorcery-alchemy-source-file-yaml/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-source/xorcery-alchemy-source-file-yaml/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-test/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xorcery-alchemy-test/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/xorcery-alchemy-transmute-all/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/xorcery-alchemy-transmute-all/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/xorcery-alchemy-transmute-jslt/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/xorcery-alchemy-transmute-jslt/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/xorcery-alchemy-transmute-script/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/xorcery-alchemy-transmute/xorcery-alchemy-transmute-script/src/main/resources" charset="UTF-8" />
   </component>
 </project>

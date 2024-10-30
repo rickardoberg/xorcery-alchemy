@@ -38,6 +38,9 @@
                 "type" : [ "null", "string" ],
                 "description" : "Name of recipe (optional)"
               },
+              "context" : {
+                "$ref" : "#/$defs/recipecontext"
+              },
               "source" : {
                 "$ref" : "#/$defs/sourcejar"
               },

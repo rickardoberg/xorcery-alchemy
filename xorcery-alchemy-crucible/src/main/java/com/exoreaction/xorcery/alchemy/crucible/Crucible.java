@@ -1,7 +1,9 @@
 package com.exoreaction.xorcery.alchemy.crucible;
 
 
-import com.exoreaction.xorcery.alchemy.jar.*;
+import com.exoreaction.xorcery.alchemy.jar.Cabinet;
+import com.exoreaction.xorcery.alchemy.jar.JarConfiguration;
+import com.exoreaction.xorcery.alchemy.jar.RecipeConfiguration;
 import com.exoreaction.xorcery.concurrent.CompletableFutures;
 import com.exoreaction.xorcery.configuration.Configuration;
 import com.exoreaction.xorcery.core.Xorcery;
@@ -9,22 +11,33 @@ import com.exoreaction.xorcery.reactivestreams.api.MetadataJsonNode;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.hk2.api.PreDestroy;
 import org.glassfish.hk2.runlevel.RunLevel;
 import org.jvnet.hk2.annotations.Service;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.util.context.Context;
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 @Service(name = "crucible")
 @RunLevel(20)
-public class Crucible {
+public class Crucible
+    implements PreDestroy
+{
 
     private final Logger logger;
     private final Cabinet cabinet;
     private final CompletableFuture<Void> result;
+    private final List<CompletableFuture<Void>> transmutations = new CopyOnWriteArrayList<>();
 
     @Inject
     public Crucible(Configuration configuration, Cabinet cabinet, Xorcery xorcery, Logger logger) {
@@ -43,20 +56,44 @@ public class Crucible {
                 addTransmutation(recipe).whenComplete(CompletableFutures.transfer(result)));
     }
 
-    public CompletableFuture<Void> addTransmutation(RecipeConfiguration transmutation) {
-        CompletableFuture<Void> result = new CompletableFuture<>();
-        logger.info("Starting transmutation: " + transmutation.getName());
-        Flux<MetadataJsonNode<JsonNode>> sourceFlux = getSource(transmutation);
-        Flux<MetadataJsonNode<JsonNode>> transmutedFlux = applyTransmutes(transmutation, sourceFlux);
-        Flux<MetadataJsonNode<JsonNode>> resultFlux = applyResult(transmutation, transmutedFlux);
-        resultFlux.retryWhen(getRetry(transmutation));
-        resultFlux.subscribe(item -> {
-        }, result::completeExceptionally, () -> result.complete(null));
-        result.whenCompleteAsync(this.logResult(transmutation.getName()));
+    public CompletableFuture<Void> addTransmutation(RecipeConfiguration recipeConfiguration) {
+        CompletableFuture<Void> result = new CompletableFuture<Void>().whenCompleteAsync(logResult(recipeConfiguration.getName()));
+        try {
+            logger.info("Starting transmutation: " + recipeConfiguration.getName());
+            Flux<MetadataJsonNode<JsonNode>> sourceFlux = newSourceFlux(recipeConfiguration);
+            Flux<MetadataJsonNode<JsonNode>> transmutedFlux = applyTransmutes(sourceFlux, recipeConfiguration);
+            Flux<MetadataJsonNode<JsonNode>> resultFlux = applyResult(transmutedFlux, recipeConfiguration);
+            resultFlux = resultFlux.retryWhen(getRetry(recipeConfiguration));
+            Map<String, Object> context = recipeConfiguration.getContext();
+            if (!context.isEmpty())
+            {
+                resultFlux = resultFlux.contextWrite(Context.of(context));
+            }
+            Disposable disposable = resultFlux.subscribe(item -> {
+            }, result::completeExceptionally, () -> result.complete(null));
+            transmutations.add(result);
+        } catch (Throwable e) {
+            result.completeExceptionally(e);
+        }
         return result;
     }
 
-    private BiConsumer<Void, Throwable> logResult(String name) {
+    public List<CompletableFuture<Void>> getTransmutations() {
+        return transmutations;
+    }
+
+    public CompletableFuture<Void> getResult() {
+        return result;
+    }
+
+    @Override
+    public void preDestroy() {
+        for (CompletableFuture<Void> transmutation : transmutations) {
+            transmutation.cancel(true);
+        }
+    }
+
+    private BiConsumer<? super Void, Throwable> logResult(String name) {
         return (result, throwable) ->
         {
             if (throwable == null) {
@@ -67,32 +104,40 @@ public class Crucible {
         };
     }
 
-    public CompletableFuture<Void> getResult() {
-        return result;
+    private Function<Throwable, Void> disposeOnCancel(Disposable disposable) {
+        return throwable -> {
+            if (throwable instanceof CancellationException)
+                disposable.dispose();
+            return null;
+        };
     }
 
-    private Flux<MetadataJsonNode<JsonNode>> getSource(RecipeConfiguration transmutation) {
-        JarConfiguration inputConfiguration = transmutation.getSource();
-        SourceJar inputPlugin = cabinet.getSourceJar(inputConfiguration.getJar()).orElseThrow(() -> new IllegalArgumentException("No source jar named:" + inputConfiguration.getJar()));
-        Flux<MetadataJsonNode<JsonNode>> sourceFlux = inputPlugin.newSource(inputConfiguration.configuration(), transmutation);
-        return sourceFlux;
+    private Flux<MetadataJsonNode<JsonNode>> newSourceFlux(RecipeConfiguration recipeConfiguration) {
+        JarConfiguration sourceConfiguration = recipeConfiguration.getSource();
+        return cabinet.newSourceFlux(sourceConfiguration, recipeConfiguration)
+                .orElseThrow(() -> new IllegalArgumentException("No source jar named:" + sourceConfiguration.getJar()));
     }
 
-    private Flux<MetadataJsonNode<JsonNode>> applyTransmutes(RecipeConfiguration transmutation, Flux<MetadataJsonNode<JsonNode>> transmutedFlux) {
-        for (JarConfiguration transmuteConfiguration : transmutation.getTransmutes()) {
-            TransmuteJar transmuteJar = cabinet.getTransmuteJar(transmuteConfiguration.getJar()).orElseThrow(() -> new IllegalArgumentException("No transmute jar named:" + transmuteConfiguration.getJar()));
-            transmutedFlux = transmutedFlux.transformDeferredContextual(transmuteJar.newIngredient(transmuteConfiguration.configuration(), transmutation));
+    private Flux<MetadataJsonNode<JsonNode>> applyTransmutes(Flux<MetadataJsonNode<JsonNode>> transmutedFlux, RecipeConfiguration recipeConfiguration) {
+        for (JarConfiguration transmuteConfiguration : recipeConfiguration.getTransmutes()) {
+            transmutedFlux = cabinet.applyTransmuteFlux(transmutedFlux, transmuteConfiguration, recipeConfiguration)
+                    .orElseThrow(() -> new IllegalArgumentException("No transmute jar named:" + transmuteConfiguration.getJar()));
         }
         return transmutedFlux;
     }
 
-    private Flux<MetadataJsonNode<JsonNode>> applyResult(RecipeConfiguration transmutation, Flux<MetadataJsonNode<JsonNode>> transmutedFlux) {
-        JarConfiguration resultConfiguration = transmutation.getResult();
-        ResultJar resultJar = cabinet.getResultJar(resultConfiguration.getJar()).orElseThrow(() -> new IllegalArgumentException("No result jar named:" + resultConfiguration.getJar()));
-        return transmutedFlux.transformDeferredContextual(resultJar.newResult(resultConfiguration.configuration(), transmutation));
+    private Flux<MetadataJsonNode<JsonNode>> applyResult(Flux<MetadataJsonNode<JsonNode>> transmutedFlux, RecipeConfiguration recipeConfiguration) {
+        JarConfiguration resultConfiguration = recipeConfiguration.getResult();
+        return cabinet.applyResultFlux(transmutedFlux, resultConfiguration, recipeConfiguration)
+                .orElseThrow(() -> new IllegalArgumentException("No result jar named:" + resultConfiguration.getJar()));
     }
 
     private Retry getRetry(RecipeConfiguration recipeConfiguration) {
-        return Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(10));
+        return Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(10))
+                .filter(this::isRetryable);
+    }
+
+    private boolean isRetryable(Throwable throwable) {
+        return false;
     }
 }

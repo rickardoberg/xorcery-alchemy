@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-script/schema",
+  "title": "xorcery-alchemy-script configuration JSON Schema",
+  "$defs": {
+    "sourcejar": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "script"
+                },
+                "engine": {
+                  "type": "string",
+                  "default": "nashorn",
+                  "description": "Script engine name"
+                },
+                "script": {
+                  "type": "string",
+                  "description": "JavaScript to execute as source generator"
+                },
+                "bindings": {
+                  "type": "object",
+                  "description": "Bindings available to the script during evaluation"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "transmutejar": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "script"
+                },
+                "engine": {
+                  "type": "string",
+                  "default": "nashorn",
+                  "description": "Script engine name"
+                },
+                "script": {
+                  "type": "string",
+                  "description": "JavaScript to execute"
+                },
+                "bindings": {
+                  "type": "object",
+                  "description": "Bindings available to the script during evaluation"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

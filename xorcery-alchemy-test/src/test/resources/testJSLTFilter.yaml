@@ -1,0 +1,33 @@
+$schema: META-INF/xorcery-alchemy-crucible-override-schema.json
+crucible:
+  recipes:
+    - name: "jsltfilter"
+      context:
+        "var1": "value1"
+      source:
+        name: "merged-source-files"
+        jar: concat
+        sources:
+          - jar: yaml
+            context:
+              resourceUrl: "foo.yaml"
+          - jar: yaml
+            context:
+              resourceUrl: "bar.yaml"
+      transmutes:
+#        - name: "dropevents"
+#          jar: jslt
+#          jslt: "if (.data.test >= 3) . else null"
+        - name: "addcontext"
+          jar: jslt
+          context:
+            "var2": "value2"
+          jslt: |+
+            {
+              "data": {
+                "var1": $var1,
+                "var2": $var2
+              } + .data
+            } + .
+      result:
+        jar: log

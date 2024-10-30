@@ -1,0 +1,20 @@
+$schema: META-INF/xorcery-alchemy-crucible-override-schema.json
+crucible:
+  recipes:
+    - name: "test"
+      source:
+        name: "merged-source-files"
+        jar: concat
+        sources:
+        - jar: yaml
+          context:
+            resourceUrl: "foo.yaml"
+        - jar: yaml
+          context:
+            resourceUrl: "bar.yaml"
+      transmutes:
+        - name: "jslt-transform"
+          jar: jslt
+          jslt: "{{ RESOURCE.string.transform.jslt }}"
+      result:
+        jar: log

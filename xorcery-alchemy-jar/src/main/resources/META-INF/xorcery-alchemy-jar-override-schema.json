@@ -332,22 +332,29 @@
       "properties" : {
         "name" : {
           "type" : "string",
-          "description" : "Jar name in this recipe"
+          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
         },
         "jar" : {
           "type" : "string",
           "description" : "Jar type"
+        },
+        "context" : {
+          "type" : "object",
+          "description" : "Jar context configuration"
         }
       }
     },
     "sourcejar" : {
-      "anyOf" : [ ]
+      "oneOf" : [ ]
     },
     "transmutejar" : {
-      "anyOf" : [ ]
+      "oneOf" : [ ]
     },
     "resultjar" : {
-      "anyOf" : [ ]
+      "oneOf" : [ ]
+    },
+    "recipecontext" : {
+      "allOf" : [ ]
     }
   }
 }

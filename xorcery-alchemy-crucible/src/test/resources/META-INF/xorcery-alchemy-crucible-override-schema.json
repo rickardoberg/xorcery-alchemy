@@ -10,99 +10,29 @@
       "properties" : {
         "name" : {
           "type" : "string",
-          "description" : "Jar name in this recipe"
+          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
         },
         "jar" : {
           "type" : "string",
           "description" : "Jar type"
+        },
+        "context" : {
+          "type" : "object",
+          "description" : "Jar context configuration"
         }
       }
     },
     "sourcejar" : {
-      "anyOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "concat"
-            },
-            "sources" : {
-              "type" : [ "array", "string" ],
-              "items" : {
-                "$ref" : "#/$defs/sourcejar"
-              }
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "yaml"
-            },
-            "file" : {
-              "type" : "string",
-              "description" : "Resource name in project or URL to YAML file"
-            }
-          }
-        } ]
-      } ]
+      "oneOf" : [ ]
     },
     "transmutejar" : {
-      "anyOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "jslt"
-            },
-            "jslt" : {
-              "type" : "string",
-              "description" : "JSLT transformation as a string"
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "JSLT transformation as a string"
-            },
-            "bindings" : {
-              "type" : "object",
-              "description" : "Bindings available to the script during evaluation"
-            }
-          }
-        } ]
-      } ]
+      "oneOf" : [ ]
     },
     "resultjar" : {
-      "anyOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "log"
-            }
-          }
-        } ]
-      } ]
+      "oneOf" : [ ]
+    },
+    "recipecontext" : {
+      "allOf" : [ ]
     },
     "instance" : {
       "type" : "object",
@@ -1091,20 +1021,6 @@
         }
       }
     },
-    "yamlfilepublisher" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : "{{ defaults.enabled }}",
-          "description" : "Default: {{ defaults.enabled }} (true)"
-        },
-        "publishers" : {
-          "type" : [ "array", "string" ]
-        }
-      }
-    },
     "crucible" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -1133,6 +1049,9 @@
               "name" : {
                 "type" : [ "null", "string" ],
                 "description" : "Name of recipe (optional)"
+              },
+              "context" : {
+                "$ref" : "#/$defs/recipecontext"
               },
               "source" : {
                 "$ref" : "#/$defs/sourcejar"
@@ -1195,9 +1114,6 @@
     },
     "reactivestreams" : {
       "$ref" : "#/$defs/reactivestreams"
-    },
-    "yamlfilepublisher" : {
-      "$ref" : "#/$defs/yamlfilepublisher"
     },
     "crucible" : {
       "$ref" : "#/$defs/crucible"

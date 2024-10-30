@@ -23,47 +23,33 @@
 
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-source-all</artifactId>
+                <artifactId>xorcery-alchemy-cabinet-all</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-source-common</artifactId>
+                <artifactId>xorcery-alchemy-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-source-file-yaml</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-transmute-all</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-transmute-jslt</artifactId>
+                <artifactId>xorcery-alchemy-file-yaml</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-transmute-script</artifactId>
+                <artifactId>xorcery-alchemy-jslt</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-result-all</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>
-                <artifactId>xorcery-alchemy-result-log</artifactId>
+                <artifactId>xorcery-alchemy-script</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-log</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

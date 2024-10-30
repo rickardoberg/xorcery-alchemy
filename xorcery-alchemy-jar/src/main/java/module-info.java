@@ -6,4 +6,5 @@ module xorcery.alchemy.jar {
     requires org.glassfish.hk2.api;
     requires jakarta.inject;
     requires org.apache.logging.log4j;
+    requires java.compiler;
 }

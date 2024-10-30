@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-jslt/schema",
+  "title": "xorcery-alchemy-jslt configuration JSON Schema",
+  "$defs": {
+    "transmutejar": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "jslt"
+                },
+                "jslt": {
+                  "type": "string",
+                  "description": "JSLT transformation as a string"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

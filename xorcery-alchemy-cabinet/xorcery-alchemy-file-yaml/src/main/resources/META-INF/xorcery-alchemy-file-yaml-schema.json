@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-file-yaml/schema",
+  "title": "xorcery-alchemy-file-yaml configuration JSON Schema",
+  "$defs": {
+    "yamlcontext": {
+      "type": "object",
+      "properties": {
+        "resourceUrl": {
+          "type": "string",
+          "description": "Resource name in project or URL to YAML file"
+        }
+      }
+    },
+    "sourcejar": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "yaml"
+                },
+                "context": {
+                  "$ref": "#/$defs/yamlcontext"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "recipecontext": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/yamlcontext"
+        }
+      ]
+    }
+  }
+}

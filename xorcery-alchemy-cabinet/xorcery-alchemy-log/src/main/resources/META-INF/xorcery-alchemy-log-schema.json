@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-log/schema",
+  "title": "xorcery-alchemy-log configuration JSON Schema",
+  "$defs": {
+    "resultjar": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "log"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
