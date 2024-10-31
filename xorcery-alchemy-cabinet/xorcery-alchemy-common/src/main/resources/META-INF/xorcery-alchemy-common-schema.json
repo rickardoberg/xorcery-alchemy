@@ -13,7 +13,8 @@
             {
               "properties": {
                 "jar": {
-                  "const": "concat"
+                  "const": "concat",
+                  "description": "concat | Concatenate a list of sources, one after the other"
                 },
                 "sources": {
                   "type": [

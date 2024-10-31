@@ -13,7 +13,8 @@
             {
               "properties": {
                 "jar": {
-                  "const": "log"
+                  "const": "log",
+                  "description": "log | Log item to Log4j"
                 }
               }
             }

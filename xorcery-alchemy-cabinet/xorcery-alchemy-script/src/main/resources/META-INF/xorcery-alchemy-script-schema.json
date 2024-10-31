@@ -14,20 +14,21 @@
             {
               "properties": {
                 "jar": {
-                  "const": "script"
+                  "const": "script",
+                  "description": "script | Execute JavaScript"
                 },
                 "engine": {
                   "type": "string",
                   "default": "nashorn",
-                  "description": "Script engine name"
+                  "description": "script | Script engine name"
                 },
                 "script": {
                   "type": "string",
-                  "description": "JavaScript to execute as source generator"
+                  "description": "script | JavaScript to execute as source generator"
                 },
                 "bindings": {
                   "type": "object",
-                  "description": "Bindings available to the script during evaluation"
+                  "description": "script | Bindings available to the script during evaluation"
                 }
               }
             }
@@ -50,15 +51,15 @@
                 "engine": {
                   "type": "string",
                   "default": "nashorn",
-                  "description": "Script engine name"
+                  "description": "script | Script engine name"
                 },
                 "script": {
                   "type": "string",
-                  "description": "JavaScript to execute"
+                  "description": "script | JavaScript to execute"
                 },
                 "bindings": {
                   "type": "object",
-                  "description": "Bindings available to the script during evaluation"
+                  "description": "script | Bindings available to the script during evaluation"
                 }
               }
             }
@@ -81,15 +82,15 @@
                 "engine": {
                   "type": "string",
                   "default": "nashorn",
-                  "description": "Script engine name"
+                  "description": "script | Script engine name"
                 },
                 "script": {
                   "type": "string",
-                  "description": "JavaScript to execute"
+                  "description": "script | JavaScript to execute"
                 },
                 "bindings": {
                   "type": "object",
-                  "description": "Bindings available to the script during evaluation"
+                  "description": "script | Bindings available to the script during evaluation"
                 }
               }
             }

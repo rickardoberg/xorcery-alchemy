@@ -36,7 +36,7 @@
             },
             "jslt" : {
               "type" : "string",
-              "description" : "JSLT transformation as a string"
+              "description" : "jslt | JSLT transformation as a string"
             }
           }
         } ]

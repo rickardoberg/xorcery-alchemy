@@ -4,25 +4,24 @@ import com.exoreaction.xorcery.reactivestreams.api.ContextViewElement;
 import com.exoreaction.xorcery.reactivestreams.api.MetadataJsonNode;
 import com.exoreaction.xorcery.reactivestreams.api.ReactiveStreamsContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.opencsv.CSVReaderHeaderAware;
+import com.opencsv.CSVReader;
 import org.reactivestreams.Subscription;
 import reactor.core.CoreSubscriber;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.concurrent.Callable;
 
 class RowReaderStreamer
         implements Subscription {
-    private final CSVReaderHeaderAware csvReader;
-    private final Function<Map<String, String>, MetadataJsonNode<JsonNode>> objectReader;
+    private final CSVReader csvReader;
+    private final Callable<MetadataJsonNode<JsonNode>> itemReader;
     private final CoreSubscriber<? super MetadataJsonNode<JsonNode>> subscriber;
     private long streamPosition = 0;
 
-    public RowReaderStreamer(CoreSubscriber<? super MetadataJsonNode<JsonNode>> subscriber, CSVReaderHeaderAware csvReader, Function<Map<String, String>, MetadataJsonNode<JsonNode>> objectReader) {
+    public RowReaderStreamer(CoreSubscriber<? super MetadataJsonNode<JsonNode>> subscriber, CSVReader csvReader, Callable<MetadataJsonNode<JsonNode>> itemReader) {
         this.subscriber = subscriber;
         this.csvReader = csvReader;
-        this.objectReader = objectReader;
+        this.itemReader = itemReader;
 
         // Skip until position
         long skip = new ContextViewElement(subscriber.currentContext())
@@ -41,15 +40,14 @@ class RowReaderStreamer
             if (request == 0)
                 return;
 
-            Map<String, String> row = null;
-            while (request-- > 0 && (row = csvReader.readMap()) != null) {
-                MetadataJsonNode<JsonNode> item = objectReader.apply(row);
+            MetadataJsonNode<JsonNode> item = null;
+            while (request-- > 0 && (item = itemReader.call()) != null) {
                 item.metadata().json().put("timestamp", System.currentTimeMillis());
                 item.metadata().json().put("streamPosition", streamPosition++);
                 subscriber.onNext(item);
             }
 
-            if (row == null) {
+            if (item == null) {
                 csvReader.close();
                 subscriber.onComplete();
             }

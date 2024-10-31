@@ -8,7 +8,27 @@
       "properties": {
         "resourceUrl": {
           "type": "string",
-          "description": "Resource name in project or URL to CSV file"
+          "description": "csv | Resource name in project or URL to CSV file"
+        },
+        "headers": {
+          "type": ["boolean","string"],
+          "default": false,
+          "description": "csv | True if CSV file has headers"
+        },
+        "separator": {
+          "type": "string",
+          "default": ",",
+          "description": "csv | Separator character"
+        },
+        "escape": {
+          "type": "string",
+          "default": "\\",
+          "description": "csv | Escape character"
+        },
+        "quote": {
+          "type": "string",
+          "default": "'",
+          "description": "csv | Quote character"
         }
       }
     },

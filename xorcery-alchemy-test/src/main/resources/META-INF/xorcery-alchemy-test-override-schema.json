@@ -10,7 +10,8 @@
         }, {
           "properties" : {
             "jar" : {
-              "const" : "concat"
+              "const" : "concat",
+              "description" : "concat | Concatenate a list of sources, one after the other"
             },
             "sources" : {
               "type" : [ "array", "string" ],
@@ -52,20 +53,21 @@
         }, {
           "properties" : {
             "jar" : {
-              "const" : "script"
+              "const" : "script",
+              "description" : "script | Execute JavaScript"
             },
             "engine" : {
               "type" : "string",
               "default" : "nashorn",
-              "description" : "Script engine name"
+              "description" : "script | Script engine name"
             },
             "script" : {
               "type" : "string",
-              "description" : "JavaScript to execute as source generator"
+              "description" : "script | JavaScript to execute as source generator"
             },
             "bindings" : {
               "type" : "object",
-              "description" : "Bindings available to the script during evaluation"
+              "description" : "script | Bindings available to the script during evaluation"
             }
           }
         } ]
@@ -128,7 +130,27 @@
       "properties" : {
         "resourceUrl" : {
           "type" : "string",
-          "description" : "Resource name in project or URL to CSV file"
+          "description" : "csv | Resource name in project or URL to CSV file"
+        },
+        "headers" : {
+          "type" : [ "boolean", "string" ],
+          "default" : false,
+          "description" : "csv | True if CSV file has headers"
+        },
+        "separator" : {
+          "type" : "string",
+          "default" : ",",
+          "description" : "csv | Separator character"
+        },
+        "escape" : {
+          "type" : "string",
+          "default" : "\\",
+          "description" : "csv | Escape character"
+        },
+        "quote" : {
+          "type" : "string",
+          "default" : "'",
+          "description" : "csv | Quote character"
         }
       }
     },
@@ -178,7 +200,7 @@
             },
             "jslt" : {
               "type" : "string",
-              "description" : "JSLT transformation as a string"
+              "description" : "jslt | JSLT transformation as a string"
             }
           }
         } ]
@@ -193,15 +215,15 @@
             "engine" : {
               "type" : "string",
               "default" : "nashorn",
-              "description" : "Script engine name"
+              "description" : "script | Script engine name"
             },
             "script" : {
               "type" : "string",
-              "description" : "JavaScript to execute"
+              "description" : "script | JavaScript to execute"
             },
             "bindings" : {
               "type" : "object",
-              "description" : "Bindings available to the script during evaluation"
+              "description" : "script | Bindings available to the script during evaluation"
             }
           }
         } ]
@@ -214,7 +236,8 @@
         }, {
           "properties" : {
             "jar" : {
-              "const" : "log"
+              "const" : "log",
+              "description" : "log | Log item to Log4j"
             }
           }
         } ]
@@ -229,15 +252,15 @@
             "engine" : {
               "type" : "string",
               "default" : "nashorn",
-              "description" : "Script engine name"
+              "description" : "script | Script engine name"
             },
             "script" : {
               "type" : "string",
-              "description" : "JavaScript to execute"
+              "description" : "script | JavaScript to execute"
             },
             "bindings" : {
               "type" : "object",
-              "description" : "Bindings available to the script during evaluation"
+              "description" : "script | Bindings available to the script during evaluation"
             }
           }
         } ]

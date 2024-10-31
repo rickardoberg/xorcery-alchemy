@@ -19,4 +19,15 @@ public class CSVTest {
             crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
+
+    @Test
+    public void testCsvWithHeadersSource() throws Exception {
+        try (Xorcery crucible = new Xorcery(new ConfigurationBuilder()
+                .addTestDefaults()
+                .addResource("testCsvWithHeadersSource.yaml")
+                .build()))
+        {
+            crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
+        }
+    }
 }

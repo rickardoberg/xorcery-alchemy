@@ -20,7 +20,7 @@ public class CSVFileSourceJar
         implements SourceJar {
     @Override
     public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
-        return Flux.from(new CSVPublisher())
+        return Flux.from(new CSVPublisher(configuration, recipeConfiguration))
                 .contextWrite(context ->
                 {
                     ContextViewElement contextViewElement = new ContextViewElement(context);
