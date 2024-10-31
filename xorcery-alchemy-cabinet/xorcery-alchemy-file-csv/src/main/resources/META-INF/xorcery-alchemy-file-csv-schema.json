@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-file-csv/schema",
+  "title": "xorcery-alchemy-file-csv configuration JSON Schema",
+  "$defs": {
+    "csvcontext": {
+      "type": "object",
+      "properties": {
+        "resourceUrl": {
+          "type": "string",
+          "description": "Resource name in project or URL to CSV file"
+        }
+      }
+    },
+    "sourcejar": {
+      "oneOf": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/$defs/jar"
+            },
+            {
+              "properties": {
+                "jar": {
+                  "const": "csv"
+                },
+                "context": {
+                  "$ref": "#/$defs/csvcontext"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "recipecontext": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/csvcontext"
+        }
+      ]
+    }
+  }
+}

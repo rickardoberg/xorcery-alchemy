@@ -15,6 +15,10 @@ public class JsonNodeJSObject
         this.jsonNode = jsonNode;
     }
 
+    public JsonNode getJsonNode() {
+        return jsonNode;
+    }
+
     @Override
     public Object getMember(String name) {
         return wrap(jsonNode.get(name));

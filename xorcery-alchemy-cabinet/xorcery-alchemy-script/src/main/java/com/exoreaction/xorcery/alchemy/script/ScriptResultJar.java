@@ -1,12 +1,15 @@
 package com.exoreaction.xorcery.alchemy.script;
 
 import com.exoreaction.xorcery.alchemy.jar.JarConfiguration;
+import com.exoreaction.xorcery.alchemy.jar.JarException;
 import com.exoreaction.xorcery.alchemy.jar.RecipeConfiguration;
 import com.exoreaction.xorcery.alchemy.jar.ResultJar;
 import com.exoreaction.xorcery.reactivestreams.api.MetadataJsonNode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
 import org.jvnet.hk2.annotations.Service;
@@ -15,10 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 import reactor.util.context.ContextView;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import javax.script.*;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -52,24 +52,32 @@ public class ScriptResultJar
 
             return configuration.getString("script").<BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>>>map(script ->
                     {
-                        return new ScriptTransmute(script, out, engine);
+                        try {
+                            return new ScriptResult(ScriptExecutor.getScriptExecutor(engine, script), out, engine, configuration, recipeConfiguration);
+                        } catch (ScriptException e) {
+                            return (metadataJsonNodeFlux, contextView) -> Flux.error(new JarException(configuration, recipeConfiguration, e));
+                        }
                     }
-            ).orElse((metadataJsonNodeFlux, contextView) -> Flux.error(new IllegalArgumentException("Missing 'jslt' transformation configuration")));
+            ).orElse((metadataJsonNodeFlux, contextView) -> Flux.error(new JarException(configuration, recipeConfiguration, "Missing 'jslt' transformation configuration")));
         } catch (JsonProcessingException e) {
-            return (metadataJsonNodeFlux, contextView) -> Flux.error(new IllegalArgumentException("Cannot parse bindings", e));
+            return (metadataJsonNodeFlux, contextView) -> Flux.error(new JarException(configuration, recipeConfiguration, "Cannot parse bindings", e));
         }
     }
 
-    class ScriptTransmute
+    class ScriptResult
             implements BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> {
-        private final String script;
+        private final ScriptExecutor script;
         private final ByteArrayOutputStream out;
         private final ScriptEngine engine;
+        private final JarConfiguration configuration;
+        private final RecipeConfiguration recipeConfiguration;
 
-        public ScriptTransmute(String script, ByteArrayOutputStream out, ScriptEngine engine) {
+        public ScriptResult(ScriptExecutor script, ByteArrayOutputStream out, ScriptEngine engine, JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
             this.script = script;
             this.out = out;
             this.engine = engine;
+            this.configuration = configuration;
+            this.recipeConfiguration = recipeConfiguration;
         }
 
         @Override
@@ -80,9 +88,12 @@ public class ScriptResultJar
         private void script(MetadataJsonNode<JsonNode> item, SynchronousSink<MetadataJsonNode<JsonNode>> sink) {
             try {
                 Bindings bindings = engine.createBindings();
-                bindings.put("metadata", new JsonNodeJSObject(item.metadata().json()));
-                bindings.put("data", new JsonNodeJSObject(item.data()));
-                engine.eval(script, bindings);
+                ObjectNode itemJson = JsonNodeFactory.instance.objectNode();
+                itemJson.set("metadata", item.metadata().json());
+                itemJson.set("data", item.data());
+                bindings.put("item", new JsonNodeJSObject(itemJson));
+                bindings.put("sink", new JavaScriptSink(sink));
+                script.call(bindings);
 
                 if (out.size() > 0) {
                     logger.info(out.toString(StandardCharsets.UTF_8));
@@ -90,8 +101,8 @@ public class ScriptResultJar
                 }
 
                 sink.next(item);
-            } catch (Exception e) {
-                sink.error(e);
+            } catch (Throwable e) {
+                sink.error(new JarException(configuration, recipeConfiguration, e));
             }
         }
     }

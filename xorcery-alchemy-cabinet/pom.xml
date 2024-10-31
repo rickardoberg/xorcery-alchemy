@@ -15,6 +15,7 @@
     <modules>
         <module>xorcery-alchemy-common</module>
         <module>xorcery-alchemy-file-yaml</module>
+        <module>xorcery-alchemy-file-csv</module>
 
         <module>xorcery-alchemy-jslt</module>
         <module>xorcery-alchemy-script</module>

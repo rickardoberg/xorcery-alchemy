@@ -1,2 +1,7 @@
 crucible:
   closeWhenDone: false
+
+log4j2:
+  Configuration:
+    thresholdFilter:
+      level: info

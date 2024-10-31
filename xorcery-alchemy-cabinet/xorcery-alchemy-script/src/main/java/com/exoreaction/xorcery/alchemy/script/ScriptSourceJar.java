@@ -1,6 +1,7 @@
 package com.exoreaction.xorcery.alchemy.script;
 
 import com.exoreaction.xorcery.alchemy.jar.JarConfiguration;
+import com.exoreaction.xorcery.alchemy.jar.JarException;
 import com.exoreaction.xorcery.alchemy.jar.RecipeConfiguration;
 import com.exoreaction.xorcery.alchemy.jar.SourceJar;
 import com.exoreaction.xorcery.metadata.Metadata;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.spi.LoggerContext;
@@ -16,10 +18,7 @@ import org.jvnet.hk2.annotations.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import javax.script.*;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +42,7 @@ public class ScriptSourceJar
         String engineName = configuration.getString("engine").orElse("nashorn");
         ScriptEngine engine = new ScriptEngineManager().getEngineByName(engineName);
         if (engine == null) {
-            return Flux.error(new IllegalArgumentException(String.format("No script engine named '%s' found", engineName)));
+            return Flux.error(new JarException(configuration, recipeConfiguration, String.format("No script engine named '%s' found", engineName)));
         }
         try {
             Map<String, Object> bindings = mapper.treeToValue(configuration.configuration().getConfiguration("bindings").json(), Map.class);
@@ -52,25 +51,36 @@ public class ScriptSourceJar
             engine.getContext().setWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 
             return configuration.getString("script").map(script ->
-                    Flux.generate(new ScriptSource(script, out, engine, loggerContext.getLogger(recipeConfiguration.getName()+"."+configuration.getName())))
-            ).orElseGet(() -> Flux.error(new IllegalArgumentException("Missing 'script' transformation configuration")));
+                    {
+                        try {
+                            return Flux.generate(new ScriptSource(ScriptExecutor.getScriptExecutor(engine, script),
+                                    engine, out, loggerContext.getLogger(recipeConfiguration.getName()+"."+configuration.getName()), configuration, recipeConfiguration));
+                        } catch (ScriptException e) {
+                            return Flux.<MetadataJsonNode<JsonNode>>error(new JarException(configuration, recipeConfiguration, e));
+                        }
+                    }
+            ).orElseGet(() -> Flux.error(new JarException(configuration, recipeConfiguration, "Missing 'script' transformation configuration")));
         } catch (JsonProcessingException e) {
-            return Flux.error(new IllegalArgumentException("Cannot parse bindings", e));
+            return Flux.error(new JarException(configuration, recipeConfiguration, "Cannot parse bindings", e));
         }
     }
 
-    class ScriptSource
+    static class ScriptSource
             implements Consumer<SynchronousSink<MetadataJsonNode<JsonNode>>> {
-        private final String script;
-        private final ByteArrayOutputStream out;
+        private final ScriptExecutor script;
         private final ScriptEngine engine;
+        private final ByteArrayOutputStream out;
         private final Logger logger;
+        private final JarConfiguration configuration;
+        private final RecipeConfiguration recipeConfiguration;
 
-        public ScriptSource(String script, ByteArrayOutputStream out, ScriptEngine engine, Logger logger) {
+        public ScriptSource(ScriptExecutor script, ScriptEngine engine, ByteArrayOutputStream out, Logger logger, JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
             this.script = script;
-            this.out = out;
             this.engine = engine;
+            this.out = out;
             this.logger = logger;
+            this.configuration = configuration;
+            this.recipeConfiguration = recipeConfiguration;
         }
 
         @Override
@@ -78,22 +88,21 @@ public class ScriptSourceJar
             try {
                 MetadataJsonNode<JsonNode> item = new MetadataJsonNode<>(new Metadata(JsonNodeFactory.instance.objectNode()), JsonNodeFactory.instance.objectNode());
                 Bindings bindings = engine.createBindings();
-                bindings.put("metadata", new JsonNodeJSObject(item.metadata().json()));
-                bindings.put("data", new JsonNodeJSObject(item.data()));
-                engine.eval(script, bindings);
+                ObjectNode itemJson = JsonNodeFactory.instance.objectNode();
+                itemJson.set("metadata", item.metadata().json());
+                itemJson.set("data", item.data());
+                bindings.put("item", new JsonNodeJSObject(itemJson));
+                bindings.put("sink", new JavaScriptSink(sink));
+                script.call(bindings);
 
                 if (out.size() > 0) {
                     logger.info(out.toString(StandardCharsets.UTF_8));
                     out.reset();
                 }
-
-                if (bindings.getOrDefault("data", null) != null)
-                    sink.next(item);
-                else
-                    sink.complete();
             } catch (Exception e) {
-                sink.error(e);
+                sink.error(new JarException(configuration, recipeConfiguration, e));
             }
         }
     }
+
 }

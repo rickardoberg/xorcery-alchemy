@@ -26,35 +26,38 @@
         "recipes" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "type" : "object",
-            "additionalProperties" : false,
-            "properties" : {
-              "enabled" : {
-                "type" : [ "boolean", "string" ],
-                "default" : "{{ defaults.enabled }}",
-                "description" : "Default: {{ defaults.enabled }} (true)"
-              },
-              "name" : {
-                "type" : [ "null", "string" ],
-                "description" : "Name of recipe (optional)"
-              },
-              "context" : {
-                "$ref" : "#/$defs/recipecontext"
-              },
-              "source" : {
-                "$ref" : "#/$defs/sourcejar"
-              },
-              "transmutes" : {
-                "type" : [ "array", "string" ],
-                "items" : {
-                  "$ref" : "#/$defs/transmutejar"
-                }
-              },
-              "result" : {
-                "$ref" : "#/$defs/resultjar"
-              }
-            }
+            "$ref" : "#/$defs/recipe"
           }
+        }
+      }
+    },
+    "recipe" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "name" : {
+          "type" : [ "null", "string" ],
+          "description" : "Name of recipe (optional)"
+        },
+        "context" : {
+          "$ref" : "#/$defs/recipecontext"
+        },
+        "source" : {
+          "$ref" : "#/$defs/sourcejar"
+        },
+        "transmutes" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "$ref" : "#/$defs/transmutejar"
+          }
+        },
+        "result" : {
+          "$ref" : "#/$defs/resultjar"
         }
       }
     }

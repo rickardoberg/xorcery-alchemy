@@ -39,6 +39,11 @@
             </dependency>
             <dependency>
                 <groupId>com.exoreaction.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-file-csv</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.exoreaction.xorcery.alchemy</groupId>
                 <artifactId>xorcery-alchemy-jslt</artifactId>
                 <version>${project.version}</version>
             </dependency>

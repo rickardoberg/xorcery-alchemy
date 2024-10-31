@@ -26,6 +26,19 @@
         }, {
           "properties" : {
             "jar" : {
+              "const" : "csv"
+            },
+            "context" : {
+              "$ref" : "#/$defs/csvcontext"
+            }
+          }
+        } ]
+      }, {
+        "allOf" : [ {
+          "$ref" : "#/$defs/jar"
+        }, {
+          "properties" : {
+            "jar" : {
               "const" : "yaml"
             },
             "context" : {
@@ -75,37 +88,56 @@
         "recipes" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "type" : "object",
-            "additionalProperties" : false,
-            "properties" : {
-              "enabled" : {
-                "type" : [ "boolean", "string" ],
-                "default" : "{{ defaults.enabled }}",
-                "description" : "Default: {{ defaults.enabled }} (true)"
-              },
-              "name" : {
-                "type" : [ "null", "string" ],
-                "description" : "Name of recipe (optional)"
-              },
-              "context" : {
-                "$ref" : "#/$defs/recipecontext"
-              },
-              "source" : {
-                "$ref" : "#/$defs/sourcejar"
-              },
-              "transmutes" : {
-                "type" : [ "array", "string" ],
-                "items" : {
-                  "$ref" : "#/$defs/transmutejar"
-                }
-              },
-              "result" : {
-                "$ref" : "#/$defs/resultjar"
-              }
-            }
+            "$ref" : "#/$defs/recipe"
           }
         }
       }
+    },
+    "recipe" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "name" : {
+          "type" : [ "null", "string" ],
+          "description" : "Name of recipe (optional)"
+        },
+        "context" : {
+          "$ref" : "#/$defs/recipecontext"
+        },
+        "source" : {
+          "$ref" : "#/$defs/sourcejar"
+        },
+        "transmutes" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "$ref" : "#/$defs/transmutejar"
+          }
+        },
+        "result" : {
+          "$ref" : "#/$defs/resultjar"
+        }
+      }
+    },
+    "csvcontext" : {
+      "type" : "object",
+      "properties" : {
+        "resourceUrl" : {
+          "type" : "string",
+          "description" : "Resource name in project or URL to CSV file"
+        }
+      }
+    },
+    "recipecontext" : {
+      "allOf" : [ {
+        "$ref" : "#/$defs/csvcontext"
+      }, {
+        "$ref" : "#/$defs/yamlcontext"
+      } ]
     },
     "yamlcontext" : {
       "type" : "object",
@@ -115,11 +147,6 @@
           "description" : "Resource name in project or URL to YAML file"
         }
       }
-    },
-    "recipecontext" : {
-      "allOf" : [ {
-        "$ref" : "#/$defs/yamlcontext"
-      } ]
     },
     "jar" : {
       "type" : "object",
@@ -188,6 +215,29 @@
           "properties" : {
             "jar" : {
               "const" : "log"
+            }
+          }
+        } ]
+      }, {
+        "allOf" : [ {
+          "$ref" : "#/$defs/jar"
+        }, {
+          "properties" : {
+            "jar" : {
+              "const" : "script"
+            },
+            "engine" : {
+              "type" : "string",
+              "default" : "nashorn",
+              "description" : "Script engine name"
+            },
+            "script" : {
+              "type" : "string",
+              "description" : "JavaScript to execute"
+            },
+            "bindings" : {
+              "type" : "object",
+              "description" : "Bindings available to the script during evaluation"
             }
           }
         } ]

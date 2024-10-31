@@ -20,6 +20,10 @@
             <groupId>com.exoreaction.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-file-yaml</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-file-csv</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.exoreaction.xorcery.alchemy</groupId>

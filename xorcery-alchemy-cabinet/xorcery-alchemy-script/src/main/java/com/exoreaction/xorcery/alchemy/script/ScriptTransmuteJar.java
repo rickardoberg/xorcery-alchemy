@@ -1,12 +1,15 @@
 package com.exoreaction.xorcery.alchemy.script;
 
 import com.exoreaction.xorcery.alchemy.jar.JarConfiguration;
+import com.exoreaction.xorcery.alchemy.jar.JarException;
 import com.exoreaction.xorcery.alchemy.jar.RecipeConfiguration;
 import com.exoreaction.xorcery.alchemy.jar.TransmuteJar;
 import com.exoreaction.xorcery.reactivestreams.api.MetadataJsonNode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.spi.LoggerContext;
@@ -16,10 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 import reactor.util.context.ContextView;
 
-import javax.script.Bindings;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import javax.script.*;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -54,7 +54,11 @@ public class ScriptTransmuteJar
 
             return configuration.getString("script").<BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>>>map(script ->
                     {
-                        return new ScriptTransmute(script, out, engine, loggerContext.getLogger(recipeConfiguration.getName()+"."+configuration.getName()));
+                        try {
+                            return new ScriptTransmute(ScriptExecutor.getScriptExecutor(engine, script), out, engine, loggerContext.getLogger(recipeConfiguration.getName() + "." + configuration.getName()));
+                        } catch (ScriptException e) {
+                            return (metadataJsonNodeFlux, contextView) -> Flux.error(new JarException(configuration, recipeConfiguration, e));
+                        }
                     }
             ).orElse((metadataJsonNodeFlux, contextView) -> Flux.error(new IllegalArgumentException("Missing 'script' transformation configuration")));
         } catch (JsonProcessingException e) {
@@ -64,12 +68,12 @@ public class ScriptTransmuteJar
 
     static class ScriptTransmute
             implements BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> {
-        private final String script;
+        private final ScriptExecutor script;
         private final ByteArrayOutputStream out;
         private final ScriptEngine engine;
         private final Logger logger;
 
-        public ScriptTransmute(String script, ByteArrayOutputStream out, ScriptEngine engine, Logger logger) {
+        public ScriptTransmute(ScriptExecutor script, ByteArrayOutputStream out, ScriptEngine engine, Logger logger) {
             this.script = script;
             this.out = out;
             this.engine = engine;
@@ -84,17 +88,18 @@ public class ScriptTransmuteJar
         private void script(MetadataJsonNode<JsonNode> item, SynchronousSink<MetadataJsonNode<JsonNode>> sink) {
             try {
                 Bindings bindings = engine.createBindings();
-                bindings.put("metadata", new JsonNodeJSObject(item.metadata().json()));
-                bindings.put("data", new JsonNodeJSObject(item.data()));
-                engine.eval(script, bindings);
+                ObjectNode itemJson = JsonNodeFactory.instance.objectNode();
+                itemJson.set("metadata", item.metadata().json());
+                itemJson.set("data", item.data());
+                bindings.put("item", new JsonNodeJSObject(itemJson));
+                bindings.put("sink", new JavaScriptSink(sink));
+                script.call(bindings);
 
                 if (out.size() > 0) {
                     logger.info(out.toString(StandardCharsets.UTF_8));
                     out.reset();
                 }
-
-                sink.next(item);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 sink.error(e);
             }
         }

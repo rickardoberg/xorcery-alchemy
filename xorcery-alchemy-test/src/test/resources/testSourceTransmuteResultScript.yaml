@@ -1,0 +1,39 @@
+$schema: META-INF/xorcery-alchemy-test-override-schema.json
+crucible:
+  recipes:
+    - name: "testscript"
+      source:
+        jar: script
+        name: "numbergenerator"
+        bindings:
+          "index": 0
+          "max": 10
+        script: |+
+          print(bindings.index);
+          if (bindings.index < bindings.max)
+          {
+            item.metadata.source = "numbergenerator";
+            item.data.value = bindings.index;            
+            bindings.index++;
+            sink.next(item);
+          } else
+          {
+            sink.complete();
+          }
+      transmutes:
+        - name: "javascript"
+          jar: script
+          bindings:
+            "abc": 123
+            "inc": 3
+          script: |+
+            print('value:'+item.data.value);
+            item.data.xyz="abc:"+bindings.abc;
+            item.data.struct = {"foo":bindings.inc+item.data.value,"bar":true};
+            item.metadata.foo="bar";
+            sink.next(item);
+      result:
+        name: "logitem"
+        jar: script
+        script: |+
+          print('item:'+item);

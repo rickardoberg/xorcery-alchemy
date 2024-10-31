@@ -23,7 +23,15 @@ public class Cabinet {
     public Cabinet(IterableProvider<Jar> jars, Logger logger) {
         this.jars = jars;
 
-        logger.info("Jars:" + String.join(",", StreamSupport.stream(jars.handleIterator().spliterator(), false).map(this::getJarName).toList()));
+        logger.info("Source jars:" + String.join(",", StreamSupport.stream(jars.handleIterator().spliterator(), false)
+                .filter(h -> SourceJar.class.isAssignableFrom(h.getActiveDescriptor().getImplementationClass()))
+                .map(this::getJarName).toList()));
+        logger.info("Transmute jars:" + String.join(",", StreamSupport.stream(jars.handleIterator().spliterator(), false)
+                .filter(h -> TransmuteJar.class.isAssignableFrom(h.getActiveDescriptor().getImplementationClass()))
+                .map(this::getJarName).toList()));
+        logger.info("Result jars:" + String.join(",", StreamSupport.stream(jars.handleIterator().spliterator(), false)
+                .filter(h -> ResultJar.class.isAssignableFrom(h.getActiveDescriptor().getImplementationClass()))
+                .map(this::getJarName).toList()));
     }
 
     public Optional<SourceJar> getSourceJar(String jarName) {
@@ -37,15 +45,13 @@ public class Cabinet {
         return Optional.empty();
     }
 
-    public Optional<Flux<MetadataJsonNode<JsonNode>>> newSourceFlux(JarConfiguration sourceConfiguration, RecipeConfiguration recipeConfiguration)
-    {
+    public Optional<Flux<MetadataJsonNode<JsonNode>>> newSourceFlux(JarConfiguration sourceConfiguration, RecipeConfiguration recipeConfiguration) {
         return getSourceJar(sourceConfiguration.getJar())
                 .map(sourceJar ->
                 {
                     Flux<MetadataJsonNode<JsonNode>> sourceFlux = sourceJar.newSource(sourceConfiguration, recipeConfiguration);
                     Map<String, Object> context = sourceConfiguration.getContext();
-                    if (!context.isEmpty())
-                    {
+                    if (!context.isEmpty()) {
                         sourceFlux = sourceFlux.contextWrite(Context.of(context));
                     }
                     return sourceFlux;
@@ -69,8 +75,7 @@ public class Cabinet {
         {
             Flux<MetadataJsonNode<JsonNode>> transmutedFlux = flux.transformDeferredContextual(transmuteJar.newTransmute(transmuteConfiguration, recipeConfiguration));
             Map<String, Object> context = transmuteConfiguration.getContext();
-            if (!context.isEmpty())
-            {
+            if (!context.isEmpty()) {
                 transmutedFlux = transmutedFlux.contextWrite(Context.of(context));
             }
             return transmutedFlux;
@@ -94,8 +99,7 @@ public class Cabinet {
                 {
                     Flux<MetadataJsonNode<JsonNode>> resultFlux = transmutedFlux.transformDeferredContextual(resultJar.newResult(resultConfiguration, recipeConfiguration));
                     Map<String, Object> context = resultConfiguration.getContext();
-                    if (!context.isEmpty())
-                    {
+                    if (!context.isEmpty()) {
                         resultFlux = resultFlux.contextWrite(Context.of(context));
                     }
                     return resultFlux;
