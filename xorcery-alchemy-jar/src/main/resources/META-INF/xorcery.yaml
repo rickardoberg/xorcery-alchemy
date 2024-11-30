@@ -1,0 +1,5 @@
+jars:
+  enabled: "{{ defaults.enabled }}"
+  sourcejars: []
+  transmutejars: [ ]
+  resultjars: [ ]

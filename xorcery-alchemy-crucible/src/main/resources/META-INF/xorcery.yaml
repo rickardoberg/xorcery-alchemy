@@ -2,3 +2,13 @@ crucible:
   enabled: "{{ defaults.enabled }}"
   closeWhenDone: true
   recipes: []
+
+watcher:
+  enabled: false
+  directories:
+  - path: "{{ instance.home }}/target/classes/files"
+    recipe:
+      source:
+        jar: yaml
+      result:
+        jar: log

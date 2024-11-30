@@ -1,5 +1,5 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-jar/override-schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-jar/override-schema",
   "title" : "xorcery-alchemy-jar configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
   "type" : "object",
@@ -30,6 +30,9 @@
     },
     "opentelemetry" : {
       "$ref" : "#/$defs/opentelemetry"
+    },
+    "jars" : {
+      "$ref" : "#/$defs/jars"
     }
   },
   "$defs" : {
@@ -91,6 +94,10 @@
           "description" : "Default: {{ instance.uri }}api/ (http://service.xorcery.test/api/)"
         },
         "locale" : {
+          "default" : null,
+          "description" : "Default: null"
+        },
+        "timeZone" : {
           "default" : null,
           "description" : "Default: null"
         }
@@ -325,36 +332,34 @@
         }
       }
     },
-    "jar" : {
+    "jars" : {
       "type" : "object",
-      "required" : [ "jar" ],
       "additionalProperties" : false,
       "properties" : {
-        "name" : {
-          "type" : "string",
-          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
         },
-        "jar" : {
-          "type" : "string",
-          "description" : "Jar type"
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
         },
-        "context" : {
-          "type" : "object",
-          "description" : "Jar context configuration"
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
         }
       }
-    },
-    "sourcejar" : {
-      "oneOf" : [ ]
-    },
-    "transmutejar" : {
-      "oneOf" : [ ]
-    },
-    "resultjar" : {
-      "oneOf" : [ ]
-    },
-    "recipecontext" : {
-      "allOf" : [ ]
     }
   }
 }

@@ -1,5 +1,6 @@
 module xorcery.alchemy.output.log {
-    exports com.exoreaction.xorcery.alchemy.result.log;
+    exports dev.xorcery.alchemy.result.log.transmute;
+    exports dev.xorcery.alchemy.result.log.result;
 
     requires xorcery.alchemy.jar;
     requires xorcery.reactivestreams.api;

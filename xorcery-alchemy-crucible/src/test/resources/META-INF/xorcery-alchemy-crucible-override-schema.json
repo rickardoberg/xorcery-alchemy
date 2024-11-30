@@ -1,38 +1,90 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-crucible/override-schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-crucible/override-schema",
   "title" : "xorcery-alchemy-crucible configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    },
+    "instance" : {
+      "$ref" : "#/$defs/instance"
+    },
+    "application" : {
+      "$ref" : "#/$defs/application"
+    },
+    "system" : {
+      "$ref" : "#/$defs/system"
+    },
+    "defaults" : {
+      "$ref" : "#/$defs/defaults"
+    },
+    "hk2" : {
+      "$ref" : "#/$defs/hk2"
+    },
+    "DefaultRunLevelContext" : {
+      "$ref" : "#/$defs/DefaultRunLevelContext"
+    },
+    "configuration" : {
+      "$ref" : "#/$defs/configuration"
+    },
+    "dns" : {
+      "$ref" : "#/$defs/dns"
+    },
+    "jetty" : {
+      "$ref" : "#/$defs/jetty"
+    },
+    "keystores" : {
+      "$ref" : "#/$defs/keystores"
+    },
+    "secrets" : {
+      "$ref" : "#/$defs/secrets"
+    },
+    "log4j2" : {
+      "$ref" : "#/$defs/log4j2"
+    },
+    "opentelemetry" : {
+      "$ref" : "#/$defs/opentelemetry"
+    },
+    "reactivestreams" : {
+      "$ref" : "#/$defs/reactivestreams"
+    },
+    "crucible" : {
+      "$ref" : "#/$defs/crucible"
+    },
+    "watcher" : {
+      "$ref" : "#/$defs/watcher"
+    }
+  },
   "$defs" : {
-    "jar" : {
+    "jars" : {
       "type" : "object",
-      "required" : [ "jar" ],
       "additionalProperties" : false,
       "properties" : {
-        "name" : {
-          "type" : "string",
-          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
         },
-        "jar" : {
-          "type" : "string",
-          "description" : "Jar type"
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
         },
-        "context" : {
-          "type" : "object",
-          "description" : "Jar context configuration"
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
         }
       }
-    },
-    "sourcejar" : {
-      "oneOf" : [ ]
-    },
-    "transmutejar" : {
-      "oneOf" : [ ]
-    },
-    "resultjar" : {
-      "oneOf" : [ ]
-    },
-    "recipecontext" : {
-      "allOf" : [ ]
     },
     "instance" : {
       "type" : "object",
@@ -92,6 +144,10 @@
           "description" : "Default: {{ instance.uri }}api/ (http://service.xorcery.test/api/)"
         },
         "locale" : {
+          "default" : null,
+          "description" : "Default: null"
+        },
+        "timeZone" : {
           "default" : null,
           "description" : "Default: null"
         }
@@ -1043,6 +1099,61 @@
         }
       }
     },
+    "watcher" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : false,
+          "description" : "Default: false"
+        },
+        "directories" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "path" : {
+                  "type" : "string",
+                  "default" : "C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files",
+                  "description" : "Default: C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files"
+                },
+                "recipe" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "source" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    },
+                    "result" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "log",
+                          "description" : "Default: log"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } ]
+          }
+        }
+      }
+    },
     "recipe" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -1056,70 +1167,19 @@
           "type" : [ "null", "string" ],
           "description" : "Name of recipe (optional)"
         },
-        "context" : {
-          "$ref" : "#/$defs/recipecontext"
-        },
         "source" : {
-          "$ref" : "#/$defs/sourcejar"
+          "$ref" : "#/$defs/jars/properties/sourcejars/items"
         },
         "transmutes" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "$ref" : "#/$defs/transmutejar"
+            "$ref" : "#/$defs/jars/properties/transmutejars/items"
           }
         },
         "result" : {
-          "$ref" : "#/$defs/resultjar"
+          "$ref" : "#/$defs/jars/properties/resultjars/items"
         }
       }
-    }
-  },
-  "type" : "object",
-  "properties" : {
-    "instance" : {
-      "$ref" : "#/$defs/instance"
-    },
-    "application" : {
-      "$ref" : "#/$defs/application"
-    },
-    "system" : {
-      "$ref" : "#/$defs/system"
-    },
-    "defaults" : {
-      "$ref" : "#/$defs/defaults"
-    },
-    "hk2" : {
-      "$ref" : "#/$defs/hk2"
-    },
-    "DefaultRunLevelContext" : {
-      "$ref" : "#/$defs/DefaultRunLevelContext"
-    },
-    "configuration" : {
-      "$ref" : "#/$defs/configuration"
-    },
-    "dns" : {
-      "$ref" : "#/$defs/dns"
-    },
-    "jetty" : {
-      "$ref" : "#/$defs/jetty"
-    },
-    "keystores" : {
-      "$ref" : "#/$defs/keystores"
-    },
-    "secrets" : {
-      "$ref" : "#/$defs/secrets"
-    },
-    "log4j2" : {
-      "$ref" : "#/$defs/log4j2"
-    },
-    "opentelemetry" : {
-      "$ref" : "#/$defs/opentelemetry"
-    },
-    "reactivestreams" : {
-      "$ref" : "#/$defs/reactivestreams"
-    },
-    "crucible" : {
-      "$ref" : "#/$defs/crucible"
     }
   }
 }

@@ -1,0 +1,9 @@
+jars:
+  sourcejars:
+    - jar: concat
+      sources: []
+  transmutejars:
+    - jar: flatten
+    - jar: rename
+      metadata: {}
+      data: {}

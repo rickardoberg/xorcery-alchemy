@@ -1,77 +1,425 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-test/override-schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-test/override-schema",
   "title" : "xorcery-alchemy-test configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    },
+    "crucible" : {
+      "$ref" : "#/$defs/crucible"
+    },
+    "watcher" : {
+      "$ref" : "#/$defs/watcher"
+    },
+    "instance" : {
+      "$ref" : "#/$defs/instance"
+    },
+    "application" : {
+      "$ref" : "#/$defs/application"
+    },
+    "system" : {
+      "$ref" : "#/$defs/system"
+    },
+    "defaults" : {
+      "$ref" : "#/$defs/defaults"
+    },
+    "hk2" : {
+      "$ref" : "#/$defs/hk2"
+    },
+    "DefaultRunLevelContext" : {
+      "$ref" : "#/$defs/DefaultRunLevelContext"
+    },
+    "configuration" : {
+      "$ref" : "#/$defs/configuration"
+    },
+    "dns" : {
+      "$ref" : "#/$defs/dns"
+    },
+    "jetty" : {
+      "$ref" : "#/$defs/jetty"
+    },
+    "keystores" : {
+      "$ref" : "#/$defs/keystores"
+    },
+    "secrets" : {
+      "$ref" : "#/$defs/secrets"
+    },
+    "log4j2" : {
+      "$ref" : "#/$defs/log4j2"
+    },
+    "neo4jdatabase" : {
+      "$ref" : "#/$defs/neo4jdatabase"
+    },
+    "neo4jprojections" : {
+      "$ref" : "#/$defs/neo4jprojections"
+    },
+    "opentelemetry" : {
+      "$ref" : "#/$defs/opentelemetry"
+    },
+    "reactivestreams" : {
+      "$ref" : "#/$defs/reactivestreams"
+    },
+    "yamlfilepublisher" : {
+      "$ref" : "#/$defs/yamlfilepublisher"
+    }
+  },
   "$defs" : {
-    "sourcejar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "concat",
-              "description" : "concat | Concatenate a list of sources, one after the other"
-            },
-            "sources" : {
-              "type" : [ "array", "string" ],
-              "items" : {
-                "$ref" : "#/$defs/sourcejar"
-              }
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "csv"
-            },
-            "context" : {
-              "$ref" : "#/$defs/csvcontext"
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "yaml"
-            },
-            "context" : {
-              "$ref" : "#/$defs/yamlcontext"
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script",
-              "description" : "script | Execute JavaScript"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "script | Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "script | JavaScript to execute as source generator"
-            },
-            "bindings" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
               "type" : "object",
-              "description" : "script | Bindings available to the script during evaluation"
-            }
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "concat",
+                  "description" : "Default: concat",
+                  "const" : "concat"
+                },
+                "sources" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "$ref" : "#/$defs/jars/properties/sourcejars/items"
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "csv",
+                  "description" : "Default: csv",
+                  "const" : "csv"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "excel",
+                  "description" : "Default: excel"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml",
+                  "const" : "yaml"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "projection",
+                  "description" : "Default: projection"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "projectionId" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
+                },
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            } ]
           }
-        } ]
-      } ]
+        },
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "flatten",
+                  "description" : "Default: flatten",
+                  "const" : "flatten"
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "rename",
+                  "description" : "Default: rename",
+                  "const" : "rename"
+                },
+                "metadata" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "data" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "jslt",
+                  "description" : "Default: jslt"
+                },
+                "jslt" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log",
+                  "const" : "log"
+                },
+                "level" : {
+                  "type" : "string",
+                  "default" : "INFO",
+                  "description" : "Default: INFO"
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
+                },
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "error" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "complete" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            } ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "excel",
+                  "description" : "Default: excel"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml",
+                  "const" : "yaml"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log",
+                  "const" : "log"
+                },
+                "level" : {
+                  "type" : "string",
+                  "default" : "INFO",
+                  "description" : "Default: INFO"
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "projection",
+                  "description" : "Default: projection"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "projectionId" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
+                },
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "error" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "complete" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            } ]
+          }
+        },
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        }
+      }
     },
     "crucible" : {
       "type" : "object",
@@ -95,6 +443,61 @@
         }
       }
     },
+    "watcher" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : false,
+          "description" : "Default: false"
+        },
+        "directories" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "path" : {
+                  "type" : "string",
+                  "default" : "C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files",
+                  "description" : "Default: C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files"
+                },
+                "recipe" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "source" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    },
+                    "result" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "log",
+                          "description" : "Default: log"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } ]
+          }
+        }
+      }
+    },
     "recipe" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -108,163 +511,19 @@
           "type" : [ "null", "string" ],
           "description" : "Name of recipe (optional)"
         },
-        "context" : {
-          "$ref" : "#/$defs/recipecontext"
-        },
         "source" : {
-          "$ref" : "#/$defs/sourcejar"
+          "$ref" : "#/$defs/jars/properties/sourcejars/items"
         },
         "transmutes" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "$ref" : "#/$defs/transmutejar"
+            "$ref" : "#/$defs/jars/properties/transmutejars/items"
           }
         },
         "result" : {
-          "$ref" : "#/$defs/resultjar"
+          "$ref" : "#/$defs/jars/properties/resultjars/items"
         }
       }
-    },
-    "csvcontext" : {
-      "type" : "object",
-      "properties" : {
-        "resourceUrl" : {
-          "type" : "string",
-          "description" : "csv | Resource name in project or URL to CSV file"
-        },
-        "headers" : {
-          "type" : [ "boolean", "string" ],
-          "default" : false,
-          "description" : "csv | True if CSV file has headers"
-        },
-        "separator" : {
-          "type" : "string",
-          "default" : ",",
-          "description" : "csv | Separator character"
-        },
-        "escape" : {
-          "type" : "string",
-          "default" : "\\",
-          "description" : "csv | Escape character"
-        },
-        "quote" : {
-          "type" : "string",
-          "default" : "'",
-          "description" : "csv | Quote character"
-        }
-      }
-    },
-    "recipecontext" : {
-      "allOf" : [ {
-        "$ref" : "#/$defs/csvcontext"
-      }, {
-        "$ref" : "#/$defs/yamlcontext"
-      } ]
-    },
-    "yamlcontext" : {
-      "type" : "object",
-      "properties" : {
-        "resourceUrl" : {
-          "type" : "string",
-          "description" : "Resource name in project or URL to YAML file"
-        }
-      }
-    },
-    "jar" : {
-      "type" : "object",
-      "required" : [ "jar" ],
-      "additionalProperties" : false,
-      "properties" : {
-        "name" : {
-          "type" : "string",
-          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
-        },
-        "jar" : {
-          "type" : "string",
-          "description" : "Jar type"
-        },
-        "context" : {
-          "type" : "object",
-          "description" : "Jar context configuration"
-        }
-      }
-    },
-    "transmutejar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "jslt"
-            },
-            "jslt" : {
-              "type" : "string",
-              "description" : "jslt | JSLT transformation as a string"
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "script | Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "script | JavaScript to execute"
-            },
-            "bindings" : {
-              "type" : "object",
-              "description" : "script | Bindings available to the script during evaluation"
-            }
-          }
-        } ]
-      } ]
-    },
-    "resultjar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "log",
-              "description" : "log | Log item to Log4j"
-            }
-          }
-        } ]
-      }, {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "script | Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "script | JavaScript to execute"
-            },
-            "bindings" : {
-              "type" : "object",
-              "description" : "script | Bindings available to the script during evaluation"
-            }
-          }
-        } ]
-      } ]
     },
     "instance" : {
       "type" : "object",
@@ -324,6 +583,10 @@
           "description" : "Default: {{ instance.uri }}api/ (http://service.xorcery.test/api/)"
         },
         "locale" : {
+          "default" : null,
+          "description" : "Default: null"
+        },
+        "timeZone" : {
           "default" : null,
           "description" : "Default: null"
         }
@@ -773,6 +1036,163 @@
               }
             }
           }
+        }
+      }
+    },
+    "neo4jdatabase" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "path" : {
+          "type" : "string",
+          "default" : "{{ instance.home }}/neo4j",
+          "description" : "Default: {{ instance.home }}/neo4j (C:\\Users\\ricka\\IdeaProjects\\xorcery/neo4j)"
+        },
+        "startup" : {
+          "type" : [ "array", "string" ]
+        },
+        "warmup" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ neo4jdatabase.enabled }}",
+              "description" : "Default: {{ neo4jdatabase.enabled }} (true)"
+            },
+            "queries" : {
+              "type" : [ "array", "string" ]
+            }
+          }
+        },
+        "domain" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "version" : {
+              "type" : "string",
+              "default" : "1.0.0",
+              "description" : "Default: 1.0.0"
+            },
+            "wipeOnBreakingChange" : {
+              "type" : [ "boolean", "string" ],
+              "default" : true,
+              "description" : "Default: true"
+            }
+          }
+        },
+        "settings" : {
+          "type" : "object",
+          "additionalProperties" : true,
+          "properties" : { }
+        },
+        "metrics" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ defaults.enabled }}",
+              "description" : "Default: {{ defaults.enabled }} (true)"
+            },
+            "attributes" : {
+              "type" : "object",
+              "additionalProperties" : true,
+              "properties" : {
+                "neo4j.transaction.active" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.transaction.active",
+                  "description" : "Default: neo4j.transaction.active"
+                },
+                "neo4j.transaction.committed" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.transaction.committed",
+                  "description" : "Default: neo4j.transaction.committed"
+                },
+                "neo4j.transaction.rolledback" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.transaction.rolledback",
+                  "description" : "Default: neo4j.transaction.rolledback"
+                },
+                "neo4j.transaction.peakConcurrent" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.transaction.peakConcurrent",
+                  "description" : "Default: neo4j.transaction.peakConcurrent"
+                },
+                "neo4j.checkpoint.count" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.checkpoint.count",
+                  "description" : "Default: neo4j.checkpoint.count"
+                },
+                "neo4j.checkpoint.flushed" : {
+                  "type" : "string",
+                  "default" : "neo4j.checkpoint.flushed",
+                  "description" : "Default: neo4j.checkpoint.flushed"
+                },
+                "neo4j.checkpoint.totalTime" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.checkpoint.totalTime",
+                  "description" : "Default: neo4j.checkpoint.totalTime"
+                },
+                "neo4j.pagecache.hits" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.pagecache.hits",
+                  "description" : "Default: neo4j.pagecache.hits"
+                },
+                "neo4j.pagecache.faults" : {
+                  "type" : "string",
+                  "default" : "neo4j.pagecache.faults",
+                  "description" : "Default: neo4j.pagecache.faults"
+                },
+                "neo4j.pagecache.hitRatio" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.pagecache.hitRatio",
+                  "description" : "Default: neo4j.pagecache.hitRatio"
+                },
+                "neo4j.pagecache.flushes" : {
+                  "type" : [ "string", "null" ],
+                  "default" : "neo4j.pagecache.flushes",
+                  "description" : "Default: neo4j.pagecache.flushes"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "neo4jprojections" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ neo4jdatabase.enabled }}",
+          "description" : "Default: {{ neo4jdatabase.enabled }} (true)"
+        },
+        "eventBatchSize" : {
+          "type" : [ "number", "string" ],
+          "default" : 1024,
+          "description" : "Default: 1024"
+        },
+        "maxThreadCount" : {
+          "type" : [ "number", "string" ],
+          "default" : -1,
+          "description" : "Default: -1"
+        },
+        "maxTransactionSize" : {
+          "type" : "string",
+          "default" : "{{ neo4jdatabase.settings.db.memory.transaction.max | \"1G\" }}",
+          "description" : "Default: {{ neo4jdatabase.settings.db.memory.transaction.max | \"1G\" }} (1G)"
+        },
+        "transactionMemoryUsageMargin" : {
+          "type" : "string",
+          "default" : "1M",
+          "description" : "Default: 1M"
         }
       }
     },
@@ -1266,57 +1686,6 @@
           "type" : [ "array", "string" ]
         }
       }
-    }
-  },
-  "type" : "object",
-  "properties" : {
-    "crucible" : {
-      "$ref" : "#/$defs/crucible"
-    },
-    "instance" : {
-      "$ref" : "#/$defs/instance"
-    },
-    "application" : {
-      "$ref" : "#/$defs/application"
-    },
-    "system" : {
-      "$ref" : "#/$defs/system"
-    },
-    "defaults" : {
-      "$ref" : "#/$defs/defaults"
-    },
-    "hk2" : {
-      "$ref" : "#/$defs/hk2"
-    },
-    "DefaultRunLevelContext" : {
-      "$ref" : "#/$defs/DefaultRunLevelContext"
-    },
-    "configuration" : {
-      "$ref" : "#/$defs/configuration"
-    },
-    "dns" : {
-      "$ref" : "#/$defs/dns"
-    },
-    "jetty" : {
-      "$ref" : "#/$defs/jetty"
-    },
-    "keystores" : {
-      "$ref" : "#/$defs/keystores"
-    },
-    "secrets" : {
-      "$ref" : "#/$defs/secrets"
-    },
-    "log4j2" : {
-      "$ref" : "#/$defs/log4j2"
-    },
-    "opentelemetry" : {
-      "$ref" : "#/$defs/opentelemetry"
-    },
-    "reactivestreams" : {
-      "$ref" : "#/$defs/reactivestreams"
-    },
-    "yamlfilepublisher" : {
-      "$ref" : "#/$defs/yamlfilepublisher"
     }
   }
 }

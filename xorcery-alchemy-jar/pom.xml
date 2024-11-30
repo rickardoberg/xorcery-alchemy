@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.exoreaction.xorcery.alchemy</groupId>
+        <groupId>dev.xorcery.alchemy</groupId>
         <artifactId>xorcery-alchemy-parent</artifactId>
         <relativePath>../xorcery-alchemy-parent</relativePath>
         <version>0.1-SNAPSHOT</version>
@@ -18,7 +18,7 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-reactivestreams-api</artifactId>
         </dependency>
     </dependencies>

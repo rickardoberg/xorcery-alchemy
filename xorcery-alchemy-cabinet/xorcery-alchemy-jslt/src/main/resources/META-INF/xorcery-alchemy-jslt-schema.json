@@ -1,30 +1,39 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-jslt/schema",
-  "title": "xorcery-alchemy-jslt configuration JSON Schema",
-  "$defs": {
-    "transmutejar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "jslt"
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-jslt/schema",
+  "title" : "xorcery-alchemy-jslt configuration JSON Schema",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    }
+  },
+  "$defs" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "jslt",
+                  "description" : "Default: jslt"
                 },
-                "jslt": {
-                  "type": "string",
-                  "description": "jslt | JSLT transformation as a string"
+                "jslt" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 }
               }
-            }
-          ]
+            } ]
+          }
         }
-      ]
+      }
     }
   }
 }

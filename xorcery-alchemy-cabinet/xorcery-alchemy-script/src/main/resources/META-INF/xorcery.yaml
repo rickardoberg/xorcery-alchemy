@@ -1,0 +1,22 @@
+jars:
+  sourcejars:
+  - jar: script
+    bindings: {}
+    subscribe: null
+    next: null
+
+  transmutejars:
+  - jar: script
+    bindings: {}
+    subscribe: null
+    next: null
+    error: null
+    complete: null
+
+  resultjars:
+  - jar: script
+    bindings: { }
+    subscribe: null
+    next: null
+    error: null
+    complete: null

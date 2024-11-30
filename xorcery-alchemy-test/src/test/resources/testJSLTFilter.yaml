@@ -2,8 +2,6 @@ $schema: META-INF/xorcery-alchemy-crucible-override-schema.json
 crucible:
   recipes:
     - name: "jsltfilter"
-      context:
-        "var1": "value1"
       source:
         name: "merged-source-files"
         jar: concat
@@ -21,6 +19,7 @@ crucible:
         - name: "addcontext"
           jar: jslt
           context:
+            "var1": "value1"
             "var2": "value2"
           jslt: |+
             {

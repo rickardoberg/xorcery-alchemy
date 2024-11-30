@@ -1,0 +1,9 @@
+jars:
+  sourcejars:
+    - jar: projection
+      context:
+        projectionId: null
+  resultjars:
+    - jar: projection
+      context:
+        projectionId: null

@@ -1,55 +1,118 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-common/override-schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-common/override-schema",
   "title" : "xorcery-alchemy-common configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    },
+    "instance" : {
+      "$ref" : "#/$defs/instance"
+    },
+    "application" : {
+      "$ref" : "#/$defs/application"
+    },
+    "system" : {
+      "$ref" : "#/$defs/system"
+    },
+    "defaults" : {
+      "$ref" : "#/$defs/defaults"
+    },
+    "hk2" : {
+      "$ref" : "#/$defs/hk2"
+    },
+    "DefaultRunLevelContext" : {
+      "$ref" : "#/$defs/DefaultRunLevelContext"
+    },
+    "configuration" : {
+      "$ref" : "#/$defs/configuration"
+    },
+    "log4j2" : {
+      "$ref" : "#/$defs/log4j2"
+    },
+    "opentelemetry" : {
+      "$ref" : "#/$defs/opentelemetry"
+    }
+  },
   "$defs" : {
-    "jar" : {
+    "jars" : {
       "type" : "object",
-      "required" : [ "jar" ],
       "additionalProperties" : false,
       "properties" : {
-        "name" : {
-          "type" : "string",
-          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
         },
-        "jar" : {
-          "type" : "string",
-          "description" : "Jar type"
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "concat",
+                  "description" : "Default: concat",
+                  "const" : "concat"
+                },
+                "sources" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "$ref" : "#/$defs/jars/properties/sourcejars/items"
+                  }
+                }
+              }
+            } ]
+          }
         },
-        "context" : {
-          "type" : "object",
-          "description" : "Jar context configuration"
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "flatten",
+                  "description" : "Default: flatten",
+                  "const" : "flatten"
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "rename",
+                  "description" : "Default: rename",
+                  "const" : "rename"
+                },
+                "metadata" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "data" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                }
+              }
+            } ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ ]
+          }
         }
       }
-    },
-    "sourcejar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "concat",
-              "description" : "concat | Concatenate a list of sources, one after the other"
-            },
-            "sources" : {
-              "type" : [ "array", "string" ],
-              "items" : {
-                "$ref" : "#/$defs/sourcejar"
-              }
-            }
-          }
-        } ]
-      } ]
-    },
-    "transmutejar" : {
-      "oneOf" : [ ]
-    },
-    "resultjar" : {
-      "oneOf" : [ ]
-    },
-    "recipecontext" : {
-      "allOf" : [ ]
     },
     "instance" : {
       "type" : "object",
@@ -109,6 +172,10 @@
           "description" : "Default: {{ instance.uri }}api/ (http://service.xorcery.test/api/)"
         },
         "locale" : {
+          "default" : null,
+          "description" : "Default: null"
+        },
+        "timeZone" : {
           "default" : null,
           "description" : "Default: null"
         }
@@ -342,36 +409,6 @@
           }
         }
       }
-    }
-  },
-  "type" : "object",
-  "properties" : {
-    "instance" : {
-      "$ref" : "#/$defs/instance"
-    },
-    "application" : {
-      "$ref" : "#/$defs/application"
-    },
-    "system" : {
-      "$ref" : "#/$defs/system"
-    },
-    "defaults" : {
-      "$ref" : "#/$defs/defaults"
-    },
-    "hk2" : {
-      "$ref" : "#/$defs/hk2"
-    },
-    "DefaultRunLevelContext" : {
-      "$ref" : "#/$defs/DefaultRunLevelContext"
-    },
-    "configuration" : {
-      "$ref" : "#/$defs/configuration"
-    },
-    "log4j2" : {
-      "$ref" : "#/$defs/log4j2"
-    },
-    "opentelemetry" : {
-      "$ref" : "#/$defs/opentelemetry"
     }
   }
 }

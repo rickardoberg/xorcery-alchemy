@@ -1,35 +1,80 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-common-schema/schema",
-  "title": "xorcery-alchemy-common configuration JSON Schema",
-  "$defs": {
-    "sourcejar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "concat",
-                  "description": "concat | Concatenate a list of sources, one after the other"
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-common/schema",
+  "title" : "xorcery-alchemy-common configuration JSON Schema",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    }
+  },
+  "$defs" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "concat",
+                  "description" : "Default: concat",
+                  "const" : "concat"
                 },
-                "sources": {
-                  "type": [
-                    "array",
-                    "string"
-                  ],
-                  "items": {
-                    "$ref": "#/$defs/sourcejar"
+                "sources" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "$ref" : "#/$defs/jars/properties/sourcejars/items"
                   }
                 }
               }
-            }
-          ]
+            } ]
+          }
+        },
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "flatten",
+                  "description" : "Default: flatten",
+                  "const" : "flatten"
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "rename",
+                  "description" : "Default: rename",
+                  "const" : "rename"
+                },
+                "metadata" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "data" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                }
+              }
+            } ]
+          }
         }
-      ]
+      }
     }
   }
 }

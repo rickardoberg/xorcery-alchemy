@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.exoreaction.xorcery.alchemy</groupId>
+        <groupId>dev.xorcery.alchemy</groupId>
         <artifactId>xorcery-alchemy-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../xorcery-alchemy-parent</relativePath>
@@ -14,19 +14,23 @@
 
     <modules>
         <module>xorcery-alchemy-common</module>
+        <module>xorcery-alchemy-log</module>
+
         <module>xorcery-alchemy-file-yaml</module>
         <module>xorcery-alchemy-file-csv</module>
+        <module>xorcery-alchemy-file-excel</module>
 
         <module>xorcery-alchemy-jslt</module>
         <module>xorcery-alchemy-script</module>
 
-        <module>xorcery-alchemy-log</module>
+        <module>xorcery-alchemy-neo4jprojection</module>
+
         <module>xorcery-alchemy-cabinet-all</module>
     </modules>
 
     <dependencies>
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <groupId>dev.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-jar</artifactId>
         </dependency>
     </dependencies>

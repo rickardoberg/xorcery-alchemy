@@ -1,0 +1,4 @@
+jars:
+  transmutejars:
+    - jar: jslt
+      jslt: null

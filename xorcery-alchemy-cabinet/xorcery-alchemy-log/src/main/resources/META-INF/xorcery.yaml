@@ -1,0 +1,7 @@
+jars:
+  transmutejars:
+  - jar: log
+    level: "INFO"
+  resultjars:
+  - jar: log
+    level: "INFO"

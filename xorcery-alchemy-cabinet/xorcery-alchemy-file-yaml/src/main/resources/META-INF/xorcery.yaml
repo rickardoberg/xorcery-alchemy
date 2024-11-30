@@ -1,0 +1,9 @@
+jars:
+  sourcejars:
+    - jar: yaml
+      context:
+        resourceUrl: null
+  resultjars:
+    - jar: yaml
+      context:
+        resourceUrl: null

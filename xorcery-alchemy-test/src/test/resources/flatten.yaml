@@ -1,0 +1,382 @@
+{
+  "data": {
+    "timeseries": [
+      {
+        "label": "2010-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": []
+        }
+      },
+      {
+        "label": "2011-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 12000000,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 90673797.72000006,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 17569200.000000007,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 19326120.00000001,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 23384605.200000018,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2012-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 28295372.292000026,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 213804071.96807534,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 41427254.57271725,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 45569980.029988974,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 55139675.83628667,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2013-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 66719007.76190688,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 504138817.8235214,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 97683299.2642079,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 107451629.19062869,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 130016471.32066074,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2014-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 157319930.2979995,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 1188732961.4304426,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 230332109.94930115,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 253365320.9442313,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 306572038.34251994,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2015-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 370952166.3944492,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 2802970141.6205063,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 543111066.8181132,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 597422173.4999245,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 722880829.9349089,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2016-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 874685804.2212398,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 6609256973.376021,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 1280627485.9603176,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 1408690234.5563495,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 1704515183.813183,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2017-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 2062463372.4139519,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 15584282219.597652,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 3019652623.5512686,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 3321617885.906396,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 4019157641.9467397,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2018-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 4863180746.755555,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 36746922275.59266,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 7120182931.324811,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 7832201224.457293,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 9476963481.593327,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2019-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 11467125812.727928,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 86647320531.09027,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 16789018902.414967,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 18467920792.656464,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 22346184159.114323,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "label": "2020-01-01T00:00:00+01:00",
+        "data": {
+          "lineItems": [
+            {
+              "total": 11467125812.727928,
+              "company": {
+                "country": "Malaysia"
+              }
+            },
+            {
+              "total": 86647320531.09027,
+              "company": {
+                "country": "Indonesia"
+              }
+            },
+            {
+              "total": 16789018902.414967,
+              "company": {
+                "country": "Sudan"
+              }
+            },
+            {
+              "total": 18467920792.656464,
+              "company": {
+                "country": "Nigeria"
+              }
+            },
+            {
+              "total": 22346184159.114323,
+              "company": {
+                "country": "Australia"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

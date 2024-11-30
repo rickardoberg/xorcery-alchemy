@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.exoreaction.xorcery.alchemy</groupId>
+        <groupId>dev.xorcery.alchemy</groupId>
         <artifactId>xorcery-alchemy-cabinet</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
@@ -13,30 +13,39 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <groupId>dev.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-file-yaml</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-file-csv</artifactId>
+            <groupId>dev.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-log</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <groupId>dev.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-file-yaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-file-csv</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-file-excel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-jslt</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <groupId>dev.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-script</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-log</artifactId>
-            <version>${project.version}</version>
+            <groupId>dev.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-neo4jprojection</artifactId>
         </dependency>
     </dependencies>
 </project>

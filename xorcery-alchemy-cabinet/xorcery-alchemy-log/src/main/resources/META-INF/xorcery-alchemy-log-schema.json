@@ -1,26 +1,63 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-log/schema",
-  "title": "xorcery-alchemy-log configuration JSON Schema",
-  "$defs": {
-    "resultjar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "log",
-                  "description": "log | Log item to Log4j"
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-log/schema",
+  "title" : "xorcery-alchemy-log configuration JSON Schema",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    }
+  },
+  "$defs" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log",
+                  "const" : "log"
+                },
+                "level" : {
+                  "type" : "string",
+                  "default" : "INFO",
+                  "description" : "Default: INFO"
                 }
               }
-            }
-          ]
+            } ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log",
+                  "const" : "log"
+                },
+                "level" : {
+                  "type" : "string",
+                  "default" : "INFO",
+                  "description" : "Default: INFO"
+                }
+              }
+            } ]
+          }
         }
-      ]
+      }
     }
   }
 }

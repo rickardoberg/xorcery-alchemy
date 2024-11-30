@@ -1,5 +1,5 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-transmute-script/override-schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-transmute-script/override-schema",
   "title" : "xorcery-alchemy-transmute-script configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
   "$defs" : {

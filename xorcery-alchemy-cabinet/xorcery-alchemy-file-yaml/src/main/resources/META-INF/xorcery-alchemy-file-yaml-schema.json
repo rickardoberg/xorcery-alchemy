@@ -1,44 +1,73 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-file-yaml/schema",
-  "title": "xorcery-alchemy-file-yaml configuration JSON Schema",
-  "$defs": {
-    "yamlcontext": {
-      "type": "object",
-      "properties": {
-        "resourceUrl": {
-          "type": "string",
-          "description": "Resource name in project or URL to YAML file"
-        }
-      }
-    },
-    "sourcejar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "yaml"
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-file-yaml/schema",
+  "title" : "xorcery-alchemy-file-yaml configuration JSON Schema",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    }
+  },
+  "$defs" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml",
+                  "const" : "yaml"
                 },
-                "context": {
-                  "$ref": "#/$defs/yamlcontext"
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
                 }
               }
-            }
-          ]
+            } ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml",
+                  "const" : "yaml"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            } ]
+          }
         }
-      ]
-    },
-    "recipecontext": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/yamlcontext"
-        }
-      ]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 open module xorcery.alchemy.jslt {
-    exports com.exoreaction.xorcery.alchemy.jslt;
-    exports com.exoreaction.xorcery.alchemy.jslt.functions;
+    exports dev.xorcery.alchemy.jslt.transmute.functions;
+    exports dev.xorcery.alchemy.jslt.transmute;
 
     uses com.schibsted.spt.data.jslt.Function;
 
@@ -15,5 +15,5 @@ open module xorcery.alchemy.jslt {
     requires org.apache.logging.log4j;
 
     provides com.schibsted.spt.data.jslt.Function with
-            com.exoreaction.xorcery.alchemy.jslt.functions.PowerFunction;
+            dev.xorcery.alchemy.jslt.transmute.functions.PowerFunction;
 }

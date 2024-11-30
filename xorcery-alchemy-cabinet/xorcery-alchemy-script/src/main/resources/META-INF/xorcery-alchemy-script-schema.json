@@ -1,102 +1,125 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-script/schema",
-  "title": "xorcery-alchemy-script configuration JSON Schema",
-  "$defs": {
-    "sourcejar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "script",
-                  "description": "script | Execute JavaScript"
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-script/schema",
+  "title" : "xorcery-alchemy-script configuration JSON Schema",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    }
+  },
+  "$defs" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
                 },
-                "engine": {
-                  "type": "string",
-                  "default": "nashorn",
-                  "description": "script | Script engine name"
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
                 },
-                "script": {
-                  "type": "string",
-                  "description": "script | JavaScript to execute as source generator"
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
-                "bindings": {
-                  "type": "object",
-                  "description": "script | Bindings available to the script during evaluation"
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 }
               }
-            }
-          ]
-        }
-      ]
-    },
-    "transmutejar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "script"
+            } ]
+          }
+        },
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
                 },
-                "engine": {
-                  "type": "string",
-                  "default": "nashorn",
-                  "description": "script | Script engine name"
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
                 },
-                "script": {
-                  "type": "string",
-                  "description": "script | JavaScript to execute"
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
-                "bindings": {
-                  "type": "object",
-                  "description": "script | Bindings available to the script during evaluation"
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "error" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "complete" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 }
               }
-            }
-          ]
-        }
-      ]
-    },
-    "resultjar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "script"
+            } ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
                 },
-                "engine": {
-                  "type": "string",
-                  "default": "nashorn",
-                  "description": "script | Script engine name"
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
                 },
-                "script": {
-                  "type": "string",
-                  "description": "script | JavaScript to execute"
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
-                "bindings": {
-                  "type": "object",
-                  "description": "script | Bindings available to the script during evaluation"
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "error" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "complete" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 }
               }
-            }
-          ]
+            } ]
+          }
         }
-      ]
+      }
     }
   }
 }

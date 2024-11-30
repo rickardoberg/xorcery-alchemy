@@ -1,5 +1,8 @@
 module xorcery.alchemy.script {
-    exports com.exoreaction.xorcery.alchemy.script;
+    exports dev.xorcery.alchemy.script;
+    exports dev.xorcery.alchemy.script.result;
+    exports dev.xorcery.alchemy.script.source;
+    exports dev.xorcery.alchemy.script.transmute;
 
     requires xorcery.alchemy.jar;
     requires org.apache.logging.log4j;

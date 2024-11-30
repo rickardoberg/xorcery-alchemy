@@ -1,5 +1,5 @@
 module xorcery.alchemy.jar {
-    exports com.exoreaction.xorcery.alchemy.jar;
+    exports dev.xorcery.alchemy.jar;
 
     requires xorcery.reactivestreams.api;
 

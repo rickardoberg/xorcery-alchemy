@@ -1,108 +1,157 @@
 {
-  "$id" : "http://xorcery.exoreaction.com/applications/com.exoreaction.xorcery.alchemy/xorcery-alchemy-script/override-schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-script/override-schema",
   "title" : "xorcery-alchemy-script configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    },
+    "instance" : {
+      "$ref" : "#/$defs/instance"
+    },
+    "application" : {
+      "$ref" : "#/$defs/application"
+    },
+    "system" : {
+      "$ref" : "#/$defs/system"
+    },
+    "defaults" : {
+      "$ref" : "#/$defs/defaults"
+    },
+    "hk2" : {
+      "$ref" : "#/$defs/hk2"
+    },
+    "DefaultRunLevelContext" : {
+      "$ref" : "#/$defs/DefaultRunLevelContext"
+    },
+    "configuration" : {
+      "$ref" : "#/$defs/configuration"
+    },
+    "log4j2" : {
+      "$ref" : "#/$defs/log4j2"
+    },
+    "opentelemetry" : {
+      "$ref" : "#/$defs/opentelemetry"
+    }
+  },
   "$defs" : {
-    "jar" : {
+    "jars" : {
       "type" : "object",
-      "required" : [ "jar" ],
       "additionalProperties" : false,
       "properties" : {
-        "name" : {
-          "type" : "string",
-          "description" : "Transmute name in this recipe (http://www.exoreaction.com))"
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
         },
-        "jar" : {
-          "type" : "string",
-          "description" : "Jar type"
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
+                },
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            } ]
+          }
         },
-        "context" : {
-          "type" : "object",
-          "description" : "Jar context configuration"
+        "transmutejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
+                },
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "error" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "complete" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            } ]
+          }
+        },
+        "resultjars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script",
+                  "const" : "script"
+                },
+                "bindings" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                },
+                "subscribe" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "next" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "error" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "complete" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                }
+              }
+            } ]
+          }
         }
       }
-    },
-    "sourcejar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script",
-              "description" : "script | Execute JavaScript"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "script | Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "script | JavaScript to execute as source generator"
-            },
-            "bindings" : {
-              "type" : "object",
-              "description" : "script | Bindings available to the script during evaluation"
-            }
-          }
-        } ]
-      } ]
-    },
-    "transmutejar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "script | Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "script | JavaScript to execute"
-            },
-            "bindings" : {
-              "type" : "object",
-              "description" : "script | Bindings available to the script during evaluation"
-            }
-          }
-        } ]
-      } ]
-    },
-    "resultjar" : {
-      "oneOf" : [ {
-        "allOf" : [ {
-          "$ref" : "#/$defs/jar"
-        }, {
-          "properties" : {
-            "jar" : {
-              "const" : "script"
-            },
-            "engine" : {
-              "type" : "string",
-              "default" : "nashorn",
-              "description" : "script | Script engine name"
-            },
-            "script" : {
-              "type" : "string",
-              "description" : "script | JavaScript to execute"
-            },
-            "bindings" : {
-              "type" : "object",
-              "description" : "script | Bindings available to the script during evaluation"
-            }
-          }
-        } ]
-      } ]
-    },
-    "recipecontext" : {
-      "allOf" : [ ]
     },
     "instance" : {
       "type" : "object",
@@ -162,6 +211,10 @@
           "description" : "Default: {{ instance.uri }}api/ (http://service.xorcery.test/api/)"
         },
         "locale" : {
+          "default" : null,
+          "description" : "Default: null"
+        },
+        "timeZone" : {
           "default" : null,
           "description" : "Default: null"
         }
@@ -395,36 +448,6 @@
           }
         }
       }
-    }
-  },
-  "type" : "object",
-  "properties" : {
-    "instance" : {
-      "$ref" : "#/$defs/instance"
-    },
-    "application" : {
-      "$ref" : "#/$defs/application"
-    },
-    "system" : {
-      "$ref" : "#/$defs/system"
-    },
-    "defaults" : {
-      "$ref" : "#/$defs/defaults"
-    },
-    "hk2" : {
-      "$ref" : "#/$defs/hk2"
-    },
-    "DefaultRunLevelContext" : {
-      "$ref" : "#/$defs/DefaultRunLevelContext"
-    },
-    "configuration" : {
-      "$ref" : "#/$defs/configuration"
-    },
-    "log4j2" : {
-      "$ref" : "#/$defs/log4j2"
-    },
-    "opentelemetry" : {
-      "$ref" : "#/$defs/opentelemetry"
     }
   }
 }

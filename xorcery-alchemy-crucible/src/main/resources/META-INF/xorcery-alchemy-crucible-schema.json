@@ -1,11 +1,14 @@
 {
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
   "type" : "object",
-  "$id" : "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-crucible/schema",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-crucible/schema",
   "title" : "xorcery-alchemy-crucible configuration JSON Schema",
   "properties" : {
     "crucible" : {
       "$ref" : "#/$defs/crucible"
+    },
+    "watcher" : {
+      "$ref" : "#/$defs/watcher"
     }
   },
   "$defs" : {
@@ -31,6 +34,61 @@
         }
       }
     },
+    "watcher" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : false,
+          "description" : "Default: false"
+        },
+        "directories" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "path" : {
+                  "type" : "string",
+                  "default" : "C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files",
+                  "description" : "Default: C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files"
+                },
+                "recipe" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "source" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    },
+                    "result" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "log",
+                          "description" : "Default: log"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } ]
+          }
+        }
+      }
+    },
     "recipe" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -44,20 +102,17 @@
           "type" : [ "null", "string" ],
           "description" : "Name of recipe (optional)"
         },
-        "context" : {
-          "$ref" : "#/$defs/recipecontext"
-        },
         "source" : {
-          "$ref" : "#/$defs/sourcejar"
+          "$ref" : "#/$defs/jars/properties/sourcejars/items"
         },
         "transmutes" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "$ref" : "#/$defs/transmutejar"
+            "$ref" : "#/$defs/jars/properties/transmutejars/items"
           }
         },
         "result" : {
-          "$ref" : "#/$defs/resultjar"
+          "$ref" : "#/$defs/jars/properties/resultjars/items"
         }
       }
     }

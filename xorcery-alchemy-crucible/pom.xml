@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.exoreaction.xorcery.alchemy</groupId>
+        <groupId>dev.xorcery.alchemy</groupId>
         <artifactId>xorcery-alchemy-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>../xorcery-alchemy-parent</relativePath>
@@ -19,36 +19,36 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.exoreaction.xorcery.alchemy</groupId>
+            <groupId>dev.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-jar</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-runner</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-opentelemetry-sdk</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-opentelemetry-log4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-opentelemetry-jvm</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-opentelemetry-exporter-websocket</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.exoreaction.xorcery</groupId>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-reactivestreams-client</artifactId>
         </dependency>
     </dependencies>

@@ -1,64 +1,46 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "http://xorcery.exoreaction.com/modules/com.exoreaction.xorcery.alchemy/xorcery-alchemy-file-csv/schema",
-  "title": "xorcery-alchemy-file-csv configuration JSON Schema",
-  "$defs": {
-    "csvcontext": {
-      "type": "object",
-      "properties": {
-        "resourceUrl": {
-          "type": "string",
-          "description": "csv | Resource name in project or URL to CSV file"
-        },
-        "headers": {
-          "type": ["boolean","string"],
-          "default": false,
-          "description": "csv | True if CSV file has headers"
-        },
-        "separator": {
-          "type": "string",
-          "default": ",",
-          "description": "csv | Separator character"
-        },
-        "escape": {
-          "type": "string",
-          "default": "\\",
-          "description": "csv | Escape character"
-        },
-        "quote": {
-          "type": "string",
-          "default": "'",
-          "description": "csv | Quote character"
-        }
-      }
-    },
-    "sourcejar": {
-      "oneOf": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/$defs/jar"
-            },
-            {
-              "properties": {
-                "jar": {
-                  "const": "csv"
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "type" : "object",
+  "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-file-csv/schema",
+  "title" : "xorcery-alchemy-file-csv configuration JSON Schema",
+  "properties" : {
+    "jars" : {
+      "$ref" : "#/$defs/jars"
+    }
+  },
+  "$defs" : {
+    "jars" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "sourcejars" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "csv",
+                  "description" : "Default: csv",
+                  "const" : "csv"
                 },
-                "context": {
-                  "$ref": "#/$defs/csvcontext"
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "resourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
                 }
               }
-            }
-          ]
+            } ]
+          }
         }
-      ]
-    },
-    "recipecontext": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/csvcontext"
-        }
-      ]
+      }
     }
   }
 }

@@ -1,0 +1,16 @@
+$schema: ./META-INF/xorcery-alchemy-test-override-schema.json
+
+crucible:
+  recipes:
+    - source:
+        jar: concat
+        sources:
+          - jar: script
+            next:
+            bindings:
+              a: "b"
+      transmutes:
+        - jar: flatten
+        - jar: jslt
+          jslt:
+
