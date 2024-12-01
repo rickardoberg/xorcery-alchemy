@@ -1,5 +1,11 @@
 jars:
   sourcejars:
     - jar: csv
+      name: csv
+      enabled: "{{ jars.enabled }}"
       context:
-        resourceUrl: null
+        escape: null
+        separator: null
+        quote: null
+        headers: false
+        sourceUrl: null

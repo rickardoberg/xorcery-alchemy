@@ -10,7 +10,13 @@ crucible:
             bindings:
               a: "b"
       transmutes:
-        - jar: flatten
         - jar: jslt
-          jslt:
+          next: dsad
+        - jar: jslt
+          jslt: "asd"
+        - jar: rename
+          name: "foo"
+
+
+
 

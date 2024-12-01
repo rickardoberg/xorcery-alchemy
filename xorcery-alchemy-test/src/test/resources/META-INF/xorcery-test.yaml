@@ -1,6 +1,13 @@
+$schema: xorcery-alchemy-test-override-schema.json
+
 crucible:
   closeWhenDone: false
 
+neo4jdatabase:
+  enabled: false
+neo4j:
+  metrics:
+    enabled: false
 log4j2:
   Configuration:
     thresholdFilter:

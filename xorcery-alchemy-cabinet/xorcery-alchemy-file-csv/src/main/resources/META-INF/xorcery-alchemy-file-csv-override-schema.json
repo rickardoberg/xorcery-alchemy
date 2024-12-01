@@ -73,11 +73,38 @@
                   "description" : "Default: csv",
                   "const" : "csv"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "csv",
+                  "description" : "Default: csv"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "escape" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "separator" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "quote" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "headers" : {
+                      "type" : [ "boolean", "string" ],
+                      "default" : false,
+                      "description" : "Default: false"
+                    },
+                    "sourceUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }

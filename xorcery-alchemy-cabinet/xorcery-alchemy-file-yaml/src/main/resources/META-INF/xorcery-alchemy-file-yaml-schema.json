@@ -26,11 +26,21 @@
                   "description" : "Default: yaml",
                   "const" : "yaml"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "sourceUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -53,11 +63,21 @@
                   "description" : "Default: yaml",
                   "const" : "yaml"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "resultUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }

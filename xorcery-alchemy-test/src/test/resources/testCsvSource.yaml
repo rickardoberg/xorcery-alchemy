@@ -6,10 +6,10 @@ crucible:
         jar: csv
         name: "readcsvfile"
         context:
-          resourceUrl: "readcsvfile.csv"
+          sourceUrl: "resource://readcsvfile.csv"
           separator: ";"
       result:
         name: "logitem"
         jar: script
-        script: |+
+        next: |+
           print('item:'+item);

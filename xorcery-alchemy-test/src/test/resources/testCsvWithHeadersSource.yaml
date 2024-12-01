@@ -6,11 +6,11 @@ crucible:
         jar: csv
         name: "readcsvfilewithheaders"
         context:
-          resourceUrl: "readcsvfilewithheaders.csv"
+          sourceUrl: "resource://readcsvfilewithheaders.csv"
           headers: true
           quote: "'"
       result:
         name: "logitem"
         jar: script
-        script: |+
+        next: |+
           print('item:'+item);

@@ -1,9 +1,13 @@
 jars:
   sourcejars:
     - jar: projection
+      name: projection
+      enabled: "{{ jars.enabled }}"
       context:
         projectionId: null
   resultjars:
     - jar: projection
+      name: projection
+      enabled: "{{ jars.enabled }}"
       context:
         projectionId: null

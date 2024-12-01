@@ -58,6 +58,16 @@
                   "description" : "Default: script",
                   "const" : "script"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "bindings" : {
                   "type" : "object",
                   "additionalProperties" : true,
@@ -87,6 +97,16 @@
                   "default" : "script",
                   "description" : "Default: script",
                   "const" : "script"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "bindings" : {
                   "type" : "object",
@@ -125,6 +145,16 @@
                   "default" : "script",
                   "description" : "Default: script",
                   "const" : "script"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "bindings" : {
                   "type" : "object",

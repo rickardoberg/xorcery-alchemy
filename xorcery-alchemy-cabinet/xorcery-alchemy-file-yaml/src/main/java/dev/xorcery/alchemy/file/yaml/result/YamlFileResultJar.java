@@ -6,23 +6,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
-import dev.xorcery.alchemy.jar.ResultJar;
+import dev.xorcery.alchemy.jar.*;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
-import dev.xorcery.reactivestreams.extras.publishers.ResourcePublisherContext;
-import dev.xorcery.util.Resources;
 import org.jvnet.hk2.annotations.Service;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.util.context.ContextView;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.function.BiFunction;
 
@@ -35,15 +28,7 @@ public class YamlFileResultJar
         return (flux, context)->
         {
             ContextViewElement contextViewElement = new ContextViewElement(context);
-            URL fileUrl = contextViewElement.getString(ResourcePublisherContext.resourceUrl).map(url ->
-                    Resources.getResource(url).orElseGet(() ->
-                    {
-                        try {
-                            return new File(url).toURI().toURL();
-                        } catch (MalformedURLException e) {
-                            return null;
-                        }
-                    })).orElse(null);
+            String fileUrl = contextViewElement.getString(JarContext.resultUrl).orElse(null);
 
             if (fileUrl == null)
             {
@@ -51,7 +36,7 @@ public class YamlFileResultJar
             }
 
             try {
-                BufferedOutputStream outputStream = new BufferedOutputStream(fileUrl.openConnection().getOutputStream());
+                BufferedOutputStream outputStream = new BufferedOutputStream(new URL(fileUrl).openConnection().getOutputStream());
                 ObjectMapper mapper = new YAMLMapper().findAndRegisterModules()
                         .configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false)
                         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

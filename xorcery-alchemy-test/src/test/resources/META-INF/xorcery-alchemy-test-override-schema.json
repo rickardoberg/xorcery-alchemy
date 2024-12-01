@@ -83,6 +83,16 @@
                   "description" : "Default: concat",
                   "const" : "concat"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "concat",
+                  "description" : "Default: concat"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "sources" : {
                   "type" : [ "array", "string" ],
                   "items" : {
@@ -96,15 +106,137 @@
               "properties" : {
                 "jar" : {
                   "type" : "string",
+                  "default" : "directory",
+                  "description" : "Default: directory"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "directory",
+                  "description" : "Default: directory"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
+                "path" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "filter" : {
+                  "type" : "string",
+                  "default" : "*.*",
+                  "description" : "Default: *.*"
+                },
+                "mappings" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "anyOf" : [ {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.yaml",
+                          "description" : "Default: *.yaml"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    }, {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.yml",
+                          "description" : "Default: *.yml"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    }, {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.csv",
+                          "description" : "Default: *.csv"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "csv",
+                          "description" : "Default: csv"
+                        }
+                      }
+                    }, {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.xlsx",
+                          "description" : "Default: *.xlsx"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "excel",
+                          "description" : "Default: excel"
+                        }
+                      }
+                    } ]
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
                   "default" : "csv",
                   "description" : "Default: csv",
                   "const" : "csv"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "csv",
+                  "description" : "Default: csv"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "escape" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "separator" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "quote" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "headers" : {
+                      "type" : [ "boolean", "string" ],
+                      "default" : false,
+                      "description" : "Default: false"
+                    },
+                    "sourceUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -120,11 +252,21 @@
                   "default" : "excel",
                   "description" : "Default: excel"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "excel",
+                  "description" : "Default: excel"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "sourceUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -141,11 +283,21 @@
                   "description" : "Default: yaml",
                   "const" : "yaml"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "sourceUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -160,6 +312,16 @@
                   "type" : "string",
                   "default" : "projection",
                   "description" : "Default: projection"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "projection",
+                  "description" : "Default: projection"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "context" : {
                   "type" : "object",
@@ -181,6 +343,16 @@
                   "default" : "script",
                   "description" : "Default: script",
                   "const" : "script"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "bindings" : {
                   "type" : "object",
@@ -211,6 +383,16 @@
                   "default" : "flatten",
                   "description" : "Default: flatten",
                   "const" : "flatten"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "flatten",
+                  "description" : "Default: flatten"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 }
               }
             }, {
@@ -222,6 +404,16 @@
                   "default" : "rename",
                   "description" : "Default: rename",
                   "const" : "rename"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "rename",
+                  "description" : "Default: rename"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "metadata" : {
                   "type" : "object",
@@ -243,6 +435,16 @@
                   "default" : "jslt",
                   "description" : "Default: jslt"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "jslt",
+                  "description" : "Default: jslt"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "jslt" : {
                   "default" : null,
                   "description" : "Default: null"
@@ -257,6 +459,16 @@
                   "default" : "log",
                   "description" : "Default: log",
                   "const" : "log"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "level" : {
                   "type" : "string",
@@ -273,6 +485,16 @@
                   "default" : "script",
                   "description" : "Default: script",
                   "const" : "script"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "bindings" : {
                   "type" : "object",
@@ -311,11 +533,21 @@
                   "default" : "excel",
                   "description" : "Default: excel"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "excel",
+                  "description" : "Default: excel"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "resultUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -332,11 +564,21 @@
                   "description" : "Default: yaml",
                   "const" : "yaml"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "yaml",
+                  "description" : "Default: yaml"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "resultUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -353,6 +595,16 @@
                   "description" : "Default: log",
                   "const" : "log"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "level" : {
                   "type" : "string",
                   "default" : "INFO",
@@ -367,6 +619,16 @@
                   "type" : "string",
                   "default" : "projection",
                   "description" : "Default: projection"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "projection",
+                  "description" : "Default: projection"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "context" : {
                   "type" : "object",
@@ -388,6 +650,16 @@
                   "default" : "script",
                   "description" : "Default: script",
                   "const" : "script"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "script",
+                  "description" : "Default: script"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "bindings" : {
                   "type" : "object",

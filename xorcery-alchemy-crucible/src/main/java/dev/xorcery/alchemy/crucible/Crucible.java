@@ -59,7 +59,7 @@ public class Crucible
         CompletableFuture<Void> result = new CompletableFuture<Void>();
         result.whenCompleteAsync(logResult(recipeConfiguration.getName().orElse("crucible")));
         try {
-            logger.info("Starting transmutation: " + recipeConfiguration.getName());
+            recipeConfiguration.getName().ifPresent(name ->logger.info("Starting transmutation: " + name));
             Transmutation transmutation = cabinet.newTransmutation(recipeConfiguration);
             Disposable disposable = transmutation.getFlux().subscribe(item -> {
             }, result::completeExceptionally, () -> result.complete(null));

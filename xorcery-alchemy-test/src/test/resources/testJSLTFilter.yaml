@@ -8,10 +8,10 @@ crucible:
         sources:
           - jar: yaml
             context:
-              resourceUrl: "foo.yaml"
+              sourceUrl: "foo.yaml"
           - jar: yaml
             context:
-              resourceUrl: "bar.yaml"
+              sourceUrl: "bar.yaml"
       transmutes:
 #        - name: "dropevents"
 #          jar: jslt

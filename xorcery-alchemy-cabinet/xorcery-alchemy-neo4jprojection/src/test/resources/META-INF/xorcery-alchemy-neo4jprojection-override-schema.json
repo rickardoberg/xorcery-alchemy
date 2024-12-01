@@ -78,6 +78,16 @@
                   "default" : "projection",
                   "description" : "Default: projection"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "projection",
+                  "description" : "Default: projection"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -109,6 +119,16 @@
                   "type" : "string",
                   "default" : "projection",
                   "description" : "Default: projection"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "projection",
+                  "description" : "Default: projection"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "context" : {
                   "type" : "object",

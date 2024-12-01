@@ -2,12 +2,10 @@ $schema: META-INF/xorcery-alchemy-test-override-schema.json
 crucible:
   recipes:
     - name: "flatten"
-      context:
-        "var1": "value1"
       source:
         jar: yaml
         context:
-          resourceUrl: "flatten.yaml"
+          sourceUrl: "flatten.yaml"
       transmutes:
       - jar: flatten
       - jar: rename

@@ -25,6 +25,16 @@
                   "default" : "jslt",
                   "description" : "Default: jslt"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "jslt",
+                  "description" : "Default: jslt"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "jslt" : {
                   "default" : null,
                   "description" : "Default: null"

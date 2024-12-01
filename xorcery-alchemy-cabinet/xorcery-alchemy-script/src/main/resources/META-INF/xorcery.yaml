@@ -1,12 +1,16 @@
 jars:
   sourcejars:
   - jar: script
+    name: script
+    enabled: "{{ jars.enabled }}"
     bindings: {}
     subscribe: null
     next: null
 
   transmutejars:
   - jar: script
+    name: script
+    enabled: "{{ jars.enabled }}"
     bindings: {}
     subscribe: null
     next: null
@@ -15,6 +19,8 @@ jars:
 
   resultjars:
   - jar: script
+    name: script
+    enabled: "{{ jars.enabled }}"
     bindings: { }
     subscribe: null
     next: null

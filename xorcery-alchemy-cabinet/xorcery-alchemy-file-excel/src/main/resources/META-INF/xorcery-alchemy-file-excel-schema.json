@@ -25,11 +25,21 @@
                   "default" : "excel",
                   "description" : "Default: excel"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "excel",
+                  "description" : "Default: excel"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "sourceUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -51,11 +61,21 @@
                   "default" : "excel",
                   "description" : "Default: excel"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "excel",
+                  "description" : "Default: excel"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
-                    "resourceUrl" : {
+                    "resultUrl" : {
                       "default" : null,
                       "description" : "Default: null"
                     }

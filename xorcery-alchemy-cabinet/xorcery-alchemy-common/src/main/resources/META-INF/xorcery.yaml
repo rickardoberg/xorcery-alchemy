@@ -1,9 +1,30 @@
 jars:
   sourcejars:
     - jar: concat
+      name: concat
+      enabled: "{{ jars.enabled }}"
       sources: []
+    - jar: directory
+      name: directory
+      enabled: "{{ jars.enabled }}"
+      path: null
+      filter: "*.*"
+      mappings:
+      - name: "*.yaml"
+        jar: yaml
+      - name: "*.yml"
+        jar: yaml
+      - name: "*.csv"
+        jar: csv
+      - name: "*.xlsx"
+        jar: excel
   transmutejars:
     - jar: flatten
+      name: flatten
+      enabled: "{{ jars.enabled }}"
+
     - jar: rename
+      name: rename
+      enabled: "{{ jars.enabled }}"
       metadata: {}
       data: {}

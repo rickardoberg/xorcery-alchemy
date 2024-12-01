@@ -1,7 +1,11 @@
 jars:
   transmutejars:
   - jar: log
+    name: log
+    enabled: "{{ jars.enabled }}"
     level: "INFO"
   resultjars:
   - jar: log
+    name: log
+    enabled: "{{ jars.enabled }}"
     level: "INFO"

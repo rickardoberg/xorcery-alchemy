@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
+import dev.xorcery.alchemy.jar.JarContext;
 import dev.xorcery.alchemy.jar.JarException;
 import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
-import dev.xorcery.reactivestreams.extras.publishers.ResourcePublisherContext;
 import org.dhatim.fastexcel.reader.Cell;
 import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.dhatim.fastexcel.reader.Row;
@@ -45,9 +45,9 @@ public class ExcelPublisher
         if (s instanceof CoreSubscriber<? super MetadataJsonNode<JsonNode>> coreSubscriber) {
             try {
                 ContextViewElement contextViewElement = new ContextViewElement(coreSubscriber.currentContext());
-                Object resourceUrl = contextViewElement.get(ResourcePublisherContext.resourceUrl)
-                        .orElseThrow(ContextViewElement.missing(ResourcePublisherContext.resourceUrl));
-                URL excelResource = resourceUrl instanceof URL url ? url : new URL(resourceUrl.toString());
+                Object sourceUrl = contextViewElement.get(JarContext.sourceUrl)
+                        .orElseThrow(ContextViewElement.missing(JarContext.sourceUrl));
+                URL excelResource = sourceUrl instanceof URL url ? url : new URL(sourceUrl.toString());
 
                 // Get metadata first
                 Metadata.Builder metadataBuilder = new Metadata.Builder();

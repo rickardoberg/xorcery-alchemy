@@ -2,16 +2,12 @@ package dev.xorcery.alchemy.file.excel.result;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
-import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
-import dev.xorcery.alchemy.jar.ResultJar;
+import dev.xorcery.alchemy.jar.*;
 import dev.xorcery.configuration.ApplicationConfiguration;
 import dev.xorcery.configuration.Configuration;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
-import dev.xorcery.reactivestreams.extras.publishers.ResourcePublisherContext;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.dhatim.fastexcel.VisibilityState;
@@ -47,7 +43,7 @@ public class ExcelResultJar
     public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newResult(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
         return (flux, context) -> {
             ContextViewElement contextViewElement = new ContextViewElement(context);
-            return contextViewElement.getURI(ResourcePublisherContext.resourceUrl).<Flux<MetadataJsonNode<JsonNode>>>map(resourceUri ->
+            return contextViewElement.getURI(JarContext.resultUrl).<Flux<MetadataJsonNode<JsonNode>>>map(resourceUri ->
             {
                 try {
                     OutputStream out = resourceUri.getScheme().equals("file")
@@ -62,7 +58,7 @@ public class ExcelResultJar
                 } catch (IOException e) {
                     return Flux.error(new JarException(jarConfiguration, recipeConfiguration, e));
                 }
-            }).orElseGet(() -> Flux.error(new JarException(jarConfiguration, recipeConfiguration, "No resourceUrl specified")));
+            }).orElseGet(() -> Flux.error(new JarException(jarConfiguration, recipeConfiguration, "No resultUrl specified")));
         };
     }
 

@@ -58,10 +58,115 @@
                   "description" : "Default: concat",
                   "const" : "concat"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "concat",
+                  "description" : "Default: concat"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "sources" : {
                   "type" : [ "array", "string" ],
                   "items" : {
                     "$ref" : "#/$defs/jars/properties/sourcejars/items"
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "directory",
+                  "description" : "Default: directory"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "directory",
+                  "description" : "Default: directory"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
+                "path" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "filter" : {
+                  "type" : "string",
+                  "default" : "*.*",
+                  "description" : "Default: *.*"
+                },
+                "mappings" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "anyOf" : [ {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.yaml",
+                          "description" : "Default: *.yaml"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    }, {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.yml",
+                          "description" : "Default: *.yml"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "yaml",
+                          "description" : "Default: yaml"
+                        }
+                      }
+                    }, {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.csv",
+                          "description" : "Default: *.csv"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "csv",
+                          "description" : "Default: csv"
+                        }
+                      }
+                    }, {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "*.xlsx",
+                          "description" : "Default: *.xlsx"
+                        },
+                        "jar" : {
+                          "type" : "string",
+                          "default" : "excel",
+                          "description" : "Default: excel"
+                        }
+                      }
+                    } ]
                   }
                 }
               }
@@ -80,6 +185,16 @@
                   "default" : "flatten",
                   "description" : "Default: flatten",
                   "const" : "flatten"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "flatten",
+                  "description" : "Default: flatten"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 }
               }
             }, {
@@ -91,6 +206,16 @@
                   "default" : "rename",
                   "description" : "Default: rename",
                   "const" : "rename"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "rename",
+                  "description" : "Default: rename"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "metadata" : {
                   "type" : "object",

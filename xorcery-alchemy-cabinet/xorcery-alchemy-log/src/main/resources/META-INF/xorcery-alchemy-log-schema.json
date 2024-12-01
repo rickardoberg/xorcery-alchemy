@@ -26,6 +26,16 @@
                   "description" : "Default: log",
                   "const" : "log"
                 },
+                "name" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
                 "level" : {
                   "type" : "string",
                   "default" : "INFO",
@@ -47,6 +57,16 @@
                   "default" : "log",
                   "description" : "Default: log",
                   "const" : "log"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "log",
+                  "description" : "Default: log"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
                 },
                 "level" : {
                   "type" : "string",

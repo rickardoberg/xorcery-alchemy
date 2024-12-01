@@ -1,9 +1,13 @@
 jars:
   sourcejars:
     - jar: yaml
+      name: yaml
+      enabled: "{{ jars.enabled }}"
       context:
-        resourceUrl: null
+        sourceUrl: null
   resultjars:
     - jar: yaml
+      name: yaml
+      enabled: "{{ jars.enabled }}"
       context:
-        resourceUrl: null
+        resultUrl: null

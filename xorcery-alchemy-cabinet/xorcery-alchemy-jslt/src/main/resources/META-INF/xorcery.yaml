@@ -1,4 +1,6 @@
 jars:
   transmutejars:
     - jar: jslt
+      name: jslt
+      enabled: "{{ jars.enabled }}"
       jslt: null

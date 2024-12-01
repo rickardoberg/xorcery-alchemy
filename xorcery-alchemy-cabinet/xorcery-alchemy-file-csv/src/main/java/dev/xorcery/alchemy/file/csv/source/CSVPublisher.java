@@ -6,12 +6,12 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.opencsv.*;
 import dev.xorcery.alchemy.jar.JarConfiguration;
+import dev.xorcery.alchemy.jar.JarContext;
 import dev.xorcery.alchemy.jar.JarException;
 import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
-import dev.xorcery.reactivestreams.extras.publishers.ResourcePublisherContext;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import reactor.core.CoreSubscriber;
@@ -40,9 +40,9 @@ public class CSVPublisher
         if (s instanceof CoreSubscriber<? super MetadataJsonNode<JsonNode>> coreSubscriber) {
             try {
                 ContextViewElement contextViewElement = new ContextViewElement(coreSubscriber.currentContext());
-                Object resourceUrl = contextViewElement.get(ResourcePublisherContext.resourceUrl)
-                        .orElseThrow(ContextViewElement.missing(ResourcePublisherContext.resourceUrl));
-                URL csvResource = resourceUrl instanceof URL url ? url : new URL(resourceUrl.toString());
+                Object sourceUrl = contextViewElement.get(JarContext.sourceUrl)
+                        .orElseThrow(ContextViewElement.missing(JarContext.sourceUrl));
+                URL csvResource = sourceUrl instanceof URL url ? url : new URL(sourceUrl.toString());
 
                 CSVParserBuilder parserBuilder = new CSVParserBuilder();
                 contextViewElement.getString("escape").ifPresent(c -> parserBuilder.withEscapeChar(c.charAt(0)));

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
+import dev.xorcery.alchemy.jar.JarContext;
 import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.alchemy.jar.SourceJar;
 import dev.xorcery.metadata.Metadata;
@@ -30,9 +31,9 @@ public class YamlFileSourceJar
                 .contextWrite(context ->
                 {
                     ContextViewElement contextViewElement = new ContextViewElement(context);
-                    return contextViewElement.getString(ResourcePublisherContext.resourceUrl).map(url ->
+                    return contextViewElement.getString(JarContext.sourceUrl).map(url ->
                     {
-                        URL resourceUrl = Resources.getResource(url).orElseGet(() ->
+                        URL sourceUrl = Resources.getResource(url).orElseGet(() ->
                         {
                             try {
                                 return new File(url).toURI().toURL();
@@ -40,8 +41,8 @@ public class YamlFileSourceJar
                                 return null;
                             }
                         });
-                        return resourceUrl != null
-                                ? context.put(ResourcePublisherContext.resourceUrl, resourceUrl)
+                        return sourceUrl != null
+                                ? context.put(ResourcePublisherContext.resourceUrl, sourceUrl)
                                 : context;
                     }).orElse(context);
                 }).map(json ->
