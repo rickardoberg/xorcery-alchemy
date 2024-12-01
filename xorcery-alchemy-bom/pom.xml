@@ -67,6 +67,11 @@
                 <artifactId>xorcery-alchemy-neo4jprojection</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>dev.xorcery.alchemy</groupId>
+                <artifactId>xorcery-alchemy-opensearch</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -37,6 +37,9 @@
     "dns" : {
       "$ref" : "#/$defs/dns"
     },
+    "jersey" : {
+      "$ref" : "#/$defs/jersey"
+    },
     "jetty" : {
       "$ref" : "#/$defs/jetty"
     },
@@ -54,6 +57,9 @@
     },
     "neo4jprojections" : {
       "$ref" : "#/$defs/neo4jprojections"
+    },
+    "opensearch" : {
+      "$ref" : "#/$defs/opensearch"
     },
     "opentelemetry" : {
       "$ref" : "#/$defs/opentelemetry"
@@ -647,6 +653,30 @@
               "properties" : {
                 "jar" : {
                   "type" : "string",
+                  "default" : "opensearch",
+                  "description" : "Default: opensearch"
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "host" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "index" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    }
+                  }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
                   "default" : "script",
                   "description" : "Default: script",
                   "const" : "script"
@@ -1038,6 +1068,48 @@
               "type" : [ "boolean", "string" ],
               "default" : false,
               "description" : "Default: false"
+            }
+          }
+        }
+      }
+    },
+    "jersey" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "client" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ jetty.client.enabled }}",
+              "description" : "Default: {{ jetty.client.enabled }} (true)"
+            },
+            "keystore" : {
+              "default" : null,
+              "description" : "Default: null",
+              "type" : [ "string", "null" ]
+            },
+            "truststore" : {
+              "default" : null,
+              "description" : "Default: null",
+              "type" : [ "string", "null" ]
+            },
+            "connectTimeout" : {
+              "type" : "string",
+              "default" : "{{ defaults.connectTimeout }}",
+              "description" : "Default: {{ defaults.connectTimeout }} (5s)"
+            },
+            "readTimeout" : {
+              "type" : "string",
+              "default" : "0s",
+              "description" : "Default: 0s"
+            },
+            "properties" : {
+              "type" : "object",
+              "additionalProperties" : true,
+              "properties" : { }
             }
           }
         }
@@ -1465,6 +1537,96 @@
           "type" : "string",
           "default" : "1M",
           "description" : "Default: 1M"
+        }
+      }
+    },
+    "opensearch" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "uri" : {
+          "type" : "string",
+          "default" : "http://localhost:9200",
+          "description" : "Default: http://localhost:9200"
+        },
+        "componentTemplates" : {
+          "type" : [ "array", "string", "object" ],
+          "additionalProperties" : true,
+          "properties" : { }
+        },
+        "indexTemplates" : {
+          "type" : [ "array", "string", "object" ],
+          "additionalProperties" : true,
+          "properties" : { }
+        },
+        "deleteOnExit" : {
+          "type" : [ "boolean", "string" ],
+          "default" : false,
+          "description" : "Default: false"
+        },
+        "publishers" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "anyOf" : [ {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "server" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "uri" : {
+                      "type" : "string",
+                      "default" : "wss://somehost:someport",
+                      "description" : "Default: wss://somehost:someport"
+                    },
+                    "stream" : {
+                      "type" : "string",
+                      "default" : "somestream",
+                      "description" : "Default: somestream"
+                    },
+                    "configuration" : {
+                      "type" : "object",
+                      "additionalProperties" : true,
+                      "properties" : { }
+                    }
+                  }
+                },
+                "client" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "alias" : {
+                      "type" : "string",
+                      "default" : "somealias",
+                      "description" : "Default: somealias"
+                    },
+                    "index" : {
+                      "type" : "string",
+                      "default" : "anindexname",
+                      "description" : "Default: anindexname"
+                    },
+                    "configuration" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "bufferSize" : {
+                          "type" : [ "number", "string" ],
+                          "default" : 64,
+                          "description" : "Default: 64"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } ]
+          }
         }
       }
     },

@@ -47,5 +47,9 @@
             <groupId>dev.xorcery.alchemy</groupId>
             <artifactId>xorcery-alchemy-neo4jprojection</artifactId>
         </dependency>
+        <dependency>
+            <groupId>dev.xorcery.alchemy</groupId>
+            <artifactId>xorcery-alchemy-opensearch</artifactId>
+        </dependency>
     </dependencies>
 </project>

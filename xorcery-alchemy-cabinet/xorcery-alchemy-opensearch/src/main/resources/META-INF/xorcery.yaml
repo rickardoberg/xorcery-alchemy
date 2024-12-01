@@ -1,0 +1,6 @@
+jars:
+  resultjars:
+    - jar: opensearch
+      context:
+        host: null
+        index: null

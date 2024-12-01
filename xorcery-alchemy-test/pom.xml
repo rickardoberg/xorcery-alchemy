@@ -30,6 +30,11 @@
 
         <dependency>
             <groupId>dev.xorcery</groupId>
+            <artifactId>xorcery-opensearch-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-junit</artifactId>
         </dependency>
     </dependencies>
