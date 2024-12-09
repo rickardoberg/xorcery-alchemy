@@ -104,6 +104,11 @@ public class Cabinet {
                     if (!context.isEmpty()) {
                         resultFlux = resultFlux.contextWrite(Context.of(context));
                     }
+                    // Append sourceUrl last, so that result can read it
+                    if (recipeConfiguration.getSource().getContext().get(JarContext.sourceUrl.name()) instanceof String sourceUrl)
+                    {
+                        resultFlux = resultFlux.contextWrite(Context.of(JarContext.sourceUrl.name(), sourceUrl));
+                    }
                     return resultFlux;
                 });
     }

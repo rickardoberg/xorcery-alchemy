@@ -5,5 +5,7 @@ package dev.xorcery.alchemy.jar;
  */
 public enum JarContext {
     sourceUrl,
-    resultUrl
+    resultUrl,
+
+    streamPosition
 }

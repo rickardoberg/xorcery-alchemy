@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.opencsv.*;
-import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.JarContext;
-import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.*;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
@@ -43,6 +40,7 @@ public class CSVPublisher
                 Object sourceUrl = contextViewElement.get(JarContext.sourceUrl)
                         .orElseThrow(ContextViewElement.missing(JarContext.sourceUrl));
                 URL csvResource = sourceUrl instanceof URL url ? url : new URL(sourceUrl.toString());
+                String csvResourceUrl = csvResource.toExternalForm();
 
                 CSVParserBuilder parserBuilder = new CSVParserBuilder();
                 contextViewElement.getString("escape").ifPresent(c -> parserBuilder.withEscapeChar(c.charAt(0)));
@@ -61,7 +59,9 @@ public class CSVPublisher
                             return null;
                         ObjectNode data = JsonNodeFactory.instance.objectNode();
                         map.forEach(data::put);
-                        return new MetadataJsonNode<>(new Metadata.Builder().build(), data);
+                        return new MetadataJsonNode<>(new Metadata.Builder()
+                                .add(StandardMetadata.sourceUrl, csvResourceUrl)
+                                .build(), data);
                     };
                     coreSubscriber.onSubscribe(new RowReaderStreamer(coreSubscriber, csvReader, itemReader));
                 } else {
@@ -77,7 +77,9 @@ public class CSVPublisher
                         for (String column : row) {
                             data.add(column);
                         }
-                        return new MetadataJsonNode<>(new Metadata.Builder().build(), data);
+                        return new MetadataJsonNode<>(new Metadata.Builder()
+                                .add(StandardMetadata.sourceUrl, csvResourceUrl)
+                                .build(), data);
                     };
                     coreSubscriber.onSubscribe(new RowReaderStreamer(coreSubscriber, csvReader, objectReader));
                 }

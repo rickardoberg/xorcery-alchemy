@@ -6,8 +6,8 @@ opensearch:
     - id: "common"
       resource: "resource://opensearch/templates/components/common.yaml"
   indexTemplates:
-    - id: "numbers"
-      resource: "resource://opensearch/numbers.yaml"
+    - id: "people"
+      resource: "resource://opensearch/people.yaml"
 
 crucible:
   recipes:
@@ -24,4 +24,5 @@ crucible:
       result:
         jar: opensearch
         context:
-          index: "numbers-%tF"
+          index: "people-%tF"
+          alias: "people"

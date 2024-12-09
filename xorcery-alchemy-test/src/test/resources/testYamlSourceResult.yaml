@@ -1,0 +1,12 @@
+$schema: META-INF/xorcery-alchemy-test-override-schema.json
+crucible:
+  recipes:
+    - name: "testYamlSourceResult"
+      source:
+        jar: yaml
+        context:
+          sourceUrl: "file:///{{ instance.home }}/../test-classes/yamlsource.yaml"
+      result:
+        jar: yaml
+        context:
+          resultUrl: "file:///{{ instance.home }}/yamlresult.yaml"

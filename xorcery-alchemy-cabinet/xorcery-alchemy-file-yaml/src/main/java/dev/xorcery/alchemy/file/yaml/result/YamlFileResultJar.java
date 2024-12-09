@@ -15,28 +15,35 @@ import reactor.core.publisher.Flux;
 import reactor.util.context.ContextView;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.function.BiFunction;
 
-@Service(name="yaml")
+@Service(name = "yaml")
 public class YamlFileResultJar
         implements ResultJar {
 
     @Override
     public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newResult(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
-        return (flux, context)->
+        return (flux, context) ->
         {
             ContextViewElement contextViewElement = new ContextViewElement(context);
-            String fileUrl = contextViewElement.getString(JarContext.resultUrl).orElse(null);
+            URI fileUrl = contextViewElement.getURI(JarContext.resultUrl).orElse(null);
 
-            if (fileUrl == null)
-            {
+            if (fileUrl == null) {
                 return Flux.error(new JarException(configuration, recipeConfiguration, "Could not find file"));
             }
 
+            if (fileUrl.getScheme().equals("file")) {
+                new File(fileUrl.toASCIIString().substring("file://".length())).getParentFile().mkdirs();
+            }
+
             try {
-                BufferedOutputStream outputStream = new BufferedOutputStream(new URL(fileUrl).openConnection().getOutputStream());
+                BufferedOutputStream outputStream = new BufferedOutputStream(fileUrl.getScheme().equals("file")
+                        ? new FileOutputStream(new File(fileUrl.toASCIIString().substring("file://".length())).getAbsoluteFile())
+                        : fileUrl.toURL().openConnection().getOutputStream());
                 ObjectMapper mapper = new YAMLMapper().findAndRegisterModules()
                         .configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false)
                         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -44,14 +51,14 @@ public class YamlFileResultJar
                         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .enable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
                         .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-                return flux.doOnTerminate(()->
+                return flux.doOnTerminate(() ->
                 {
                     try {
                         outputStream.close();
                     } catch (IOException e) {
                         // Ignore
                     }
-                }).handle((item, sink)->
+                }).handle((item, sink) ->
                 {
                     try {
                         mapper.writeValue(outputStream, item);

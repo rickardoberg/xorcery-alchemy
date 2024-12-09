@@ -7,4 +7,5 @@ module xorcery.alchemy.opensearch {
     requires org.glassfish.hk2.api;
     requires jakarta.inject;
     requires org.apache.logging.log4j;
+    requires jakarta.ws.rs;
 }

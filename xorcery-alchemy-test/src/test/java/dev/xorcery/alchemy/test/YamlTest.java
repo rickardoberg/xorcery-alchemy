@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-public class ScriptTest {
+public class YamlTest {
 
     @Test
-    public void testSourceTransmuteResultScript() throws Exception {
+    public void testYamlSourceResult() throws Exception {
         try (Xorcery crucible = new Xorcery(new ConfigurationBuilder()
                 .addTestDefaults()
-                .addResource("testSourceTransmuteResultScript.yaml")
+                .addResource("testYamlSourceResult.yaml")
                 .build()))
         {
             crucible.getServiceLocator().getService(CrucibleRecipeService.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();

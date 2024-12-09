@@ -1,6 +1,6 @@
 package dev.xorcery.alchemy.test;
 
-import dev.xorcery.alchemy.crucible.Crucible;
+import dev.xorcery.alchemy.crucible.CrucibleRecipeService;
 import dev.xorcery.configuration.builder.ConfigurationBuilder;
 import dev.xorcery.core.Xorcery;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class CSVTest {
                 .addResource("testCsvSource.yaml")
                 .build()))
         {
-            crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
+            crucible.getServiceLocator().getService(CrucibleRecipeService.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
 
@@ -27,7 +27,7 @@ public class CSVTest {
                 .addResource("testCsvWithHeadersSource.yaml")
                 .build()))
         {
-            crucible.getServiceLocator().getService(Crucible.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
+            crucible.getServiceLocator().getService(CrucibleRecipeService.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
 }

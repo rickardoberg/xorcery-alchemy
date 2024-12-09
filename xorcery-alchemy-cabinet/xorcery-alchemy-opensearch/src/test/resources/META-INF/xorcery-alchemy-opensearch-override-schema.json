@@ -101,6 +101,10 @@
                     "index" : {
                       "default" : null,
                       "description" : "Default: null"
+                    },
+                    "alias" : {
+                      "default" : null,
+                      "description" : "Default: null"
                     }
                   }
                 }

@@ -46,8 +46,12 @@ public class ExcelResultJar
             return contextViewElement.getURI(JarContext.resultUrl).<Flux<MetadataJsonNode<JsonNode>>>map(resourceUri ->
             {
                 try {
+                    if (resourceUri.getScheme().equals("file")) {
+                        new File(resourceUri.toASCIIString().substring("file://".length())).getParentFile().mkdirs();
+                    }
+
                     OutputStream out = resourceUri.getScheme().equals("file")
-                            ? new FileOutputStream(new File(resourceUri.getHost()).getAbsoluteFile())
+                            ? new FileOutputStream(new File(resourceUri.toASCIIString().substring("file://".length())).getAbsoluteFile())
                             : resourceUri.toURL().openConnection().getOutputStream();
                     ApplicationConfiguration applicationConfiguration = ApplicationConfiguration.get(configuration);
                     String version = applicationConfiguration.getVersion();

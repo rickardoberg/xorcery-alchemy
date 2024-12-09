@@ -25,6 +25,7 @@
 
         <module>xorcery-alchemy-neo4jprojection</module>
         <module>xorcery-alchemy-opensearch</module>
+        <module>xorcery-alchemy-domainevents</module>
 
         <module>xorcery-alchemy-cabinet-all</module>
     </modules>

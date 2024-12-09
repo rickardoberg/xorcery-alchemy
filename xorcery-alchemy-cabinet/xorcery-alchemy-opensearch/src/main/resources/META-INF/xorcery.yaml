@@ -4,3 +4,4 @@ jars:
       context:
         host: null
         index: null
+        alias: null

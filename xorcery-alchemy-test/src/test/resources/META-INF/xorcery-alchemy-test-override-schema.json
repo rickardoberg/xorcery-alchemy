@@ -4,6 +4,27 @@
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
   "type" : "object",
   "properties" : {
+    "analytics" : {
+      "$ref" : "#/$defs/analytics"
+    },
+    "graphql" : {
+      "$ref" : "#/$defs/graphql"
+    },
+    "neo4j" : {
+      "$ref" : "#/$defs/neo4j"
+    },
+    "anonymizer" : {
+      "$ref" : "#/$defs/anonymizer"
+    },
+    "hris" : {
+      "$ref" : "#/$defs/hris"
+    },
+    "adminservlet" : {
+      "$ref" : "#/$defs/adminservlet"
+    },
+    "serveradmin" : {
+      "$ref" : "#/$defs/serveradmin"
+    },
     "jars" : {
       "$ref" : "#/$defs/jars"
     },
@@ -37,11 +58,17 @@
     "dns" : {
       "$ref" : "#/$defs/dns"
     },
+    "health" : {
+      "$ref" : "#/$defs/health"
+    },
     "jersey" : {
       "$ref" : "#/$defs/jersey"
     },
     "jetty" : {
       "$ref" : "#/$defs/jetty"
+    },
+    "jwt" : {
+      "$ref" : "#/$defs/jwt"
     },
     "keystores" : {
       "$ref" : "#/$defs/keystores"
@@ -51,6 +78,9 @@
     },
     "log4j2" : {
       "$ref" : "#/$defs/log4j2"
+    },
+    "neo4jbrowser" : {
+      "$ref" : "#/$defs/neo4jbrowser"
     },
     "neo4jdatabase" : {
       "$ref" : "#/$defs/neo4jdatabase"
@@ -69,9 +99,284 @@
     },
     "yamlfilepublisher" : {
       "$ref" : "#/$defs/yamlfilepublisher"
+    },
+    "jmx" : {
+      "$ref" : "#/$defs/jmx"
+    },
+    "status" : {
+      "$ref" : "#/$defs/status"
+    },
+    "thymeleaf" : {
+      "$ref" : "#/$defs/thymeleaf"
+    },
+    "deepl" : {
+      "$ref" : "#/$defs/deepl"
     }
   },
   "$defs" : {
+    "analytics" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "projection" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ analytics.enabled }}",
+              "description" : "Default: {{ analytics.enabled }} (true)"
+            },
+            "id" : {
+              "type" : "string",
+              "default" : "analytics",
+              "description" : "Default: analytics"
+            },
+            "batchSize" : {
+              "type" : [ "number", "string" ],
+              "default" : 8192,
+              "description" : "Default: 8192"
+            },
+            "compression" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "waitUntilLive" : {
+              "type" : "string",
+              "default" : "1H",
+              "description" : "Default: 1H"
+            },
+            "entityIdCacheSize" : {
+              "type" : [ "number", "string" ],
+              "default" : 10000,
+              "description" : "Default: 10000"
+            },
+            "changetrackingeventprojection" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
+                "debug" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                }
+              }
+            },
+            "anonymized" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "replace" : {
+              "type" : [ "array", "string" ]
+            },
+            "events" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ analytics.projection.enabled }}",
+                  "description" : "Default: {{ analytics.projection.enabled }} (true)"
+                },
+                "streams" : {
+                  "type" : [ "array", "string" ]
+                },
+                "uri" : {
+                  "type" : "string",
+                  "default" : "{{ ENV.EVENTS | \"ws://localhost:8889\" }}",
+                  "description" : "Default: {{ ENV.EVENTS | \"ws://localhost:8889\" }} (ws://localhost:8889)"
+                },
+                "configuration" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "environment" : {
+                      "type" : "string",
+                      "default" : "{{ instance.environment }}",
+                      "description" : "Default: {{ instance.environment }} (development)"
+                    }
+                  }
+                }
+              }
+            },
+            "file" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
+                "uri" : {
+                  "type" : "string",
+                  "default" : "file:///{{instance.home}}/events.yaml",
+                  "description" : "Default: file:///{{instance.home}}/events.yaml (file:///C:\\Users\\ricka\\IdeaProjects\\co-analytics-vanilla/events.yaml)"
+                }
+              }
+            },
+            "fulltextsearch" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ defaults.enabled }}",
+                  "description" : "Default: {{ defaults.enabled }} (true)"
+                },
+                "includes" : {
+                  "type" : [ "array", "string" ]
+                },
+                "excludes" : {
+                  "type" : [ "array", "string" ]
+                }
+              }
+            }
+          }
+        },
+        "admin" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ analytics.enabled }}",
+              "description" : "Default: {{ analytics.enabled }} (true)"
+            },
+            "authorization" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ ENV.AUTHORIZATION_ENABLED | \"true\" }}",
+                  "description" : "Default: {{ ENV.AUTHORIZATION_ENABLED | \"true\" }} (true)"
+                },
+                "adminaccountguid" : {
+                  "type" : "string",
+                  "default" : "{{ ENV.AUTHORIZATION_ADMIN_ACCOUNT_GUID }}",
+                  "description" : "Default: {{ ENV.AUTHORIZATION_ADMIN_ACCOUNT_GUID }} ({{ ENV.AUTHORIZATION_ADMIN_ACCOUNT_GUID }})"
+                }
+              }
+            },
+            "accessControl" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                }
+              }
+            },
+            "projection" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ analytics.enabled }}",
+                  "description" : "Default: {{ analytics.enabled }} (true)"
+                },
+                "id" : {
+                  "type" : "string",
+                  "default" : "analyticsadmin",
+                  "description" : "Default: analyticsadmin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "graphql" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "schemas" : {
+          "type" : [ "array", "string" ]
+        }
+      }
+    },
+    "neo4j" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "extensions" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ neo4jdatabase.enabled }}",
+              "description" : "Default: {{ neo4jdatabase.enabled }} (true)"
+            }
+          }
+        }
+      }
+    },
+    "anonymizer" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "blacklisted" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "entities" : {
+              "type" : [ "array", "string" ]
+            },
+            "metadata" : {
+              "type" : [ "array", "string" ]
+            }
+          }
+        },
+        "whitelisted" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "attributes" : {
+              "type" : [ "array", "string" ]
+            }
+          }
+        }
+      }
+    },
+    "adminservlet" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        }
+      }
+    },
+    "serveradmin" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        }
+      }
+    },
     "jars" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -438,6 +743,21 @@
               "properties" : {
                 "jar" : {
                   "type" : "string",
+                  "default" : "graphqldomainevents",
+                  "description" : "Default: graphqldomainevents"
+                },
+                "metadata" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
                   "default" : "jslt",
                   "description" : "Default: jslt"
                 },
@@ -665,6 +985,10 @@
                       "description" : "Default: null"
                     },
                     "index" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "alias" : {
                       "default" : null,
                       "description" : "Default: null"
                     }
@@ -1073,6 +1397,23 @@
         }
       }
     },
+    "health" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "updater" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "interval" : {
+              "type" : "string",
+              "default" : "1S",
+              "description" : "Default: 1S"
+            }
+          }
+        }
+      }
+    },
     "jersey" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -1110,6 +1451,99 @@
               "type" : "object",
               "additionalProperties" : true,
               "properties" : { }
+            }
+          }
+        },
+        "server" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ jetty.server.enabled }}",
+              "description" : "Default: {{ jetty.server.enabled }} (true)"
+            },
+            "register" : {
+              "type" : [ "array", "string" ]
+            },
+            "mediaTypes" : {
+              "type" : "object",
+              "additionalProperties" : true,
+              "properties" : { }
+            },
+            "properties" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jersey" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : {
+                    "config" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "server" : {
+                          "type" : "object",
+                          "additionalProperties" : false,
+                          "properties" : {
+                            "unwrap" : {
+                              "type" : "object",
+                              "additionalProperties" : false,
+                              "properties" : {
+                                "completion" : {
+                                  "type" : "object",
+                                  "additionalProperties" : false,
+                                  "properties" : {
+                                    "stage" : {
+                                      "type" : "object",
+                                      "additionalProperties" : false,
+                                      "properties" : {
+                                        "writer" : {
+                                          "type" : "object",
+                                          "additionalProperties" : false,
+                                          "properties" : {
+                                            "enable" : {
+                                              "type" : [ "boolean", "string" ],
+                                              "default" : true,
+                                              "description" : "Default: true"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "wadl" : {
+                              "type" : "object",
+                              "additionalProperties" : false,
+                              "properties" : {
+                                "disableWadl" : {
+                                  "type" : [ "boolean", "string" ],
+                                  "default" : true,
+                                  "description" : "Default: true"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "config" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "server" : {
+              "default" : null,
+              "description" : "Default: null"
             }
           }
         }
@@ -1198,6 +1632,526 @@
                   "default" : false,
                   "description" : "Default: false"
                 }
+              }
+            }
+          }
+        },
+        "server" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ defaults.enabled }}",
+              "description" : "Default: {{ defaults.enabled }} (true)"
+            },
+            "scheme" : {
+              "type" : "string",
+              "default" : "{{ jetty.server.ssl.enabled ? \"https\" | \"http\" }}",
+              "description" : "Default: {{ jetty.server.ssl.enabled ? \"https\" | \"http\" }} (https)"
+            },
+            "port" : {
+              "type" : [ "number", "string" ],
+              "default" : "{{ jetty.server.ssl.enabled ? jetty.server.ssl.port | jetty.server.http.port }}",
+              "description" : "Default: {{ jetty.server.ssl.enabled ? jetty.server.ssl.port | jetty.server.http.port }} (443)"
+            },
+            "uri" : {
+              "type" : "string",
+              "default" : "{{jetty.server.scheme}}://{{instance.fqdn}}:{{jetty.server.port}}/",
+              "description" : "Default: {{jetty.server.scheme}}://{{instance.fqdn}}:{{jetty.server.port}}/ (https://service.xorcery.test:443/)"
+            },
+            "minThreads" : {
+              "type" : [ "number", "string" ],
+              "default" : 10,
+              "description" : "Default: 10"
+            },
+            "maxThreads" : {
+              "type" : [ "number", "string" ],
+              "default" : 150,
+              "description" : "Default: 150"
+            },
+            "outputBufferSize" : {
+              "type" : [ "number", "string" ],
+              "default" : 32768,
+              "description" : "Default: 32768"
+            },
+            "requestHeaderSize" : {
+              "type" : [ "number", "string" ],
+              "default" : 16384,
+              "description" : "Default: 16384"
+            },
+            "mediaTypes" : {
+              "type" : [ "object", "string" ],
+              "additionalProperties" : true,
+              "properties" : { }
+            },
+            "idleTimeout" : {
+              "type" : "string",
+              "default" : "{{ defaults.idleTimeout }}",
+              "description" : "Default: {{ defaults.idleTimeout }} (-1s)"
+            },
+            "http" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                },
+                "port" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 80,
+                  "description" : "Default: 80"
+                }
+              }
+            },
+            "http2" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                }
+              }
+            },
+            "ssl" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                },
+                "port" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 443,
+                  "description" : "Default: 443"
+                },
+                "keystore" : {
+                  "default" : null,
+                  "description" : "Default: null",
+                  "type" : [ "string", "null" ]
+                },
+                "truststore" : {
+                  "default" : null,
+                  "description" : "Default: null",
+                  "type" : [ "string", "null" ]
+                },
+                "trustAll" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
+                "needClientAuth" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
+                "wantClientAuth" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
+                "sniRequired" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
+                "sniHostCheck" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
+                "alias" : {
+                  "type" : "string",
+                  "default" : "self",
+                  "description" : "Default: self"
+                },
+                "crls" : {
+                  "default" : null,
+                  "description" : "Default: null",
+                  "type" : [ "string", "null" ]
+                }
+              }
+            },
+            "srv" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "priority" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 2,
+                  "description" : "Default: 2"
+                },
+                "weight" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 100,
+                  "description" : "Default: 100"
+                }
+              }
+            },
+            "log4j2" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                }
+              }
+            },
+            "sessions" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                }
+              }
+            },
+            "security" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                },
+                "type" : {
+                  "type" : "string",
+                  "default" : "jwt",
+                  "description" : "Default: jwt"
+                },
+                "constraints" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "anyOf" : [ {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "name" : {
+                          "type" : "string",
+                          "default" : "admin",
+                          "description" : "Default: admin"
+                        },
+                        "roles" : {
+                          "type" : [ "array", "string" ]
+                        }
+                      }
+                    } ]
+                  }
+                },
+                "mappings" : {
+                  "type" : [ "array", "string" ],
+                  "items" : {
+                    "required" : [ "path" ],
+                    "additionalProperties" : false,
+                    "properties" : {
+                      "path" : {
+                        "type" : "string"
+                      },
+                      "constraint" : {
+                        "type" : [ "string", "null" ]
+                      }
+                    }
+                  }
+                },
+                "certificate" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "enabled" : {
+                      "type" : [ "boolean", "string" ],
+                      "default" : "{{ jetty.server.security.enabled }}",
+                      "description" : "Default: {{ jetty.server.security.enabled }} (true)"
+                    }
+                  }
+                },
+                "jwt" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "enabled" : {
+                      "type" : [ "boolean", "string" ],
+                      "default" : "{{ jetty.server.security.enabled }}",
+                      "description" : "Default: {{ jetty.server.security.enabled }} (true)"
+                    },
+                    "cookie" : {
+                      "type" : "string",
+                      "default" : "token",
+                      "description" : "Default: token"
+                    },
+                    "issuers" : {
+                      "type" : [ "array", "string" ],
+                      "items" : {
+                        "anyOf" : [ {
+                          "type" : "object",
+                          "additionalProperties" : false,
+                          "properties" : {
+                            "name" : {
+                              "type" : "string",
+                              "default" : "default",
+                              "description" : "Default: default"
+                            },
+                            "keys" : {
+                              "type" : [ "array", "string" ]
+                            }
+                          }
+                        } ],
+                        "type" : "object",
+                        "properties" : {
+                          "name" : {
+                            "type" : "string"
+                          },
+                          "keys" : {
+                            "type" : "array",
+                            "items" : {
+                              "type" : "object",
+                              "properties" : {
+                                "kid" : {
+                                  "type" : "string",
+                                  "description" : "Key id, usually a UUID"
+                                },
+                                "alg" : {
+                                  "type" : "string",
+                                  "enum" : [ "ES256", "ES384", "ES512", "RS256", "RS384", "RS512" ]
+                                },
+                                "publicKey" : {
+                                  "type" : "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "websockets" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                },
+                "autoFragment" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
+                "idleTimeout" : {
+                  "type" : "string",
+                  "default" : "{{ defaults.idleTimeout }}",
+                  "description" : "Default: {{ defaults.idleTimeout }} (-1s)"
+                },
+                "inputBufferSize" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 4096,
+                  "description" : "Default: 4096"
+                },
+                "outputBufferSize" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 4096,
+                  "description" : "Default: 4096"
+                },
+                "maxFrameSize" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 65536,
+                  "description" : "Default: 65536"
+                },
+                "maxTextMessageSize" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 1048576,
+                  "description" : "Default: 1048576"
+                },
+                "maxBinaryMessageSize" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 1048576,
+                  "description" : "Default: 1048576"
+                }
+              }
+            },
+            "servlet" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                }
+              }
+            },
+            "gzip" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ jetty.server.enabled }}",
+                  "description" : "Default: {{ jetty.server.enabled }} (true)"
+                },
+                "minGzipSize" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 32,
+                  "description" : "Default: 32"
+                },
+                "syncFlush" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
+                "excluded" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "mediatypes" : {
+                      "type" : [ "array", "string" ]
+                    },
+                    "methods" : {
+                      "type" : [ "array", "string" ]
+                    },
+                    "paths" : {
+                      "type" : [ "array", "string" ]
+                    }
+                  }
+                },
+                "included" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "mediatypes" : {
+                      "type" : [ "array", "string" ]
+                    },
+                    "methods" : {
+                      "type" : [ "array", "string" ]
+                    },
+                    "paths" : {
+                      "type" : [ "array", "string" ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "jwt" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "server" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ defaults.enabled }}",
+              "description" : "Default: {{ defaults.enabled }} (true)"
+            },
+            "token" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "duration" : {
+                  "type" : "string",
+                  "default" : "P7D",
+                  "description" : "Default: P7D"
+                },
+                "issuer" : {
+                  "type" : "string",
+                  "default" : "{{ instance.fqdn }}",
+                  "description" : "Default: {{ instance.fqdn }} (service.xorcery.test)"
+                }
+              }
+            },
+            "cookie" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "duration" : {
+                  "type" : "string",
+                  "default" : "P7D",
+                  "description" : "Default: P7D"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "token",
+                  "description" : "Default: token"
+                },
+                "path" : {
+                  "type" : "string",
+                  "default" : "/",
+                  "description" : "Default: /"
+                },
+                "domain" : {
+                  "type" : [ "null", "string" ],
+                  "default" : "{{ instance.domain }}",
+                  "description" : "Default: {{ instance.domain }} (xorcery.test)"
+                }
+              }
+            },
+            "keys" : {
+              "type" : [ "array", "string" ],
+              "items" : {
+                "type" : "object",
+                "additionalProperties" : false,
+                "properties" : {
+                  "kid" : {
+                    "type" : "string"
+                  },
+                  "alg" : {
+                    "type" : "string"
+                  },
+                  "publicKey" : {
+                    "type" : "string"
+                  },
+                  "privateKey" : {
+                    "type" : "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "configuration" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ defaults.enabled }}",
+              "description" : "Default: {{ defaults.enabled }} (true)"
+            }
+          }
+        },
+        "users" : {
+          "type" : [ "array", "string" ],
+          "items" : {
+            "type" : "object",
+            "additionalProperties" : false,
+            "properties" : {
+              "name" : {
+                "type" : "string"
+              },
+              "password" : {
+                "type" : "string"
+              },
+              "claims" : {
+                "type" : "object"
               }
             }
           }
@@ -1378,6 +2332,28 @@
                   }
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "neo4jbrowser" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ neo4jdatabase.enabled | defaults.enabled }}",
+          "description" : "Default: {{ neo4jdatabase.enabled | defaults.enabled }} (true)"
+        },
+        "ssl" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ neo4jbrowser.enabled ? certificates.enabled | false }}",
+              "description" : "Default: {{ neo4jbrowser.enabled ? certificates.enabled | false }} (false)"
             }
           }
         }
@@ -1885,6 +2861,158 @@
           "type" : "object",
           "additionalProperties" : false,
           "properties" : {
+            "jersey" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ defaults.enabled }}",
+                  "description" : "Default: {{ defaults.enabled }} (true)"
+                },
+                "attributes" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "http.request.method" : {
+                      "type" : "string",
+                      "default" : "http.request.method",
+                      "description" : "Default: http.request.method"
+                    },
+                    "http.route" : {
+                      "type" : "string",
+                      "default" : "http.route",
+                      "description" : "Default: http.route"
+                    },
+                    "http.response.status_code" : {
+                      "type" : "string",
+                      "default" : "http.response.status_code",
+                      "description" : "Default: http.response.status_code"
+                    },
+                    "http.response.body.size" : {
+                      "type" : "string",
+                      "default" : "http.response.body.size",
+                      "description" : "Default: http.response.body.size"
+                    },
+                    "enduser.id" : {
+                      "type" : "string",
+                      "default" : "enduser.id",
+                      "description" : "Default: enduser.id"
+                    },
+                    "url.full" : {
+                      "type" : "string",
+                      "default" : "url.full",
+                      "description" : "Default: url.full"
+                    }
+                  }
+                }
+              }
+            },
+            "jmx" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "attributes" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "classloading.loadedClasses" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "description" : {
+                          "type" : "string",
+                          "default" : "Nr of loaded classes",
+                          "description" : "Default: Nr of loaded classes"
+                        },
+                        "objectName" : {
+                          "type" : "string",
+                          "default" : "java.lang:type=ClassLoading",
+                          "description" : "Default: java.lang:type=ClassLoading"
+                        },
+                        "attribute" : {
+                          "type" : "string",
+                          "default" : "LoadedClassCount",
+                          "description" : "Default: LoadedClassCount"
+                        },
+                        "unit" : {
+                          "type" : "string",
+                          "default" : "{count}",
+                          "description" : "Default: {count}"
+                        },
+                        "type" : {
+                          "type" : "string",
+                          "default" : "Gauge",
+                          "description" : "Default: Gauge"
+                        }
+                      }
+                    },
+                    "system.memory.limit" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "description" : {
+                          "type" : "string",
+                          "default" : "Total memory size",
+                          "description" : "Default: Total memory size"
+                        },
+                        "objectName" : {
+                          "type" : "string",
+                          "default" : "java.lang:type=OperatingSystem",
+                          "description" : "Default: java.lang:type=OperatingSystem"
+                        },
+                        "attribute" : {
+                          "type" : "string",
+                          "default" : "TotalMemorySize",
+                          "description" : "Default: TotalMemorySize"
+                        },
+                        "unit" : {
+                          "type" : "string",
+                          "default" : "By",
+                          "description" : "Default: By"
+                        },
+                        "type" : {
+                          "type" : "string",
+                          "default" : "Gauge",
+                          "description" : "Default: Gauge"
+                        }
+                      }
+                    },
+                    "system.cpu.utilization" : {
+                      "type" : "object",
+                      "additionalProperties" : false,
+                      "properties" : {
+                        "description" : {
+                          "type" : "string",
+                          "default" : "Process CPU utilization",
+                          "description" : "Default: Process CPU utilization"
+                        },
+                        "objectName" : {
+                          "type" : "string",
+                          "default" : "java.lang:type=OperatingSystem",
+                          "description" : "Default: java.lang:type=OperatingSystem"
+                        },
+                        "attribute" : {
+                          "type" : "string",
+                          "default" : "ProcessCpuLoad",
+                          "description" : "Default: ProcessCpuLoad"
+                        },
+                        "unit" : {
+                          "type" : "string",
+                          "default" : "1",
+                          "description" : "Default: 1"
+                        },
+                        "type" : {
+                          "type" : "string",
+                          "default" : "Gauge",
+                          "description" : "Default: Gauge"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "jvm" : {
               "type" : "object",
               "additionalProperties" : false,
@@ -1955,6 +3083,28 @@
                   "type" : [ "boolean", "string" ],
                   "default" : "{{ defaults.enabled }}",
                   "description" : "Default: {{ defaults.enabled }} (true)"
+                }
+              }
+            },
+            "system" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ defaults.enabled }}",
+                  "description" : "Default: {{ defaults.enabled }} (true)"
+                },
+                "attributes" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "system.filesystem.usage" : {
+                      "type" : "string",
+                      "default" : "system.filesystem.usage",
+                      "description" : "Default: system.filesystem.usage"
+                    }
+                  }
                 }
               }
             }
@@ -2104,6 +3254,32 @@
               "description" : "Default: 4096"
             }
           }
+        },
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "server" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ jetty.server.websockets.enabled }}",
+              "description" : "Default: {{ jetty.server.websockets.enabled }} (true)"
+            },
+            "scheme" : {
+              "type" : "string",
+              "default" : "{{ jetty.server.ssl.enabled ? \"wss\" | \"ws\" }}",
+              "description" : "Default: {{ jetty.server.ssl.enabled ? \"wss\" | \"ws\" }} (wss)"
+            },
+            "uri" : {
+              "type" : "string",
+              "default" : "{{ reactivestreams.server.scheme }}://{{ instance.fqdn }}:{{ jetty.server.port }}/",
+              "description" : "Default: {{ reactivestreams.server.scheme }}://{{ instance.fqdn }}:{{ jetty.server.port }}/ (wss://service.xorcery.test:443/)"
+            }
+          }
         }
       }
     },
@@ -2118,6 +3294,261 @@
         },
         "publishers" : {
           "type" : [ "array", "string" ]
+        }
+      }
+    },
+    "jmx" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "status" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ defaults.enabled }}",
+              "description" : "Default: {{ defaults.enabled }} (true)"
+            }
+          }
+        }
+      }
+    },
+    "status" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        }
+      }
+    },
+    "thymeleaf" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
+        "development" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.development }}",
+          "description" : "Default: {{ defaults.development }} (false)"
+        },
+        "classloader" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ thymeleaf.enabled }}",
+              "description" : "Default: {{ thymeleaf.enabled }} (true)"
+            },
+            "templateMode" : {
+              "type" : "string",
+              "default" : "HTML",
+              "description" : "Default: HTML"
+            },
+            "encoding" : {
+              "type" : "string",
+              "default" : "UTF8",
+              "description" : "Default: UTF8"
+            },
+            "prefix" : {
+              "type" : "string",
+              "default" : "templates/",
+              "description" : "Default: templates/"
+            },
+            "suffix" : {
+              "type" : "string",
+              "default" : ".html",
+              "description" : "Default: .html"
+            },
+            "checkExistence" : {
+              "type" : [ "boolean", "string" ],
+              "default" : true,
+              "description" : "Default: true"
+            },
+            "cacheable" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ thymeleaf.development ? false | true }}",
+              "description" : "Default: {{ thymeleaf.development ? false | true }} (true)"
+            },
+            "cacheTTL" : {
+              "type" : "string",
+              "default" : "1h",
+              "description" : "Default: 1h"
+            },
+            "cacheablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "nonCacheablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "resolvablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "decoupledLogic" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "aliases" : {
+              "type" : "object",
+              "additionalProperties" : true,
+              "properties" : { }
+            }
+          }
+        },
+        "webapplication" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "templateMode" : {
+              "type" : "string",
+              "default" : "HTML",
+              "description" : "Default: HTML"
+            },
+            "encoding" : {
+              "type" : "string",
+              "default" : "UTF8",
+              "description" : "Default: UTF8"
+            },
+            "prefix" : {
+              "type" : "string",
+              "default" : "templates/",
+              "description" : "Default: templates/"
+            },
+            "suffix" : {
+              "type" : "string",
+              "default" : ".html",
+              "description" : "Default: .html"
+            },
+            "checkExistence" : {
+              "type" : [ "boolean", "string" ],
+              "default" : true,
+              "description" : "Default: true"
+            },
+            "cacheable" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ thymeleaf.development ? false | true }}",
+              "description" : "Default: {{ thymeleaf.development ? false | true }} (true)"
+            },
+            "cacheTTL" : {
+              "type" : "string",
+              "default" : "1h",
+              "description" : "Default: 1h"
+            },
+            "cacheablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "nonCacheablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "resolvablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "decoupledLogic" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "aliases" : {
+              "type" : "object",
+              "additionalProperties" : true,
+              "properties" : { }
+            }
+          }
+        },
+        "file" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "templateMode" : {
+              "type" : "string",
+              "default" : "HTML",
+              "description" : "Default: HTML"
+            },
+            "encoding" : {
+              "type" : "string",
+              "default" : "UTF8",
+              "description" : "Default: UTF8"
+            },
+            "prefix" : {
+              "type" : "string",
+              "default" : "",
+              "description" : "Default: "
+            },
+            "suffix" : {
+              "type" : "string",
+              "default" : ".html",
+              "description" : "Default: .html"
+            },
+            "checkExistence" : {
+              "type" : [ "boolean", "string" ],
+              "default" : true,
+              "description" : "Default: true"
+            },
+            "cacheable" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ thymeleaf.development ? false | true }}",
+              "description" : "Default: {{ thymeleaf.development ? false | true }} (true)"
+            },
+            "cacheTTL" : {
+              "type" : "string",
+              "default" : "1h",
+              "description" : "Default: 1h"
+            },
+            "cacheablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "nonCacheablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "resolvablePatterns" : {
+              "type" : [ "array", "string" ]
+            },
+            "decoupledLogic" : {
+              "type" : [ "boolean", "string" ],
+              "default" : false,
+              "description" : "Default: false"
+            },
+            "aliases" : {
+              "type" : "object",
+              "additionalProperties" : true,
+              "properties" : { }
+            }
+          }
+        }
+      }
+    },
+    "deepl" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : true,
+          "description" : "Default: true"
+        },
+        "authkey" : {
+          "type" : "string",
+          "default" : "env:deepl",
+          "description" : "Default: env:deepl"
         }
       }
     }

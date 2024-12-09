@@ -3,17 +3,11 @@ package dev.xorcery.alchemy.file.excel.source;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.JarContext;
-import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.*;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
-import org.dhatim.fastexcel.reader.Cell;
-import org.dhatim.fastexcel.reader.ReadableWorkbook;
-import org.dhatim.fastexcel.reader.Row;
-import org.dhatim.fastexcel.reader.Sheet;
+import org.dhatim.fastexcel.reader.*;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import reactor.core.CoreSubscriber;
@@ -22,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -51,7 +46,8 @@ public class ExcelPublisher
 
                 // Get metadata first
                 Metadata.Builder metadataBuilder = new Metadata.Builder();
-                try (InputStream resourceIn = excelResource.openStream(); ReadableWorkbook wb = new ReadableWorkbook(resourceIn)) {
+                metadataBuilder.add(StandardMetadata.sourceUrl, excelResource.toExternalForm());
+                try (InputStream resourceIn = excelResource.openStream(); ReadableWorkbook wb = new ReadableWorkbook(resourceIn, new ReadingOptions(true, false))) {
                     wb.getSheets().filter(sheet -> sheet.getName().equals("Metadata")).findFirst().ifPresent(metadataSheet ->
                     {
                         try {
@@ -72,7 +68,7 @@ public class ExcelPublisher
                 // Stream data
                 InputStream resourceIn = excelResource.openStream();
                 String dataSheetName = configuration.getString("data").orElse(null);
-                ReadableWorkbook wb = new ReadableWorkbook(resourceIn);
+                ReadableWorkbook wb = new ReadableWorkbook(resourceIn, new ReadingOptions(true, false));
                 Iterator<Sheet> dataSheets = wb.getSheets().filter(sheet -> !sheet.getName().equals("Metadata") &&
                         (dataSheetName == null || sheet.getName().equals(dataSheetName))).iterator();
                 Callable<MetadataJsonNode<JsonNode>> itemReader = new Callable<>() {
@@ -93,7 +89,9 @@ public class ExcelPublisher
 
                                 Row headers = rowIterator.next();
                                 headerNames.clear();
-                                headers.forEach(cell -> headerNames.add(cell.asString()));
+                                headers.forEach(cell -> headerNames.add(hasDateFormat(cell)
+                                        ? cell.asDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                        : cell.asString()));
                                 if (!rowIterator.hasNext()) {
                                     return null;
                                 }
@@ -122,14 +120,20 @@ public class ExcelPublisher
         }
     }
 
-    private JsonNode toJsonNode(Cell cell)
-    {
+    private JsonNode toJsonNode(Cell cell) {
         instance = JsonNodeFactory.instance;
         return switch (cell.getType()) {
-            case NUMBER -> instance.numberNode(cell.asNumber());
+            case NUMBER -> hasDateFormat(cell)
+                    ? instance.textNode(cell.asDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    : instance.numberNode(cell.asNumber());
             case STRING -> instance.textNode(cell.asString());
             case BOOLEAN -> instance.booleanNode(cell.asBoolean());
             default -> JsonNodeFactory.instance.missingNode();
         };
+    }
+
+    private boolean hasDateFormat(Cell cell) {
+        String dataFormatString = cell.getDataFormatString();
+        return dataFormatString != null && (dataFormatString.contains("y") || dataFormatString.contains("m") || dataFormatString.contains("d"));
     }
 }

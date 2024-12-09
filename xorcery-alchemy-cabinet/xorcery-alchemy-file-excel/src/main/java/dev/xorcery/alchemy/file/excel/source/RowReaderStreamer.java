@@ -1,9 +1,10 @@
 package dev.xorcery.alchemy.file.excel.source;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import dev.xorcery.alchemy.jar.JarContext;
+import dev.xorcery.alchemy.jar.StandardMetadata;
 import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
-import dev.xorcery.reactivestreams.api.ReactiveStreamsContext;
 import org.dhatim.fastexcel.reader.ReadableWorkbook;
 import org.reactivestreams.Subscription;
 import reactor.core.CoreSubscriber;
@@ -25,7 +26,7 @@ public class RowReaderStreamer
 
         // Skip until position
         long skip = new ContextViewElement(subscriber.currentContext())
-                .getLong(ReactiveStreamsContext.streamPosition)
+                .getLong(JarContext.streamPosition)
                 .map(pos -> pos + 1).orElse(0L);
         try {
             for (int i = 0; i < skip; i++) {
@@ -44,8 +45,8 @@ public class RowReaderStreamer
 
             MetadataJsonNode<JsonNode> item = null;
             while (request-- > 0 && (item = itemReader.call()) != null) {
-                item.metadata().json().put("timestamp", System.currentTimeMillis());
-                item.metadata().json().put("streamPosition", streamPosition++);
+                item.metadata().json().put(StandardMetadata.timestamp.name(), System.currentTimeMillis());
+                item.metadata().json().put(StandardMetadata.streamPosition.name(), streamPosition++);
                 subscriber.onNext(item);
             }
 

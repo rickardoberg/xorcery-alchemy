@@ -12,15 +12,10 @@ import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import dev.xorcery.reactivestreams.extras.publishers.ResourcePublisherContext;
 import dev.xorcery.reactivestreams.extras.publishers.YamlPublisher;
-import dev.xorcery.util.Resources;
 import org.jvnet.hk2.annotations.Service;
 import reactor.core.publisher.Flux;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-@Service(name="yaml")
+@Service(name = "yaml")
 public class YamlFileSourceJar
         implements SourceJar {
 
@@ -32,19 +27,7 @@ public class YamlFileSourceJar
                 {
                     ContextViewElement contextViewElement = new ContextViewElement(context);
                     return contextViewElement.getString(JarContext.sourceUrl).map(url ->
-                    {
-                        URL sourceUrl = Resources.getResource(url).orElseGet(() ->
-                        {
-                            try {
-                                return new File(url).toURI().toURL();
-                            } catch (MalformedURLException e) {
-                                return null;
-                            }
-                        });
-                        return sourceUrl != null
-                                ? context.put(ResourcePublisherContext.resourceUrl, sourceUrl)
-                                : context;
-                    }).orElse(context);
+                            context.put(ResourcePublisherContext.resourceUrl, url)).orElse(context);
                 }).map(json ->
                 {
                     ObjectNode metadata = JsonNodeFactory.instance.objectNode();

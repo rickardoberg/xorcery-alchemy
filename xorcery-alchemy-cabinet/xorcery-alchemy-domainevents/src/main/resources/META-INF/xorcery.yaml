@@ -1,0 +1,9 @@
+$schema: xorcery-alchemy-domainevents-override-schema.json
+
+graphql:
+  schemas: []
+
+jars:
+  transmutejars:
+    - jar: graphqldomainevents
+      metadata: {}

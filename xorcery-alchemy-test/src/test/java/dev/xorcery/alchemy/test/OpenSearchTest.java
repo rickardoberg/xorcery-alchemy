@@ -1,6 +1,6 @@
 package dev.xorcery.alchemy.test;
 
-import dev.xorcery.alchemy.crucible.Crucible;
+import dev.xorcery.alchemy.crucible.CrucibleRecipeService;
 import dev.xorcery.configuration.builder.ConfigurationBuilder;
 import dev.xorcery.junit.XorceryExtension;
 import dev.xorcery.opensearch.OpenSearchService;
@@ -25,12 +25,13 @@ class OpenSearchTest {
             .build();
 
     @Test
-    public void testOpenSearch(Crucible crucible, OpenSearchService openSearchService) throws Exception {
+    public void testOpenSearch(CrucibleRecipeService crucible, OpenSearchService openSearchService) throws Exception {
         crucible.getResult().orTimeout(10, TimeUnit.SECONDS).join();
 
-        SearchResponse response = openSearchService.getClient().search().search("numbers", SearchRequest.builder()
-                        .query(SearchQuery.match_all())
-                .build(), Map.of()).orTimeout(10, TimeUnit.SECONDS).join();
+        SearchResponse response = openSearchService.getClient().search().search("people", SearchRequest.builder()
+                .query(SearchQuery.match_all())
+                .size(1)
+                .build(), Map.of("sort", "metadata.streamPosition:desc")).orTimeout(10, TimeUnit.SECONDS).join();
 
         for (Document document : response.hits().documents()) {
             System.out.println(document.source().toPrettyString());

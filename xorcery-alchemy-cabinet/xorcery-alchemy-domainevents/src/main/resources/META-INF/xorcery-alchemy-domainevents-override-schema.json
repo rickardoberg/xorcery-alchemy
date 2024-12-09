@@ -1,6 +1,6 @@
 {
-  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-test/override-schema",
-  "title" : "xorcery-alchemy-test configuration override JSON Schema",
+  "$id" : "http://xorcery.dev/applications/dev.xorcery.alchemy/xorcery-alchemy-domainevents/override-schema",
+  "title" : "xorcery-alchemy-domainevents configuration override JSON Schema",
   "$schema" : "https://json-schema.org/draft/2020-12/schema",
   "type" : "object",
   "properties" : {
@@ -27,12 +27,6 @@
     },
     "jars" : {
       "$ref" : "#/$defs/jars"
-    },
-    "crucible" : {
-      "$ref" : "#/$defs/crucible"
-    },
-    "watcher" : {
-      "$ref" : "#/$defs/watcher"
     },
     "instance" : {
       "$ref" : "#/$defs/instance"
@@ -87,9 +81,6 @@
     },
     "neo4jprojections" : {
       "$ref" : "#/$defs/neo4jprojections"
-    },
-    "opensearch" : {
-      "$ref" : "#/$defs/opensearch"
     },
     "opentelemetry" : {
       "$ref" : "#/$defs/opentelemetry"
@@ -179,7 +170,23 @@
               "description" : "Default: false"
             },
             "replace" : {
-              "type" : [ "array", "string" ]
+              "type" : [ "array", "string" ],
+              "items" : {
+                "anyOf" : [ {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "entity" : {
+                      "type" : "string",
+                      "default" : "Employment",
+                      "description" : "Default: Employment"
+                    },
+                    "attributes" : {
+                      "type" : [ "array", "string" ]
+                    }
+                  }
+                } ]
+              }
             },
             "events" : {
               "type" : "object",
@@ -308,6 +315,17 @@
       "properties" : {
         "schemas" : {
           "type" : [ "array", "string" ]
+        },
+        "changes" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "enabled" : {
+              "type" : [ "boolean", "string" ],
+              "default" : "{{ defaults.development }}",
+              "description" : "Default: {{ defaults.development }} (false)"
+            }
+          }
         }
       }
     },
@@ -381,363 +399,21 @@
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
+        "enabled" : {
+          "type" : [ "boolean", "string" ],
+          "default" : "{{ defaults.enabled }}",
+          "description" : "Default: {{ defaults.enabled }} (true)"
+        },
         "sourcejars" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "concat",
-                  "description" : "Default: concat",
-                  "const" : "concat"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "concat",
-                  "description" : "Default: concat"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "sources" : {
-                  "type" : [ "array", "string" ],
-                  "items" : {
-                    "$ref" : "#/$defs/jars/properties/sourcejars/items"
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "directory",
-                  "description" : "Default: directory"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "directory",
-                  "description" : "Default: directory"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "path" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "filter" : {
-                  "type" : "string",
-                  "default" : "*.*",
-                  "description" : "Default: *.*"
-                },
-                "mappings" : {
-                  "type" : [ "array", "string" ],
-                  "items" : {
-                    "anyOf" : [ {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "name" : {
-                          "type" : "string",
-                          "default" : "*.yaml",
-                          "description" : "Default: *.yaml"
-                        },
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "yaml",
-                          "description" : "Default: yaml"
-                        }
-                      }
-                    }, {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "name" : {
-                          "type" : "string",
-                          "default" : "*.yml",
-                          "description" : "Default: *.yml"
-                        },
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "yaml",
-                          "description" : "Default: yaml"
-                        }
-                      }
-                    }, {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "name" : {
-                          "type" : "string",
-                          "default" : "*.csv",
-                          "description" : "Default: *.csv"
-                        },
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "csv",
-                          "description" : "Default: csv"
-                        }
-                      }
-                    }, {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "name" : {
-                          "type" : "string",
-                          "default" : "*.xlsx",
-                          "description" : "Default: *.xlsx"
-                        },
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "excel",
-                          "description" : "Default: excel"
-                        }
-                      }
-                    } ]
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "csv",
-                  "description" : "Default: csv",
-                  "const" : "csv"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "csv",
-                  "description" : "Default: csv"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "escape" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    },
-                    "separator" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    },
-                    "quote" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    },
-                    "headers" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : false,
-                      "description" : "Default: false"
-                    },
-                    "sourceUrl" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "excel",
-                  "description" : "Default: excel"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "excel",
-                  "description" : "Default: excel"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "sourceUrl" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "yaml",
-                  "description" : "Default: yaml",
-                  "const" : "yaml"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "yaml",
-                  "description" : "Default: yaml"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "sourceUrl" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "projection",
-                  "description" : "Default: projection"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "projection",
-                  "description" : "Default: projection"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "projectionId" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script",
-                  "const" : "script"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "bindings" : {
-                  "type" : "object",
-                  "additionalProperties" : true,
-                  "properties" : { }
-                },
-                "subscribe" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "next" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                }
-              }
-            } ]
+            "anyOf" : [ ]
           }
         },
         "transmutejars" : {
           "type" : [ "array", "string" ],
           "items" : {
             "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "flatten",
-                  "description" : "Default: flatten",
-                  "const" : "flatten"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "flatten",
-                  "description" : "Default: flatten"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "rename",
-                  "description" : "Default: rename",
-                  "const" : "rename"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "rename",
-                  "description" : "Default: rename"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "metadata" : {
-                  "type" : "object",
-                  "additionalProperties" : true,
-                  "properties" : { }
-                },
-                "data" : {
-                  "type" : "object",
-                  "additionalProperties" : true,
-                  "properties" : { }
-                }
-              }
-            }, {
               "type" : "object",
               "additionalProperties" : false,
               "properties" : {
@@ -752,402 +428,14 @@
                   "properties" : { }
                 }
               }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "jslt",
-                  "description" : "Default: jslt"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "jslt",
-                  "description" : "Default: jslt"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "jslt" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "log",
-                  "description" : "Default: log",
-                  "const" : "log"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "log",
-                  "description" : "Default: log"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "level" : {
-                  "type" : "string",
-                  "default" : "INFO",
-                  "description" : "Default: INFO"
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script",
-                  "const" : "script"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "bindings" : {
-                  "type" : "object",
-                  "additionalProperties" : true,
-                  "properties" : { }
-                },
-                "subscribe" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "next" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "error" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "complete" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                }
-              }
             } ]
           }
         },
         "resultjars" : {
           "type" : [ "array", "string" ],
           "items" : {
-            "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "excel",
-                  "description" : "Default: excel"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "excel",
-                  "description" : "Default: excel"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "resultUrl" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "yaml",
-                  "description" : "Default: yaml",
-                  "const" : "yaml"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "yaml",
-                  "description" : "Default: yaml"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "resultUrl" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "log",
-                  "description" : "Default: log",
-                  "const" : "log"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "log",
-                  "description" : "Default: log"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "level" : {
-                  "type" : "string",
-                  "default" : "INFO",
-                  "description" : "Default: INFO"
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "projection",
-                  "description" : "Default: projection"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "projection",
-                  "description" : "Default: projection"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "projectionId" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "opensearch",
-                  "description" : "Default: opensearch"
-                },
-                "context" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "host" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    },
-                    "index" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    },
-                    "alias" : {
-                      "default" : null,
-                      "description" : "Default: null"
-                    }
-                  }
-                }
-              }
-            }, {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script",
-                  "const" : "script"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "bindings" : {
-                  "type" : "object",
-                  "additionalProperties" : true,
-                  "properties" : { }
-                },
-                "subscribe" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "next" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "error" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "complete" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                }
-              }
-            } ]
+            "anyOf" : [ ]
           }
-        },
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : "{{ defaults.enabled }}",
-          "description" : "Default: {{ defaults.enabled }} (true)"
-        }
-      }
-    },
-    "crucible" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : "{{ defaults.enabled }}",
-          "description" : "Default: {{ defaults.enabled }} (true)"
-        },
-        "closeWhenDone" : {
-          "type" : [ "boolean", "string" ],
-          "default" : true,
-          "description" : "Default: true"
-        },
-        "recipes" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "$ref" : "#/$defs/recipe"
-          }
-        }
-      }
-    },
-    "watcher" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : false,
-          "description" : "Default: false"
-        },
-        "directories" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "path" : {
-                  "type" : "string",
-                  "default" : "C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files",
-                  "description" : "Default: C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files"
-                },
-                "recipe" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "source" : {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "yaml",
-                          "description" : "Default: yaml"
-                        }
-                      }
-                    },
-                    "result" : {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "log",
-                          "description" : "Default: log"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            } ]
-          }
-        }
-      }
-    },
-    "recipe" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : "{{ defaults.enabled }}",
-          "description" : "Default: {{ defaults.enabled }} (true)"
-        },
-        "name" : {
-          "type" : [ "null", "string" ],
-          "description" : "Name of recipe (optional)"
-        },
-        "source" : {
-          "$ref" : "#/$defs/jars/properties/sourcejars/items"
-        },
-        "transmutes" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "$ref" : "#/$defs/jars/properties/transmutejars/items"
-          }
-        },
-        "result" : {
-          "$ref" : "#/$defs/jars/properties/resultjars/items"
         }
       }
     },
@@ -2516,96 +1804,6 @@
         }
       }
     },
-    "opensearch" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : "{{ defaults.enabled }}",
-          "description" : "Default: {{ defaults.enabled }} (true)"
-        },
-        "uri" : {
-          "type" : "string",
-          "default" : "http://localhost:9200",
-          "description" : "Default: http://localhost:9200"
-        },
-        "componentTemplates" : {
-          "type" : [ "array", "string", "object" ],
-          "additionalProperties" : true,
-          "properties" : { }
-        },
-        "indexTemplates" : {
-          "type" : [ "array", "string", "object" ],
-          "additionalProperties" : true,
-          "properties" : { }
-        },
-        "deleteOnExit" : {
-          "type" : [ "boolean", "string" ],
-          "default" : false,
-          "description" : "Default: false"
-        },
-        "publishers" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "server" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "uri" : {
-                      "type" : "string",
-                      "default" : "wss://somehost:someport",
-                      "description" : "Default: wss://somehost:someport"
-                    },
-                    "stream" : {
-                      "type" : "string",
-                      "default" : "somestream",
-                      "description" : "Default: somestream"
-                    },
-                    "configuration" : {
-                      "type" : "object",
-                      "additionalProperties" : true,
-                      "properties" : { }
-                    }
-                  }
-                },
-                "client" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "alias" : {
-                      "type" : "string",
-                      "default" : "somealias",
-                      "description" : "Default: somealias"
-                    },
-                    "index" : {
-                      "type" : "string",
-                      "default" : "anindexname",
-                      "description" : "Default: anindexname"
-                    },
-                    "configuration" : {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "bufferSize" : {
-                          "type" : [ "number", "string" ],
-                          "default" : 64,
-                          "description" : "Default: 64"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            } ]
-          }
-        }
-      }
-    },
     "opentelemetry" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -2618,242 +1816,6 @@
               "type" : [ "boolean", "string" ],
               "default" : "{{ opentelemetry.enabled ? false | true }}",
               "description" : "Default: {{ opentelemetry.enabled ? false | true }} (true)"
-            }
-          }
-        },
-        "exporters" : {
-          "type" : "object",
-          "additionalProperties" : false,
-          "properties" : {
-            "websocket" : {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : "{{ defaults.enabled }}",
-                  "description" : "Default: {{ defaults.enabled }} (true)"
-                },
-                "logs" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "enabled" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : "{{ opentelemetry.exporters.websocket.enabled }}",
-                      "description" : "Default: {{ opentelemetry.exporters.websocket.enabled }} (true)"
-                    }
-                  }
-                },
-                "traces" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "enabled" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : "{{ opentelemetry.exporters.websocket.enabled }}",
-                      "description" : "Default: {{ opentelemetry.exporters.websocket.enabled }} (true)"
-                    }
-                  }
-                },
-                "metrics" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "enabled" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : "{{ opentelemetry.exporters.websocket.enabled }}",
-                      "description" : "Default: {{ opentelemetry.exporters.websocket.enabled }} (true)"
-                    },
-                    "interval" : {
-                      "type" : "string",
-                      "default" : "30s",
-                      "description" : "Default: 30s"
-                    }
-                  }
-                },
-                "attach" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "enabled" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : "{{ opentelemetry.exporters.websocket.enabled }}",
-                      "description" : "Default: {{ opentelemetry.exporters.websocket.enabled }} (true)"
-                    },
-                    "host" : {
-                      "type" : "string",
-                      "default" : "wss://localhost/",
-                      "description" : "Default: wss://localhost/"
-                    },
-                    "optimizeResource" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : false,
-                      "description" : "Default: false"
-                    }
-                  }
-                },
-                "listen" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "enabled" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : "{{ opentelemetry.exporters.websocket.enabled }}",
-                      "description" : "Default: {{ opentelemetry.exporters.websocket.enabled }} (true)"
-                    },
-                    "path" : {
-                      "type" : "string",
-                      "default" : "exporter/v1",
-                      "description" : "Default: exporter/v1"
-                    },
-                    "uri" : {
-                      "type" : "string",
-                      "default" : "{{ reactivestreams.server.scheme }}://{{ instance.fqdn }}:{{ jetty.server.port }}/{{ opentelemetry.exporters.websocket.listen.path }}",
-                      "description" : "Default: {{ reactivestreams.server.scheme }}://{{ instance.fqdn }}:{{ jetty.server.port }}/{{ opentelemetry.exporters.websocket.listen.path }} (://service.xorcery.test:/exporter/v1)"
-                    }
-                  }
-                }
-              }
-            },
-            "local" : {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : "{{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }}",
-                  "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }} (false)"
-                },
-                "interval" : {
-                  "type" : "string",
-                  "default" : "10s",
-                  "description" : "Default: 10s"
-                }
-              }
-            },
-            "logging" : {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : "{{ opentelemetry.exporters.otlp.endpoint ? false | true }}",
-                  "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? false | true }} (true)"
-                },
-                "interval" : {
-                  "type" : "string",
-                  "default" : "10s",
-                  "description" : "Default: 10s"
-                }
-              }
-            },
-            "jmx" : {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : "{{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }}",
-                  "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }} (false)"
-                },
-                "interval" : {
-                  "type" : "string",
-                  "default" : "5s",
-                  "description" : "Default: 5s"
-                }
-              }
-            },
-            "otlp" : {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "endpoint" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "http" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "enabled" : {
-                      "type" : [ "boolean", "string" ],
-                      "default" : "{{ opentelemetry.exporters.otlp.endpoint ? true | false }}",
-                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? true | false }} (false)"
-                    },
-                    "port" : {
-                      "type" : [ "number", "string" ],
-                      "default" : 4318,
-                      "description" : "Default: 4318"
-                    },
-                    "compression" : {
-                      "type" : "string",
-                      "default" : "gzip",
-                      "description" : "Default: gzip"
-                    },
-                    "headers" : {
-                      "type" : "object",
-                      "additionalProperties" : true,
-                      "properties" : { }
-                    },
-                    "connectTimeout" : {
-                      "type" : "string",
-                      "default" : "{{ defaults.connectTimeout }}",
-                      "description" : "Default: {{ defaults.connectTimeout }} (5s)"
-                    },
-                    "timeout" : {
-                      "type" : "string",
-                      "default" : "10s",
-                      "description" : "Default: 10s"
-                    },
-                    "interval" : {
-                      "type" : "string",
-                      "default" : "10s",
-                      "description" : "Default: 10s"
-                    },
-                    "aggregationTemporality" : {
-                      "type" : "string",
-                      "default" : "alwaysCumulative",
-                      "description" : "Default: alwaysCumulative"
-                    },
-                    "scheduleDelay" : {
-                      "type" : "string",
-                      "default" : "5s",
-                      "description" : "Default: 5s"
-                    },
-                    "exporterTimeout" : {
-                      "type" : "string",
-                      "default" : "60s",
-                      "description" : "Default: 60s"
-                    },
-                    "maxExportBatchSize" : {
-                      "type" : [ "number", "string" ],
-                      "default" : 1000,
-                      "description" : "Default: 1000"
-                    },
-                    "maxQueueSize" : {
-                      "type" : [ "number", "string" ],
-                      "default" : 10000,
-                      "description" : "Default: 10000"
-                    },
-                    "logsEndpoint" : {
-                      "type" : "string",
-                      "default" : "{{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/logs",
-                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/logs (null:4318/v1/logs)"
-                    },
-                    "tracesEndpoint" : {
-                      "type" : "string",
-                      "default" : "{{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/traces",
-                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/traces (null:4318/v1/traces)"
-                    },
-                    "metricsEndpoint" : {
-                      "type" : "string",
-                      "default" : "{{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/metrics",
-                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/metrics (null:4318/v1/metrics)"
-                    }
-                  }
-                }
-              }
             }
           }
         },
@@ -3166,6 +2128,151 @@
               "type" : "string",
               "default" : "{{ SYSTEM.java_vm_vendor }} {{ SYSTEM.java_vm_name }} {{ SYSTEM.java_vm_version }}",
               "description" : "Default: {{ SYSTEM.java_vm_vendor }} {{ SYSTEM.java_vm_name }} {{ SYSTEM.java_vm_version }} (Amazon.com Inc. OpenJDK 64-Bit Server VM 17.0.8+7-LTS)"
+            }
+          }
+        },
+        "exporters" : {
+          "type" : "object",
+          "additionalProperties" : false,
+          "properties" : {
+            "local" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }}",
+                  "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }} (false)"
+                },
+                "interval" : {
+                  "type" : "string",
+                  "default" : "10s",
+                  "description" : "Default: 10s"
+                }
+              }
+            },
+            "logging" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ opentelemetry.exporters.otlp.endpoint ? false | true }}",
+                  "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? false | true }} (true)"
+                },
+                "interval" : {
+                  "type" : "string",
+                  "default" : "10s",
+                  "description" : "Default: 10s"
+                }
+              }
+            },
+            "jmx" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : "{{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }}",
+                  "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? false | defaults.development }} (false)"
+                },
+                "interval" : {
+                  "type" : "string",
+                  "default" : "5s",
+                  "description" : "Default: 5s"
+                }
+              }
+            },
+            "otlp" : {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "endpoint" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "http" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "enabled" : {
+                      "type" : [ "boolean", "string" ],
+                      "default" : "{{ opentelemetry.exporters.otlp.endpoint ? true | false }}",
+                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint ? true | false }} (false)"
+                    },
+                    "port" : {
+                      "type" : [ "number", "string" ],
+                      "default" : 4318,
+                      "description" : "Default: 4318"
+                    },
+                    "compression" : {
+                      "type" : "string",
+                      "default" : "gzip",
+                      "description" : "Default: gzip"
+                    },
+                    "headers" : {
+                      "type" : "object",
+                      "additionalProperties" : true,
+                      "properties" : { }
+                    },
+                    "connectTimeout" : {
+                      "type" : "string",
+                      "default" : "{{ defaults.connectTimeout }}",
+                      "description" : "Default: {{ defaults.connectTimeout }} (5s)"
+                    },
+                    "timeout" : {
+                      "type" : "string",
+                      "default" : "10s",
+                      "description" : "Default: 10s"
+                    },
+                    "interval" : {
+                      "type" : "string",
+                      "default" : "10s",
+                      "description" : "Default: 10s"
+                    },
+                    "aggregationTemporality" : {
+                      "type" : "string",
+                      "default" : "alwaysCumulative",
+                      "description" : "Default: alwaysCumulative"
+                    },
+                    "scheduleDelay" : {
+                      "type" : "string",
+                      "default" : "5s",
+                      "description" : "Default: 5s"
+                    },
+                    "exporterTimeout" : {
+                      "type" : "string",
+                      "default" : "60s",
+                      "description" : "Default: 60s"
+                    },
+                    "maxExportBatchSize" : {
+                      "type" : [ "number", "string" ],
+                      "default" : 1000,
+                      "description" : "Default: 1000"
+                    },
+                    "maxQueueSize" : {
+                      "type" : [ "number", "string" ],
+                      "default" : 10000,
+                      "description" : "Default: 10000"
+                    },
+                    "logsEndpoint" : {
+                      "type" : "string",
+                      "default" : "{{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/logs",
+                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/logs (null:4318/v1/logs)"
+                    },
+                    "tracesEndpoint" : {
+                      "type" : "string",
+                      "default" : "{{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/traces",
+                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/traces (null:4318/v1/traces)"
+                    },
+                    "metricsEndpoint" : {
+                      "type" : "string",
+                      "default" : "{{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/metrics",
+                      "description" : "Default: {{ opentelemetry.exporters.otlp.endpoint }}:{{ opentelemetry.exporters.otlp.http.port }}/v1/metrics (null:4318/v1/metrics)"
+                    }
+                  }
+                }
+              }
             }
           }
         },

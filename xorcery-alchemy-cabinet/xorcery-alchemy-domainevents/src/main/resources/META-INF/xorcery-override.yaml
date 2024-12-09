@@ -1,0 +1,8 @@
+$schema: xorcery-alchemy-domainevents-override-schema.json
+
+analytics:
+  projection:
+    enabled: false
+
+anonymizer:
+  enabled: false
