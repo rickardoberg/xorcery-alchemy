@@ -100,54 +100,6 @@
               }
             } ]
           }
-        },
-        "resultjars" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "jar" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script",
-                  "const" : "script"
-                },
-                "name" : {
-                  "type" : "string",
-                  "default" : "script",
-                  "description" : "Default: script"
-                },
-                "enabled" : {
-                  "type" : [ "boolean", "string" ],
-                  "default" : true,
-                  "description" : "Default: true"
-                },
-                "bindings" : {
-                  "type" : "object",
-                  "additionalProperties" : true,
-                  "properties" : { }
-                },
-                "subscribe" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "next" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "error" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "complete" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                }
-              }
-            } ]
-          }
         }
       }
     }

@@ -13,8 +13,8 @@ public record RelationDirective(String name, String direction) {
     {
         return Optional.ofNullable(fieldDefinition.getDirective(RelationDirective.RELATION)).map(dir ->
         {
-            String name = getMandatoryArgument(dir, RelationDirective.NAME, fieldDefinition.getName());
-            String direction = getMandatoryArgument(dir, RelationDirective.DIRECTION, Direction.OUTGOING.name());
+            String name = GraphQLHelpers.getMandatoryArgument(dir, RelationDirective.NAME, fieldDefinition.getName());
+            String direction = GraphQLHelpers.getMandatoryArgument(dir, RelationDirective.DIRECTION, "OUTGOING");
             return new RelationDirective(name, parseDirection(direction));
         });
     }

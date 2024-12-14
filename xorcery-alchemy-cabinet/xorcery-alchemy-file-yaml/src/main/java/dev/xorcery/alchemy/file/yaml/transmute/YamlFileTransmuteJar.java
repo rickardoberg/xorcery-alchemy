@@ -1,4 +1,4 @@
-package dev.xorcery.alchemy.file.yaml.result;
+package dev.xorcery.alchemy.file.yaml.transmute;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -21,19 +21,19 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.function.BiFunction;
 
-@Service(name = "yaml")
-public class YamlFileResultJar
-        implements ResultJar {
+@Service(name = "yaml", metadata = "enabled=jars.enabled")
+public class YamlFileTransmuteJar
+        implements TransmuteJar {
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newResult(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
         return (flux, context) ->
         {
             ContextViewElement contextViewElement = new ContextViewElement(context);
             URI fileUrl = contextViewElement.getURI(JarContext.resultUrl).orElse(null);
 
             if (fileUrl == null) {
-                return Flux.error(new JarException(configuration, recipeConfiguration, "Could not find file"));
+                return Flux.error(new JarException(jarConfiguration, recipeConfiguration, "Could not find file"));
             }
 
             if (fileUrl.getScheme().equals("file")) {
@@ -68,7 +68,7 @@ public class YamlFileResultJar
                     }
                 });
             } catch (Throwable e) {
-                return Flux.error(new JarException(configuration, recipeConfiguration, e));
+                return Flux.error(new JarException(jarConfiguration, recipeConfiguration, e));
             }
         };
     }

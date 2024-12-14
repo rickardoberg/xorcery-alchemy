@@ -50,7 +50,7 @@
             } ]
           }
         },
-        "resultjars" : {
+        "transmutejars" : {
           "type" : [ "array", "string" ],
           "items" : {
             "anyOf" : [ {
@@ -60,8 +60,7 @@
                 "jar" : {
                   "type" : "string",
                   "default" : "yaml",
-                  "description" : "Default: yaml",
-                  "const" : "yaml"
+                  "description" : "Default: yaml"
                 },
                 "name" : {
                   "type" : "string",

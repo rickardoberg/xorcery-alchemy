@@ -31,61 +31,9 @@
           "items" : {
             "$ref" : "#/$defs/recipe"
           }
-        }
-      }
-    },
-    "watcher" : {
-      "type" : "object",
-      "additionalProperties" : false,
-      "properties" : {
-        "enabled" : {
-          "type" : [ "boolean", "string" ],
-          "default" : false,
-          "description" : "Default: false"
         },
-        "directories" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "anyOf" : [ {
-              "type" : "object",
-              "additionalProperties" : false,
-              "properties" : {
-                "path" : {
-                  "type" : "string",
-                  "default" : "C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files",
-                  "description" : "Default: C:\\Users\\ricka\\IdeaProjects\\xorcery-alchemy/target/classes/files"
-                },
-                "recipe" : {
-                  "type" : "object",
-                  "additionalProperties" : false,
-                  "properties" : {
-                    "source" : {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "yaml",
-                          "description" : "Default: yaml"
-                        }
-                      }
-                    },
-                    "result" : {
-                      "type" : "object",
-                      "additionalProperties" : false,
-                      "properties" : {
-                        "jar" : {
-                          "type" : "string",
-                          "default" : "log",
-                          "description" : "Default: log"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            } ]
-          }
+        "transmutations" : {
+          "type" : [ "array", "string" ]
         }
       }
     },

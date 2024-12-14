@@ -1,7 +1,8 @@
 $schema: META-INF/xorcery-alchemy-test-override-schema.json
 crucible:
-  recipes:
-    - name: "testscript"
+  transmutations:
+  - recipe:
+      name: "testscript"
       source:
         jar: script
         name: "numbergenerator"
@@ -23,21 +24,20 @@ crucible:
             sink.complete();
           }
       transmutes:
-        - name: "javascript"
-          jar: script
-          bindings:
-            "abc": 123
-            "inc": 3
-          next: |+
-            print('value:'+item.data.value);
-            item.data.xyz="abc:"+bindings.abc;
-            item.data.struct = {"foo":bindings.inc+item.data.value,"bar":true};
-            item.metadata.foo="bar";
-            sink.next(item);
-          complete: |+
-            print("Transmute complete");
-      result:
-        name: "logitem"
+      - name: "javascript"
+        jar: script
+        bindings:
+          "abc": 123
+          "inc": 3
+        next: |+
+          print('value:'+item.data.value);
+          item.data.xyz="abc:"+bindings.abc;
+          item.data.struct = {"foo":bindings.inc+item.data.value,"bar":true};
+          item.metadata.foo="bar";
+          sink.next(item);
+        complete: |+
+          print("Transmute complete");
+      - name: "logitem"
         jar: script
         next: |+
           print('item:'+item);

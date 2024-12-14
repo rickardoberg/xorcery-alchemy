@@ -6,4 +6,5 @@ graphql:
 jars:
   transmutejars:
     - jar: graphqldomainevents
+      name: graphqldomainevents
       metadata: {}

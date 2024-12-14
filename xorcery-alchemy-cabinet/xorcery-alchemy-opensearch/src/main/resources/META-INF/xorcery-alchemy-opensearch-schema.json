@@ -13,7 +13,7 @@
       "type" : "object",
       "additionalProperties" : false,
       "properties" : {
-        "resultjars" : {
+        "transmutejars" : {
           "type" : [ "array", "string" ],
           "items" : {
             "anyOf" : [ {

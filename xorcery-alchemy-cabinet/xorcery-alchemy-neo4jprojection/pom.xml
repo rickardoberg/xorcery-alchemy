@@ -16,5 +16,4 @@
             <artifactId>xorcery-neo4j-projections</artifactId>
         </dependency>
     </dependencies>
-
 </project>

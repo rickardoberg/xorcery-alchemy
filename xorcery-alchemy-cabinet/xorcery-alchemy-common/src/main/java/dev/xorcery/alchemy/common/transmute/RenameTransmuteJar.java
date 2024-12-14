@@ -13,13 +13,14 @@ import jakarta.inject.Inject;
 import org.jvnet.hk2.annotations.Service;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
+import reactor.util.context.Context;
 import reactor.util.context.ContextView;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-@Service(name = "rename")
+@Service(name = "rename", metadata = "enabled=jars.enabled")
 public class RenameTransmuteJar
         implements TransmuteJar {
     @Inject
@@ -38,8 +39,14 @@ public class RenameTransmuteJar
         for (Map.Entry<String, JsonNode> renamedField : dataRenameConfiguration.json().properties()) {
             renamedData.put(renamedField.getKey(), renamedField.getValue().asText());
         }
-        return (flux, context) ->
-                flux.map(item ->
+        Configuration contextRenameConfiguration = configuration.configuration().getConfiguration("context");
+        Map<String, String> renamedContext = new HashMap<>();
+        for (Map.Entry<String, JsonNode> renamedField : contextRenameConfiguration.json().properties()) {
+            renamedContext.put(renamedField.getKey(), renamedField.getValue().asText());
+        }
+        return (flux, ctx) -> {
+            if (!renamedMetadata.isEmpty() || !renamedData.isEmpty()) {
+                flux = flux.map(item ->
                 {
                     ObjectNode metadata = item.metadata().json();
                     if (!renamedMetadata.isEmpty()) {
@@ -63,5 +70,20 @@ public class RenameTransmuteJar
 
                     return new MetadataJsonNode<>(new Metadata(metadata), data);
                 });
+            }
+
+            if (!renamedContext.isEmpty()) {
+                flux = flux.contextWrite(context ->
+                {
+                    Map<Object, Object> renamedContextMap = new HashMap<>(context.size());
+                    context.forEach((k, v) -> {
+                        Object newKey = renamedContext.get(k.toString());
+                        renamedContextMap.put(newKey != null ? newKey : k, v);
+                    });
+                    return Context.of(renamedContextMap);
+                });
+            }
+            return flux;
+        };
     }
 }

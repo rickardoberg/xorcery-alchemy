@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-@Service(name = "script")
+@Service(name = "script", metadata = "enabled=jars.enabled")
 public class ScriptTransmuteJar
         implements TransmuteJar {
 

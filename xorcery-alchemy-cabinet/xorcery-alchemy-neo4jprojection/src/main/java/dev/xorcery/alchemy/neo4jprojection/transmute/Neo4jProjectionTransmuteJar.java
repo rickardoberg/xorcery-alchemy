@@ -1,4 +1,4 @@
-package dev.xorcery.alchemy.neo4jprojection.result;
+package dev.xorcery.alchemy.neo4jprojection.transmute;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
 import dev.xorcery.alchemy.jar.RecipeConfiguration;
-import dev.xorcery.alchemy.jar.ResultJar;
+import dev.xorcery.alchemy.jar.TransmuteJar;
 import dev.xorcery.configuration.Configuration;
 import dev.xorcery.domainevents.api.DomainEvent;
 import dev.xorcery.domainevents.api.JsonDomainEvent;
@@ -24,22 +24,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-@Service(name = "projection")
-public class Neo4jProjectionResultJar
-        implements ResultJar {
+@Service(name = "projection", metadata = "enabled=jars.enabled")
+public class Neo4jProjectionTransmuteJar
+        implements TransmuteJar {
     private final Configuration configuration;
     private final Logger logger;
     private final Neo4jProjections neo4jProjections;
 
     @Inject
-    public Neo4jProjectionResultJar(Configuration configuration, Logger logger, Neo4jProjections neo4jProjections) {
+    public Neo4jProjectionTransmuteJar(Configuration configuration, Logger logger, Neo4jProjections neo4jProjections) {
         this.configuration = configuration;
         this.logger = logger;
         this.neo4jProjections = neo4jProjections;
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newResult(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
         return (flux, context) -> flux.<MetadataEvents>handle((metadatajson, sink) -> {
                     if (metadatajson.data() instanceof ArrayNode arrayNode) {
                         List<DomainEvent> events = new ArrayList<>(arrayNode.size());

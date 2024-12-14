@@ -1,6 +1,5 @@
 module xorcery.alchemy.script {
     exports dev.xorcery.alchemy.script;
-    exports dev.xorcery.alchemy.script.result;
     exports dev.xorcery.alchemy.script.source;
     exports dev.xorcery.alchemy.script.transmute;
 

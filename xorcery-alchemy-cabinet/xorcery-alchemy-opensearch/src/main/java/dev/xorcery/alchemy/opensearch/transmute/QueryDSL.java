@@ -1,4 +1,4 @@
-package dev.xorcery.alchemy.opensearch.result;
+package dev.xorcery.alchemy.opensearch.transmute;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;

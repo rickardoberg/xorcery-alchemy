@@ -1,5 +1,5 @@
 jars:
-  resultjars:
+  transmutejars:
     - jar: opensearch
       context:
         host: null

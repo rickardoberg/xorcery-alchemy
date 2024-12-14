@@ -1,5 +1,5 @@
 module xorcery.alchemy.opensearch {
-    exports dev.xorcery.alchemy.opensearch.result;
+    exports dev.xorcery.alchemy.opensearch.transmute;
 
     requires xorcery.opensearch.client;
     requires xorcery.alchemy.jar;

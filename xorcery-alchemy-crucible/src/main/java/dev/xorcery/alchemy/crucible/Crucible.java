@@ -2,15 +2,20 @@ package dev.xorcery.alchemy.crucible;
 
 
 import dev.xorcery.alchemy.jar.Cabinet;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.alchemy.jar.Transmutation;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.MarkerManager;
 import org.jvnet.hk2.annotations.Service;
 import reactor.core.Disposable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -20,6 +25,8 @@ public class Crucible {
     private final Logger logger;
     private final Cabinet cabinet;
 
+    private final List<CompletableFuture<Void>> transmutations = new CopyOnWriteArrayList<>();
+
     @Inject
     public Crucible(Cabinet cabinet, Logger logger) {
         this.cabinet = cabinet;
@@ -27,12 +34,14 @@ public class Crucible {
         logger.info("Starting Crucible");
     }
 
-    public CompletableFuture<Void> addTransmutation(RecipeConfiguration recipeConfiguration) {
+    public CompletableFuture<Void> addTransmutation(TransmutationConfiguration transmutationConfiguration) {
         CompletableFuture<Void> result = new CompletableFuture<Void>();
-        result.whenCompleteAsync(logResult(recipeConfiguration.getName().orElse("crucible")));
+        result.whenCompleteAsync(logResult(transmutationConfiguration.getName().or(()->transmutationConfiguration.getRecipe().getName()).orElse("crucible")));
         try {
-            recipeConfiguration.getName().ifPresent(name -> logger.info("Starting transmutation: " + name));
-            Transmutation transmutation = cabinet.newTransmutation(recipeConfiguration);
+            transmutationConfiguration.getName().or(()->transmutationConfiguration.getRecipe().getName()).ifPresent(name -> logger.info("Starting: " + name));
+            Transmutation transmutation = cabinet.newTransmutation(transmutationConfiguration);
+            transmutations.add(result);
+            result.whenComplete((r, t) -> transmutations.remove(result));
             Disposable disposable = transmutation.getFlux().subscribe(item -> {
             }, result::completeExceptionally, () -> result.complete(null));
             result.exceptionally(disposeOnCancel(disposable));
@@ -42,13 +51,17 @@ public class Crucible {
         return result;
     }
 
+    public List<CompletableFuture<Void>> getTransmutations() {
+        return Collections.unmodifiableList(new ArrayList<>(transmutations));
+    }
+
     private BiConsumer<? super Void, Throwable> logResult(String name) {
         return (result, throwable) ->
         {
             if (throwable == null) {
-                logger.info("Finished transmutation: " + name);
+                logger.info(MarkerManager.getMarker(name), "Finished: " + name);
             } else {
-                logger.error("Transmutation failed: " + name, throwable);
+                logger.error(MarkerManager.getMarker(name), "Failed: " + name, throwable);
             }
         };
     }

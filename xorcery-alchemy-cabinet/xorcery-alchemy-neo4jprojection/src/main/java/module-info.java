@@ -1,5 +1,5 @@
 module xorcery.alchemy.neo4jprojection {
-    exports dev.xorcery.alchemy.neo4jprojection.result;
+    exports dev.xorcery.alchemy.neo4jprojection.transmute;
     exports dev.xorcery.alchemy.neo4jprojection.source;
 
     requires xorcery.alchemy.jar;

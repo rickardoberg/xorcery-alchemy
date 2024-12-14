@@ -13,7 +13,7 @@ import reactor.util.context.ContextView;
 
 import java.util.function.BiFunction;
 
-@Service(name = "flatten")
+@Service(name = "flatten", metadata = "enabled=jars.enabled")
 public class FlattenTransmuteJar
         implements TransmuteJar {
 

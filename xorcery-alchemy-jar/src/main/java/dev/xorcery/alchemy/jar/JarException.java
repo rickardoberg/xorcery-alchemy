@@ -26,6 +26,6 @@ public class JarException
 
     @Override
     public String getMessage() {
-        return recipeConfiguration.getName()+"."+jarConfiguration.getName()+":"+super.getMessage();
+        return recipeConfiguration.getName().map(rn -> rn+".").orElse("")+jarConfiguration.getName().orElseGet(jarConfiguration::getJar)+":"+super.getMessage();
     }
 }

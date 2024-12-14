@@ -1,8 +1,9 @@
 $schema: ./META-INF/xorcery-alchemy-test-override-schema.json
 
 crucible:
-  recipes:
-    - source:
+  transmutations:
+  - recipe:
+      source:
         jar: concat
         sources:
           - jar: script
@@ -11,12 +12,7 @@ crucible:
               a: "b"
       transmutes:
         - jar: jslt
-          next: dsad
         - jar: jslt
           jslt: "asd"
         - jar: rename
           name: "foo"
-
-
-
-

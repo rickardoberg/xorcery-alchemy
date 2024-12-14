@@ -10,7 +10,7 @@ import jakarta.inject.Inject;
 import org.jvnet.hk2.annotations.Service;
 import reactor.core.publisher.Flux;
 
-@Service(name = "excel")
+@Service(name = "excel", metadata = "enabled=jars.enabled")
 public class ExcelSourceJar
         implements SourceJar
 {

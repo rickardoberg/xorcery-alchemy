@@ -4,11 +4,23 @@
   "$id" : "http://xorcery.dev/modules/dev.xorcery.alchemy/xorcery-alchemy-domainevents/schema",
   "title" : "xorcery-alchemy-domainevents configuration JSON Schema",
   "properties" : {
+    "graphql" : {
+      "$ref" : "#/$defs/graphql"
+    },
     "jars" : {
       "$ref" : "#/$defs/jars"
     }
   },
   "$defs" : {
+    "graphql" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "schemas" : {
+          "type" : [ "array", "string" ]
+        }
+      }
+    },
     "jars" : {
       "type" : "object",
       "additionalProperties" : false,
@@ -21,6 +33,11 @@
               "additionalProperties" : false,
               "properties" : {
                 "jar" : {
+                  "type" : "string",
+                  "default" : "graphqldomainevents",
+                  "description" : "Default: graphqldomainevents"
+                },
+                "name" : {
                   "type" : "string",
                   "default" : "graphqldomainevents",
                   "description" : "Default: graphqldomainevents"

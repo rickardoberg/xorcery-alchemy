@@ -8,7 +8,7 @@ import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import org.jvnet.hk2.annotations.Service;
 import reactor.core.publisher.Flux;
 
-@Service(name = "csv")
+@Service(name = "csv", metadata = "enabled=jars.enabled")
 public class CSVFileSourceJar
         implements SourceJar {
     @Override

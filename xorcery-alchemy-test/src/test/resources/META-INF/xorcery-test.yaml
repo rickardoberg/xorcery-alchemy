@@ -1,14 +1,23 @@
 $schema: xorcery-alchemy-test-override-schema.json
 
+defaults:
+  enabled: false
+
+jars:
+  enabled: true
+
 crucible:
+  enabled: true
   closeWhenDone: false
 
-neo4jdatabase:
-  enabled: false
-neo4j:
-  metrics:
-    enabled: false
+opentelemetry:
+  enabled: true
+
 log4j2:
   Configuration:
     thresholdFilter:
-      level: info
+      level: debug
+    Loggers:
+      logger:
+        - name: dev.xorcery.junit
+          level: debug

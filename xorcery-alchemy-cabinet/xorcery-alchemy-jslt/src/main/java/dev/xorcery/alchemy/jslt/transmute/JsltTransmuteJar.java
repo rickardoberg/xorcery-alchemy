@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-@Service(name = "jslt")
+@Service(name = "jslt", metadata = "enabled=jars.enabled")
 public class JsltTransmuteJar
         implements TransmuteJar {
 

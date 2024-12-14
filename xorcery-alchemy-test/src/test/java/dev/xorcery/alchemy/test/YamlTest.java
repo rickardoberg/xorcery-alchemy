@@ -1,6 +1,6 @@
 package dev.xorcery.alchemy.test;
 
-import dev.xorcery.alchemy.crucible.CrucibleRecipeService;
+import dev.xorcery.alchemy.crucible.TransmutationsService;
 import dev.xorcery.configuration.builder.ConfigurationBuilder;
 import dev.xorcery.core.Xorcery;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class YamlTest {
                 .addResource("testYamlSourceResult.yaml")
                 .build()))
         {
-            crucible.getServiceLocator().getService(CrucibleRecipeService.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
+            crucible.getServiceLocator().getService(TransmutationsService.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
 }

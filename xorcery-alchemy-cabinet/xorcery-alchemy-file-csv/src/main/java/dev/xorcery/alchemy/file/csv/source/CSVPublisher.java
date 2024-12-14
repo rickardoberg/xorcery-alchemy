@@ -23,11 +23,11 @@ import java.util.concurrent.Callable;
 public class CSVPublisher
         implements Publisher<MetadataJsonNode<JsonNode>> {
 
-    private final JarConfiguration configuration;
+    private final JarConfiguration jarConfiguration;
     private final RecipeConfiguration recipeConfiguration;
 
-    public CSVPublisher(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
-        this.configuration = configuration;
+    public CSVPublisher(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+        this.jarConfiguration = jarConfiguration;
         this.recipeConfiguration = recipeConfiguration;
     }
 
@@ -43,12 +43,13 @@ public class CSVPublisher
                 String csvResourceUrl = csvResource.toExternalForm();
 
                 CSVParserBuilder parserBuilder = new CSVParserBuilder();
-                contextViewElement.getString("escape").ifPresent(c -> parserBuilder.withEscapeChar(c.charAt(0)));
-                contextViewElement.getString("separator").ifPresent(c -> parserBuilder.withSeparator(c.charAt(0)));
-                contextViewElement.getString("quote").ifPresent(c -> parserBuilder.withQuoteChar(c.charAt(0)));
+
+                jarConfiguration.getString("escape").ifPresent(c -> parserBuilder.withEscapeChar(c.charAt(0)));
+                jarConfiguration.getString("separator").ifPresent(c -> parserBuilder.withSeparator(c.charAt(0)));
+                jarConfiguration.getString("quote").ifPresent(c -> parserBuilder.withQuoteChar(c.charAt(0)));
                 CSVParser csvParser = parserBuilder.build();
 
-                if (contextViewElement.getBoolean("headers").orElse(false)) {
+                if (jarConfiguration.getBoolean("headers").orElse(false)) {
                     CSVReaderHeaderAware csvReader = new CSVReaderHeaderAwareBuilder(new BufferedReader(new InputStreamReader(csvResource.openStream(), StandardCharsets.UTF_8)))
                             .withCSVParser(csvParser)
                             .build();
@@ -84,10 +85,10 @@ public class CSVPublisher
                     coreSubscriber.onSubscribe(new RowReaderStreamer(coreSubscriber, csvReader, objectReader));
                 }
             } catch (Throwable e) {
-                coreSubscriber.onError(new JarException(configuration, recipeConfiguration, e));
+                coreSubscriber.onError(new JarException(jarConfiguration, recipeConfiguration, e));
             }
         } else {
-            s.onError(new JarException(configuration, recipeConfiguration, "Subscriber must implement CoreSubscriber"));
+            s.onError(new JarException(jarConfiguration, recipeConfiguration, "Subscriber must implement CoreSubscriber"));
         }
     }
 }

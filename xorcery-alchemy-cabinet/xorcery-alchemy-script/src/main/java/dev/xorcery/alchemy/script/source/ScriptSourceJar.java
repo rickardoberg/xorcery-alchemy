@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 
-@Service(name = "script")
+@Service(name = "script", metadata = "enabled=jars.enabled")
 public class ScriptSourceJar
         implements SourceJar {
 

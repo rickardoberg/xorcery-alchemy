@@ -352,12 +352,6 @@
           "items" : {
             "anyOf" : [ ]
           }
-        },
-        "resultjars" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "anyOf" : [ ]
-          }
         }
       }
     }

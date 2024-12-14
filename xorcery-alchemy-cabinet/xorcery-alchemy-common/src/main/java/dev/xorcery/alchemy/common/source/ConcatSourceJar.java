@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 import java.util.Optional;
 
-@Service(name="concat")
+@Service(name="concat", metadata = "enabled=jars.enabled")
 public class ConcatSourceJar
     implements SourceJar
 {

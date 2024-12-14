@@ -12,8 +12,8 @@
         <module>xorcery-alchemy-bom</module>
         <module>xorcery-alchemy-parent</module>
         <module>xorcery-alchemy-jar</module>
-        <module>xorcery-alchemy-cabinet</module>
         <module>xorcery-alchemy-crucible</module>
+        <module>xorcery-alchemy-cabinet</module>
         <module>xorcery-alchemy-test</module>
     </modules>
 </project>

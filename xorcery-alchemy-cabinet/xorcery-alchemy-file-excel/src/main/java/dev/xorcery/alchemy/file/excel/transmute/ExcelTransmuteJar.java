@@ -1,4 +1,4 @@
-package dev.xorcery.alchemy.file.excel.result;
+package dev.xorcery.alchemy.file.excel.transmute;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
@@ -29,18 +29,18 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-@Service(name = "excel")
-public class ExcelResultJar
-        implements ResultJar {
+@Service(name = "excel", metadata = "enabled=jars.enabled")
+public class ExcelTransmuteJar
+        implements TransmuteJar {
     private final Configuration configuration;
 
     @Inject
-    public ExcelResultJar(Configuration configuration) {
+    public ExcelTransmuteJar(Configuration configuration) {
         this.configuration = configuration;
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newResult(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
         return (flux, context) -> {
             ContextViewElement contextViewElement = new ContextViewElement(context);
             return contextViewElement.getURI(JarContext.resultUrl).<Flux<MetadataJsonNode<JsonNode>>>map(resourceUri ->

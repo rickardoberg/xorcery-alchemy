@@ -1,10 +1,10 @@
-package dev.xorcery.alchemy.opensearch.result;
+package dev.xorcery.alchemy.opensearch.transmute;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
 import dev.xorcery.alchemy.jar.JarContext;
 import dev.xorcery.alchemy.jar.RecipeConfiguration;
-import dev.xorcery.alchemy.jar.ResultJar;
+import dev.xorcery.alchemy.jar.TransmuteJar;
 import dev.xorcery.configuration.Configuration;
 import dev.xorcery.lang.Exceptions;
 import dev.xorcery.opensearch.OpenSearchService;
@@ -26,20 +26,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
-@Service(name="opensearch")
-public class OpenSearchResultJar
-    implements ResultJar
+@Service(name="opensearch", metadata = "enabled=jars.enabled")
+public class OpenSearchTransmuteJar
+    implements TransmuteJar
 {
     private final OpenSearchService openSearchService;
 
     @Inject
-    public OpenSearchResultJar(Configuration configuration, Logger logger, OpenSearchService openSearchService) {
+    public OpenSearchTransmuteJar(Configuration configuration, Logger logger, OpenSearchService openSearchService) {
         this.openSearchService = openSearchService;
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newResult(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
         return (flux, context)-> {
             return flux.contextWrite(ctx ->
             {
@@ -75,7 +76,7 @@ public class OpenSearchResultJar
                         throw (RuntimeException)e;
                     }
                 }
-            }).transformDeferredContextual(openSearchService.documentUpdates(item -> UUIDs.newId()));
+            }).transformDeferredContextual(openSearchService.documentUpdates(item -> UUIDs.newId(), Function.identity()));
         };
     }
 }

@@ -5,7 +5,7 @@ jars:
       enabled: "{{ jars.enabled }}"
       context:
         projectionId: null
-  resultjars:
+  transmutejars:
     - jar: projection
       name: projection
       enabled: "{{ jars.enabled }}"

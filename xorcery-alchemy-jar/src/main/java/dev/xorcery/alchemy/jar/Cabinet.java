@@ -1,6 +1,8 @@
 package dev.xorcery.alchemy.jar;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import dev.xorcery.json.JsonElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import jakarta.inject.Inject;
 import org.apache.logging.log4j.Logger;
@@ -9,9 +11,8 @@ import org.glassfish.hk2.api.ServiceHandle;
 import org.jvnet.hk2.annotations.Service;
 import reactor.core.publisher.Flux;
 import reactor.util.context.Context;
-import reactor.util.retry.Retry;
 
-import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -30,9 +31,6 @@ public class Cabinet {
                 .map(this::getJarName).toList()));
         logger.info("Transmute jars:" + String.join(",", StreamSupport.stream(jars.handleIterator().spliterator(), false)
                 .filter(h -> TransmuteJar.class.isAssignableFrom(h.getActiveDescriptor().getImplementationClass()))
-                .map(this::getJarName).toList()));
-        logger.info("Result jars:" + String.join(",", StreamSupport.stream(jars.handleIterator().spliterator(), false)
-                .filter(h -> ResultJar.class.isAssignableFrom(h.getActiveDescriptor().getImplementationClass()))
                 .map(this::getJarName).toList()));
     }
 
@@ -84,35 +82,6 @@ public class Cabinet {
         });
     }
 
-    public Optional<ResultJar> getResultJar(String jarName) {
-
-        for (ServiceHandle<Jar> jar : jars.handleIterator()) {
-            if (getJarName(jar).equals(jarName) &&
-                    ResultJar.class.isAssignableFrom(jar.getActiveDescriptor().getImplementationClass())) {
-                return Optional.of((ResultJar) jar.getService());
-            }
-        }
-        return Optional.empty();
-    }
-
-    public <T> Optional<Flux<MetadataJsonNode<JsonNode>>> applyResultFlux(Flux<MetadataJsonNode<JsonNode>> transmutedFlux, JarConfiguration resultConfiguration, RecipeConfiguration recipeConfiguration) {
-        return getResultJar(resultConfiguration.getJar())
-                .map(resultJar ->
-                {
-                    Flux<MetadataJsonNode<JsonNode>> resultFlux = transmutedFlux.transformDeferredContextual(resultJar.newResult(resultConfiguration, recipeConfiguration));
-                    Map<String, Object> context = resultConfiguration.getContext();
-                    if (!context.isEmpty()) {
-                        resultFlux = resultFlux.contextWrite(Context.of(context));
-                    }
-                    // Append sourceUrl last, so that result can read it
-                    if (recipeConfiguration.getSource().getContext().get(JarContext.sourceUrl.name()) instanceof String sourceUrl)
-                    {
-                        resultFlux = resultFlux.contextWrite(Context.of(JarContext.sourceUrl.name(), sourceUrl));
-                    }
-                    return resultFlux;
-                });
-    }
-
     private String getJarName(String serviceName) {
         if (serviceName == null)
             return null;
@@ -124,44 +93,32 @@ public class Cabinet {
         return getJarName(serviceHandle.getActiveDescriptor().getName());
     }
 
-    public Transmutation newTransmutation(RecipeConfiguration recipeConfiguration) {
+    public Transmutation newTransmutation(TransmutationConfiguration transmutationConfiguration) {
 
-        Flux<MetadataJsonNode<JsonNode>> sourceFlux = newSourceFlux(recipeConfiguration);
-        Flux<MetadataJsonNode<JsonNode>> transmutedFlux = applyTransmutes(sourceFlux, recipeConfiguration);
-        Flux<MetadataJsonNode<JsonNode>> resultFlux = applyResult(transmutedFlux, recipeConfiguration);
-        resultFlux = resultFlux.retryWhen(getRetry(recipeConfiguration));
-        return new Transmutation(recipeConfiguration, resultFlux);
+        Flux<MetadataJsonNode<JsonNode>> sourceFlux = newSourceFlux(transmutationConfiguration);
+        Flux<MetadataJsonNode<JsonNode>> transmutedFlux = applyTransmutes(sourceFlux, transmutationConfiguration);
+        return new Transmutation(transmutationConfiguration, transmutedFlux);
     }
 
-    private Flux<MetadataJsonNode<JsonNode>> newSourceFlux(RecipeConfiguration recipeConfiguration) {
-        JarConfiguration sourceConfiguration = recipeConfiguration.getSource();
-        return newSourceFlux(sourceConfiguration, recipeConfiguration)
+    private Flux<MetadataJsonNode<JsonNode>> newSourceFlux(TransmutationConfiguration transmutationConfiguration) {
+        JarConfiguration sourceConfiguration = transmutationConfiguration.getRecipe().getSource();
+        return newSourceFlux(sourceConfiguration, transmutationConfiguration.getRecipe())
                 .orElseThrow(() -> new IllegalArgumentException("No source jar named:" + sourceConfiguration.getJar()));
     }
 
-    private Flux<MetadataJsonNode<JsonNode>> applyTransmutes(Flux<MetadataJsonNode<JsonNode>> transmutedFlux, RecipeConfiguration recipeConfiguration) {
-        for (JarConfiguration transmuteConfiguration : recipeConfiguration.getTransmutes()) {
+    private Flux<MetadataJsonNode<JsonNode>> applyTransmutes(Flux<MetadataJsonNode<JsonNode>> transmutedFlux, TransmutationConfiguration transmutationConfiguration) {
+        List<JarConfiguration> transmutes = transmutationConfiguration.getRecipe().getTransmutes();
+        for (JarConfiguration transmuteConfiguration : transmutes) {
             if (transmuteConfiguration.isEnabled()) {
-                transmutedFlux = applyTransmuteFlux(transmutedFlux, transmuteConfiguration, recipeConfiguration)
+                transmutedFlux = applyTransmuteFlux(transmutedFlux, transmuteConfiguration, transmutationConfiguration.getRecipe())
                         .orElseThrow(() -> new IllegalArgumentException("No transmute jar named:" + transmuteConfiguration.getJar()));
             }
         }
+        ObjectNode contextConfiguration = transmutationConfiguration.getContext();
+        if (!contextConfiguration.isEmpty())
+        {
+            transmutedFlux = transmutedFlux.contextWrite(Context.of(JsonElement.toMap(contextConfiguration)));
+        }
         return transmutedFlux;
     }
-
-    private Flux<MetadataJsonNode<JsonNode>> applyResult(Flux<MetadataJsonNode<JsonNode>> transmutedFlux, RecipeConfiguration recipeConfiguration) {
-        JarConfiguration resultConfiguration = recipeConfiguration.getResult();
-        return applyResultFlux(transmutedFlux, resultConfiguration, recipeConfiguration)
-                .orElseThrow(() -> new IllegalArgumentException("No result jar named:" + resultConfiguration.getJar()));
-    }
-
-    private Retry getRetry(RecipeConfiguration recipeConfiguration) {
-        return Retry.backoff(Long.MAX_VALUE, Duration.ofSeconds(10))
-                .filter(this::isRetryable);
-    }
-
-    private boolean isRetryable(Throwable throwable) {
-        return false;
-    }
-
 }

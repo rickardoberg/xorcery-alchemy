@@ -1,6 +1,6 @@
 package dev.xorcery.alchemy.test;
 
-import dev.xorcery.alchemy.crucible.CrucibleRecipeService;
+import dev.xorcery.alchemy.crucible.TransmutationsService;
 import dev.xorcery.configuration.builder.ConfigurationBuilder;
 import dev.xorcery.junit.XorceryExtension;
 import dev.xorcery.opensearch.OpenSearchService;
@@ -25,7 +25,7 @@ class OpenSearchTest {
             .build();
 
     @Test
-    public void testOpenSearch(CrucibleRecipeService crucible, OpenSearchService openSearchService) throws Exception {
+    public void testOpenSearch(TransmutationsService crucible, OpenSearchService openSearchService) throws Exception {
         crucible.getResult().orTimeout(10, TimeUnit.SECONDS).join();
 
         SearchResponse response = openSearchService.getClient().search().search("people", SearchRequest.builder()

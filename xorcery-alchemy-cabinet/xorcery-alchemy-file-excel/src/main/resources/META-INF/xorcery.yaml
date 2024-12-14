@@ -5,7 +5,7 @@ jars:
       enabled: "{{ jars.enabled }}"
       context:
         sourceUrl: null
-  resultjars:
+  transmutejars:
     - jar: excel
       name: excel
       enabled: "{{ jars.enabled }}"

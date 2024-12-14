@@ -1,11 +1,12 @@
 $schema: META-INF/xorcery-alchemy-test-override-schema.json
 crucible:
-  recipes:
-    - name: "flatten"
+  transmutations:
+  - context:
+      sourceUrl: "resource://flatten.yaml"
+    recipe:
+      name: "flatten"
       source:
         jar: yaml
-        context:
-          sourceUrl: "flatten.yaml"
       transmutes:
       - jar: flatten
       - jar: rename
@@ -14,6 +15,4 @@ crucible:
           Year: "data.timeseries.label"
           Total: "data.timeseries.data.lineItems.total"
           Country: "data.timeseries.data.lineItems.company.country"
-
-      result:
-        jar: log
+      - jar: log

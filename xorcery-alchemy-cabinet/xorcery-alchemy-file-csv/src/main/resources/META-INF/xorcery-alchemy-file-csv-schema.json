@@ -36,10 +36,31 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
+                "escape" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "separator" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "quote" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "headers" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : false,
+                  "description" : "Default: false"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
                   "properties" : {
+                    "sourceUrl" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
                     "escape" : {
                       "default" : null,
                       "description" : "Default: null"
@@ -56,10 +77,6 @@
                       "type" : [ "boolean", "string" ],
                       "default" : false,
                       "description" : "Default: false"
-                    },
-                    "sourceUrl" : {
-                      "default" : null,
-                      "description" : "Default: null"
                     }
                   }
                 }

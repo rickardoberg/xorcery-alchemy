@@ -23,8 +23,4 @@ public record RecipeConfiguration(Configuration configuration) {
         return configuration.getObjectListAs("transmutes", json -> new JarConfiguration(new Configuration(json)))
                 .orElse(Collections.emptyList());
     }
-
-    public JarConfiguration getResult() {
-        return new JarConfiguration(configuration.getConfiguration("result"));
-    }
 }

@@ -1,16 +1,17 @@
 $schema: META-INF/xorcery-alchemy-test-override-schema.json
 crucible:
-  recipes:
-    - name: "testcsvsourcewithheaders"
+  transmutations:
+  - context:
+      sourceUrl: "resource://readcsvfilewithheaders.csv"
+    recipe:
+      name: "testcsvsourcewithheaders"
       source:
         jar: csv
         name: "readcsvfilewithheaders"
-        context:
-          sourceUrl: "resource://readcsvfilewithheaders.csv"
-          headers: true
-          quote: "'"
-      result:
-        name: "logitem"
+        headers: true
+        quote: "'"
+      transmutes:
+      - name: "logitem"
         jar: script
         next: |+
           print('item:'+item);

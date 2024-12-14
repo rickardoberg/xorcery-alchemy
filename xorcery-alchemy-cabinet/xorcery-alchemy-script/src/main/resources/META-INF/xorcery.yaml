@@ -16,13 +16,3 @@ jars:
     next: null
     error: null
     complete: null
-
-  resultjars:
-  - jar: script
-    name: script
-    enabled: "{{ jars.enabled }}"
-    bindings: { }
-    subscribe: null
-    next: null
-    error: null
-    complete: null

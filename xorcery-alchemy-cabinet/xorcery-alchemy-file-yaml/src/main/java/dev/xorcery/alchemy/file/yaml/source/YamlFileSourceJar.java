@@ -15,7 +15,7 @@ import dev.xorcery.reactivestreams.extras.publishers.YamlPublisher;
 import org.jvnet.hk2.annotations.Service;
 import reactor.core.publisher.Flux;
 
-@Service(name = "yaml")
+@Service(name = "yaml", metadata = "enabled=jars.enabled")
 public class YamlFileSourceJar
         implements SourceJar {
 

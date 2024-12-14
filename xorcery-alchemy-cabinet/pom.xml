@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>dev.xorcery.alchemy</groupId>
-            <artifactId>xorcery-alchemy-jar</artifactId>
+            <artifactId>xorcery-alchemy-crucible</artifactId>
         </dependency>
     </dependencies>
 </project>

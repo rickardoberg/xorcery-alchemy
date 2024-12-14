@@ -5,16 +5,16 @@ import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import reactor.core.publisher.Flux;
 
 public class Transmutation {
-    private final RecipeConfiguration recipeConfiguration;
+    private final TransmutationConfiguration transmutationConfiguration;
     private final Flux<MetadataJsonNode<JsonNode>> flux;
 
-    public Transmutation(RecipeConfiguration recipeConfiguration, Flux<MetadataJsonNode<JsonNode>> flux) {
-        this.recipeConfiguration = recipeConfiguration;
+    public Transmutation(TransmutationConfiguration transmutationConfiguration, Flux<MetadataJsonNode<JsonNode>> flux) {
+        this.transmutationConfiguration = transmutationConfiguration;
         this.flux = flux;
     }
 
-    public RecipeConfiguration getRecipeConfiguration() {
-        return recipeConfiguration;
+    public TransmutationConfiguration getTransmutationConfiguration() {
+        return transmutationConfiguration;
     }
 
     public Flux<MetadataJsonNode<JsonNode>> getFlux() {

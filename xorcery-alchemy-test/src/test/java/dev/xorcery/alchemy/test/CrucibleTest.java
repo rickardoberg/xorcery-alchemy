@@ -1,6 +1,6 @@
 package dev.xorcery.alchemy.test;
 
-import dev.xorcery.alchemy.crucible.CrucibleRecipeService;
+import dev.xorcery.alchemy.crucible.TransmutationsService;
 import dev.xorcery.configuration.builder.ConfigurationBuilder;
 import dev.xorcery.junit.XorceryExtension;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ class CrucibleTest {
             .build();
 
     @Test
-    public void testCrucible(CrucibleRecipeService crucible) throws Exception {
-        crucible.getResult().orTimeout(10, TimeUnit.SECONDS).join();
+    public void testCrucible(TransmutationsService transmutations) throws Exception {
+        transmutations.getResult().orTimeout(10, TimeUnit.SECONDS).join();
     }
 }

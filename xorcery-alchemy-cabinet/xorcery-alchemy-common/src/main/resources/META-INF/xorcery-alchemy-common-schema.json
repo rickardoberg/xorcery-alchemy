@@ -62,14 +62,20 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
-                "path" : {
-                  "default" : null,
-                  "description" : "Default: null"
-                },
-                "filter" : {
-                  "type" : "string",
-                  "default" : "*.*",
-                  "description" : "Default: *.*"
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : false,
+                  "properties" : {
+                    "path" : {
+                      "default" : null,
+                      "description" : "Default: null"
+                    },
+                    "filter" : {
+                      "type" : "string",
+                      "default" : "*.*",
+                      "description" : "Default: *.*"
+                    }
+                  }
                 },
                 "mappings" : {
                   "type" : [ "array", "string" ],
@@ -136,6 +142,15 @@
                       }
                     } ]
                   }
+                },
+                "path" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "filter" : {
+                  "type" : "string",
+                  "default" : "*.*",
+                  "description" : "Default: *.*"
                 }
               }
             } ]
@@ -194,6 +209,62 @@
                   "type" : "object",
                   "additionalProperties" : true,
                   "properties" : { }
+                },
+                "context" : {
+                  "type" : "object",
+                  "additionalProperties" : true,
+                  "properties" : { }
+                }
+              }
+            }, {
+              "type" : "object",
+              "additionalProperties" : false,
+              "properties" : {
+                "jar" : {
+                  "type" : "string",
+                  "default" : "retry",
+                  "description" : "Default: retry"
+                },
+                "name" : {
+                  "type" : "string",
+                  "default" : "retry",
+                  "description" : "Default: retry"
+                },
+                "enabled" : {
+                  "type" : [ "boolean", "string" ],
+                  "default" : true,
+                  "description" : "Default: true"
+                },
+                "maxAttempts" : {
+                  "type" : [ "number", "string" ],
+                  "default" : -1,
+                  "description" : "Default: -1"
+                },
+                "minBackoff" : {
+                  "type" : "string",
+                  "default" : "10S",
+                  "description" : "Default: 10S"
+                },
+                "maxBackoff" : {
+                  "type" : "string",
+                  "default" : "1M",
+                  "description" : "Default: 1M"
+                },
+                "multiplier" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 2,
+                  "description" : "Default: 2"
+                },
+                "jitter" : {
+                  "type" : [ "number", "string" ],
+                  "default" : 0.5,
+                  "description" : "Default: 0.5"
+                },
+                "includes" : {
+                  "type" : [ "array", "string" ]
+                },
+                "excludes" : {
+                  "type" : [ "array", "string" ]
                 }
               }
             } ]

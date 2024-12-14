@@ -37,6 +37,10 @@
             <groupId>dev.xorcery</groupId>
             <artifactId>xorcery-junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>dev.xorcery</groupId>
+            <artifactId>xorcery-log4j</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
 
 import static dev.xorcery.collections.Element.missing;
 
-@Service(name = "graphqldomainevents")
+@Service(name = "graphqldomainevents", metadata = "enabled=jars.enabled")
 public class GraphQLDomainEventTransmuteJar
         implements TransmuteJar {
 

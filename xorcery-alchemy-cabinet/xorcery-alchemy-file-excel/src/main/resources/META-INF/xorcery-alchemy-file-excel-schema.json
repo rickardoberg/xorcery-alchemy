@@ -49,7 +49,7 @@
             } ]
           }
         },
-        "resultjars" : {
+        "transmutejars" : {
           "type" : [ "array", "string" ],
           "items" : {
             "anyOf" : [ {
