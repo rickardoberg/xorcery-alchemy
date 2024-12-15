@@ -9,20 +9,16 @@ opensearch:
     - id: "people"
       resource: "resource://opensearch/people.yaml"
 
-crucible:
-  transmutations:
-  - context:
-      sourceUrl: "resource://readcsvfilewithheaders.csv"
-    recipe:
-      name: "testCsvToOpenSearch"
-      source:
-        jar: csv
-        name: "readcsvfilewithheaders"
-        headers: true
-        quote: "'"
-      transmutes:
-      - jar: log
-      - jar: opensearch
-        context:
-          index: "people-%tF"
-          alias: "people"
+transmutations:
+- name: "testCsvToOpenSearch"
+  source:
+    jar: csv
+    name: "readcsvfilewithheaders"
+    headers: true
+    quote: "'"
+    sourceUrl: "resource://readcsvfilewithheaders.csv"
+  transmutes:
+  - jar: log
+  - jar: opensearch
+    index: "people-%tF"
+    alias: "people"

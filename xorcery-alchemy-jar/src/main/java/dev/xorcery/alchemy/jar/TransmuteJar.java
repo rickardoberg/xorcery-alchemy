@@ -11,5 +11,5 @@ import java.util.function.BiFunction;
 public interface TransmuteJar
     extends Jar
 {
-    BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration);
+    BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration);
 }

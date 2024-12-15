@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.*;
+import dev.xorcery.configuration.Configuration;
 import dev.xorcery.metadata.Metadata;
-import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import org.dhatim.fastexcel.reader.*;
 import org.reactivestreams.Publisher;
@@ -25,13 +25,13 @@ import java.util.concurrent.Callable;
 public class ExcelPublisher
         implements Publisher<MetadataJsonNode<JsonNode>> {
 
-    private final JarConfiguration configuration;
-    private final RecipeConfiguration recipeConfiguration;
+    private final JarConfiguration jarConfiguration;
+    private final TransmutationConfiguration transmutationConfiguration;
     private JsonNodeFactory instance;
 
-    public ExcelPublisher(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
-        this.configuration = configuration;
-        this.recipeConfiguration = recipeConfiguration;
+    public ExcelPublisher(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
+        this.jarConfiguration = jarConfiguration;
+        this.transmutationConfiguration = transmutationConfiguration;
     }
 
     @Override
@@ -39,9 +39,8 @@ public class ExcelPublisher
 
         if (s instanceof CoreSubscriber<? super MetadataJsonNode<JsonNode>> coreSubscriber) {
             try {
-                ContextViewElement contextViewElement = new ContextViewElement(coreSubscriber.currentContext());
-                Object sourceUrl = contextViewElement.get(JarContext.sourceUrl)
-                        .orElseThrow(ContextViewElement.missing(JarContext.sourceUrl));
+                Object sourceUrl = jarConfiguration.get(JarContext.sourceUrl)
+                        .orElseThrow(Configuration.missing(JarContext.sourceUrl.name()));
                 URL excelResource = sourceUrl instanceof URL url ? url : new URL(sourceUrl.toString());
 
                 // Get metadata first
@@ -67,7 +66,7 @@ public class ExcelPublisher
 
                 // Stream data
                 InputStream resourceIn = excelResource.openStream();
-                String dataSheetName = configuration.getString("data").orElse(null);
+                String dataSheetName = jarConfiguration.getString("data").orElse(null);
                 ReadableWorkbook wb = new ReadableWorkbook(resourceIn, new ReadingOptions(true, false));
                 Iterator<Sheet> dataSheets = wb.getSheets().filter(sheet -> !sheet.getName().equals("Metadata") &&
                         (dataSheetName == null || sheet.getName().equals(dataSheetName))).iterator();
@@ -113,10 +112,10 @@ public class ExcelPublisher
 
                 coreSubscriber.onSubscribe(new RowReaderStreamer(coreSubscriber, wb, itemReader));
             } catch (Throwable e) {
-                coreSubscriber.onError(new JarException(configuration, recipeConfiguration, e));
+                coreSubscriber.onError(new JarException(jarConfiguration, transmutationConfiguration, "Excel parsing failed", e));
             }
         } else {
-            s.onError(new JarException(configuration, recipeConfiguration, "Subscriber must implement CoreSubscriber"));
+            s.onError(new JarException(jarConfiguration, transmutationConfiguration, "Subscriber must implement CoreSubscriber"));
         }
     }
 

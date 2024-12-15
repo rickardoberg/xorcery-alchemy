@@ -1,15 +1,16 @@
 $schema: META-INF/xorcery-alchemy-test-override-schema.json
-crucible:
-  transmutations:
-  - context:
-      sourceUrl: "resource://yamlsource.yaml"
-      resultUrl: "file:///{{ instance.home }}/yamlresult.yaml"
-    recipe:
-      name: "testYamlSourceResult"
+transmutations:
+- recipe: "testYamlSourceResult"
+  source:
+    jar: yaml
+    sourceUrl: "resource://yamlsource.yaml"
+  transmutes:
+  - jar: yaml
+    resultUrl: "file:///{{ instance.home }}/yamlresult.yaml"
 
-  recipes:
-  - name: "testYamlSourceResult"
-    source:
-      jar: yaml
-    transmutes:
-    - jar: yaml
+recipes:
+- name: "testYamlSourceResult"
+  source:
+    jar: yaml
+  transmutes:
+  - jar: yaml

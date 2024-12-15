@@ -25,6 +25,22 @@
                   "default" : "opensearch",
                   "description" : "Default: opensearch"
                 },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "host" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "index" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "alias" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,

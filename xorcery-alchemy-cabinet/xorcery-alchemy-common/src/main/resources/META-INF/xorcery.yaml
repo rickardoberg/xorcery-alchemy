@@ -7,9 +7,9 @@ jars:
     - jar: directory
       name: directory
       enabled: "{{ jars.enabled }}"
-      context:
-        path: null
-        filter: "*.*"
+      path: null
+      filter: "*.*"
+
   transmutejars:
     - jar: flatten
       name: flatten

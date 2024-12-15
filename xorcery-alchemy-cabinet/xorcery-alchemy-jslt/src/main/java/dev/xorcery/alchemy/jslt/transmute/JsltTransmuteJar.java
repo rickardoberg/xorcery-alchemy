@@ -8,7 +8,7 @@ import com.schibsted.spt.data.jslt.Expression;
 import com.schibsted.spt.data.jslt.Function;
 import com.schibsted.spt.data.jslt.Parser;
 import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.alchemy.jar.TransmuteJar;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
@@ -40,22 +40,25 @@ public class JsltTransmuteJar
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
 
-        return configuration.configuration().getJson("jslt").<BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>>>map(jslt ->
+        return jarConfiguration.configuration().getJson("jslt").<BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>>>map(jslt ->
                 {
                     Expression expression = Parser.compileString(jslt.asText(), customFunctions);
-                    return newJsltTransmuteFactory(expression);
+                    return newJsltTransmuteFactory(expression, jarConfiguration);
                 }
         ).orElse((metadataJsonNodeFlux, contextView) -> Flux.error(new IllegalArgumentException("Missing 'jslt' transformation configuration")));
     }
 
-    BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newJsltTransmuteFactory(Expression expression)
+    BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newJsltTransmuteFactory(Expression expression, JarConfiguration jarConfiguration)
     {
         return (flux, context)->
         {
             Map<String, JsonNode> variables = new HashMap<>();
-            context.forEach((k,v)-> variables.put(k.toString(), objectMapper.valueToTree(v)));
+            jarConfiguration.configuration().getConfiguration("context").object().fields().forEachRemaining(entry ->
+            {
+                variables.put(entry.getKey(), entry.getValue());
+            });
             return flux.handle(new JsltTransmute(expression, variables));
         };
     }
@@ -69,7 +72,6 @@ public class JsltTransmuteJar
             this.expression = expression;
             this.variables = variables;
         }
-
 
         @Override
         public void accept(MetadataJsonNode<JsonNode> item, SynchronousSink<MetadataJsonNode<JsonNode>> sink) {

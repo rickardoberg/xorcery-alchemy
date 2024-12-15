@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
 import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import org.apache.logging.log4j.Logger;
 import org.reactivestreams.Publisher;
@@ -32,9 +32,9 @@ public class ScriptFlux
 
     private final ScriptEngine engine;
     private final JarConfiguration configuration;
-    private final RecipeConfiguration recipeConfiguration;
+    private final TransmutationConfiguration transmutationConfiguration;
 
-    public ScriptFlux(ScriptEngine engine, JarConfiguration configuration, RecipeConfiguration recipeConfiguration, Logger logger) {
+    public ScriptFlux(ScriptEngine engine, JarConfiguration configuration, TransmutationConfiguration transmutationConfiguration, Logger logger) {
         this.logger = logger;
         this.subscribe = configuration.getString("subscribe").map(script -> ScriptExecutor.getScriptExecutor(engine, script)).orElse(null);
         this.next = configuration.getString("next").map(script -> ScriptExecutor.getScriptExecutor(engine, script)).orElse(null);
@@ -42,7 +42,7 @@ public class ScriptFlux
         this.complete = configuration.getString("complete").map(script -> ScriptExecutor.getScriptExecutor(engine, script)).orElse(null);
         this.engine = engine;
         this.configuration = configuration;
-        this.recipeConfiguration = recipeConfiguration;
+        this.transmutationConfiguration = transmutationConfiguration;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ScriptFlux
                     subscribe.call(bindings);
                 }
             } catch (Throwable e) {
-                sink.error(new JarException(configuration, recipeConfiguration, e));
+                sink.error(new JarException(configuration, transmutationConfiguration, "Failed to setup bindings", e));
             }
             if (out.size() > 0) {
                 logger.info(out.toString(StandardCharsets.UTF_8));
@@ -101,7 +101,7 @@ public class ScriptFlux
                     bindings.put("sink", new JavaScriptFluxSink(sink));
                     next.call(bindings);
                 } catch (Throwable e) {
-                    sink.error(new JarException(configuration, recipeConfiguration, e));
+                    sink.error(new JarException(configuration, transmutationConfiguration, "Failed to handle item", e));
                 }
                 if (out.size() > 0) {
                     logger.info(out.toString(StandardCharsets.UTF_8));
@@ -121,7 +121,7 @@ public class ScriptFlux
                     bindings.put("sink", new JavaScriptFluxSink(sink));
                     error.call(bindings);
                 } catch (Throwable e) {
-                    sink.error(new JarException(configuration, recipeConfiguration, e));
+                    sink.error(new JarException(configuration, transmutationConfiguration, "Failed to handle error", e));
                 }
                 if (out.size() > 0) {
                     logger.info(out.toString(StandardCharsets.UTF_8));
@@ -143,7 +143,7 @@ public class ScriptFlux
 
                     sink.complete();
                 } catch (Throwable e) {
-                    sink.error(new JarException(configuration, recipeConfiguration, e));
+                    sink.error(new JarException(configuration, transmutationConfiguration, "Failed to complete", e));
                 }
                 if (out.size() > 0) {
                     logger.info(out.toString(StandardCharsets.UTF_8));

@@ -1,6 +1,6 @@
 package dev.xorcery.alchemy.test;
 
-import dev.xorcery.alchemy.crucible.TransmutationsService;
+import dev.xorcery.alchemy.crucible.TransmutationsRunner;
 import dev.xorcery.configuration.builder.ConfigurationBuilder;
 import dev.xorcery.core.Xorcery;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class JSLTTest {
                 .addResource("testJSLTFilter.yaml")
                 .build()))
         {
-            crucible.getServiceLocator().getService(TransmutationsService.class).getResult().orTimeout(10, TimeUnit.SECONDS).join();
+            crucible.getServiceLocator().getService(TransmutationsRunner.class).getDone().orTimeout(10, TimeUnit.SECONDS).join();
         }
     }
 }

@@ -1,45 +1,43 @@
 $schema: META-INF/xorcery-alchemy-test-override-schema.json
-crucible:
-  transmutations:
-  - recipe:
-      name: "testscript"
-      source:
-        jar: script
-        name: "numbergenerator"
-        bindings:
-          "index": 0
-          "max": 10
-        subscribe: |+
-          print("Starting number generator");
-          bindings.index = bindings.index + 1;
-          metadata.source = "numbergenerator";
-        next: |+
-          print(bindings.index);
-          if (bindings.index < bindings.max)
-          {
-            item.data.value = bindings.index++;            
-            sink.next(item);
-          } else
-          {
-            sink.complete();
-          }
-      transmutes:
-      - name: "javascript"
-        jar: script
-        bindings:
-          "abc": 123
-          "inc": 3
-        next: |+
-          print('value:'+item.data.value);
-          item.data.xyz="abc:"+bindings.abc;
-          item.data.struct = {"foo":bindings.inc+item.data.value,"bar":true};
-          item.metadata.foo="bar";
-          sink.next(item);
-        complete: |+
-          print("Transmute complete");
-      - name: "logitem"
-        jar: script
-        next: |+
-          print('item:'+item);
-        complete: |+
-          print('Complete');
+transmutations:
+- name: "testscript"
+  source:
+    jar: script
+    name: "numbergenerator"
+    bindings:
+      "index": 0
+      "max": 10
+    subscribe: |+
+      print("Starting number generator");
+      bindings.index = bindings.index + 1;
+      metadata.source = "numbergenerator";
+    next: |+
+      print(bindings.index);
+      if (bindings.index < bindings.max)
+      {
+        item.data.value = bindings.index++;            
+        sink.next(item);
+      } else
+      {
+        sink.complete();
+      }
+  transmutes:
+  - name: "javascript"
+    jar: script
+    bindings:
+      "abc": 123
+      "inc": 3
+    next: |+
+      print('value:'+item.data.value);
+      item.data.xyz="abc:"+bindings.abc;
+      item.data.struct = {"foo":bindings.inc+item.data.value,"bar":true};
+      item.metadata.foo="bar";
+      sink.next(item);
+    complete: |+
+      print("Transmute complete");
+  - name: "logitem"
+    jar: script
+    next: |+
+      print('item:'+item);
+    complete: |+
+      print('Complete');

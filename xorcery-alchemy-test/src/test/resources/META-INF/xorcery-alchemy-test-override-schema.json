@@ -256,6 +256,10 @@
                   "default" : false,
                   "description" : "Default: false"
                 },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -303,6 +307,10 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -334,6 +342,10 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -363,6 +375,10 @@
                   "type" : [ "boolean", "string" ],
                   "default" : true,
                   "description" : "Default: true"
+                },
+                "projectionId" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
                 "context" : {
                   "type" : "object",
@@ -562,6 +578,10 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
+                "resultUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -591,6 +611,10 @@
                   "type" : [ "boolean", "string" ],
                   "default" : true,
                   "description" : "Default: true"
+                },
+                "resultUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
                 "context" : {
                   "type" : "object",
@@ -672,6 +696,10 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
+                "projectionId" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -691,6 +719,22 @@
                   "type" : "string",
                   "default" : "opensearch",
                   "description" : "Default: opensearch"
+                },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "host" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "index" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "alias" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
                 "context" : {
                   "type" : "object",
@@ -776,15 +820,6 @@
           "type" : [ "boolean", "string" ],
           "default" : true,
           "description" : "Default: true"
-        },
-        "recipes" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "$ref" : "#/$defs/recipe"
-          }
-        },
-        "transmutations" : {
-          "type" : [ "array", "string" ]
         }
       }
     },

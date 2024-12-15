@@ -40,7 +40,7 @@ public class ExcelTransmuteJar
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
         return (flux, context) -> {
             ContextViewElement contextViewElement = new ContextViewElement(context);
             return contextViewElement.getURI(JarContext.resultUrl).<Flux<MetadataJsonNode<JsonNode>>>map(resourceUri ->
@@ -58,11 +58,19 @@ public class ExcelTransmuteJar
                     Workbook wb = new Workbook(out, applicationConfiguration.getName(), version.equals("unknown") ? null : version);
 
                     ExcelState excelState = new ExcelState(new MetadataState(new LinkedHashMap<>()), new LinkedHashMap<>());
-                    return flux.<MetadataJsonNode<JsonNode>>map(handleItems(excelState)).doOnTerminate(() -> excelState.write(wb));
+                    return flux.<MetadataJsonNode<JsonNode>>map(handleItems(excelState))
+                            .doOnComplete(()->excelState.write(wb))
+                            .doOnError(t-> {
+                                try {
+                                    wb.close();
+                                } catch (IOException e) {
+                                    // Ignore
+                                }
+                            });
                 } catch (IOException e) {
-                    return Flux.error(new JarException(jarConfiguration, recipeConfiguration, e));
+                    return Flux.error(new JarException(jarConfiguration, transmutationConfiguration, "Excel writing failed", e));
                 }
-            }).orElseGet(() -> Flux.error(new JarException(jarConfiguration, recipeConfiguration, "No resultUrl specified")));
+            }).orElseGet(() -> Flux.error(new JarException(jarConfiguration, transmutationConfiguration, "No resultUrl specified")));
         };
     }
 

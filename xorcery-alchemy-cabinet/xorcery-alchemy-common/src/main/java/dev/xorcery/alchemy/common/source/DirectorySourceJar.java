@@ -3,8 +3,8 @@ package dev.xorcery.alchemy.common.source;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.alchemy.jar.SourceJar;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.metadata.Metadata;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import org.jvnet.hk2.annotations.Service;
@@ -23,12 +23,12 @@ public class DirectorySourceJar
         implements SourceJar {
 
     @Override
-    public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
         try {
-            DirectoryContext directoryContext = new DirectoryContext(jarConfiguration.getContext());
-            Path directory = Path.of(directoryContext.getPath());
+            DirectoryConfiguration directoryConfiguration = new DirectoryConfiguration(jarConfiguration);
+            Path directory = Path.of(directoryConfiguration.getPath());
 
-            String matcherPattern = directoryContext.getFilter();
+            String matcherPattern = directoryConfiguration.getFilter();
 
             final List<Path> filePaths = new ArrayList<>();
             final PathMatcher matcher = FileSystems.getDefault().getPathMatcher(matcherPattern);

@@ -1,8 +1,9 @@
 package dev.xorcery.alchemy.jar;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.configuration.Configuration;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public record TransmutationConfiguration(Configuration configuration) {
@@ -14,13 +15,17 @@ public record TransmutationConfiguration(Configuration configuration) {
         return configuration.getBoolean("enabled").orElse(true);
     }
 
-    public RecipeConfiguration getRecipe()
+    public Optional<String> getRecipe()
     {
-        return new RecipeConfiguration(configuration.getConfiguration("recipe"));
+        return configuration.getString("recipe");
     }
 
-    public ObjectNode getContext()
-    {
-        return configuration.getConfiguration("context").object();
+    public JarConfiguration getSource() {
+        return new JarConfiguration(configuration.getConfiguration("source"));
+    }
+
+    public List<JarConfiguration> getTransmutes() {
+        return configuration.getObjectListAs("transmutes", json -> new JarConfiguration(new Configuration(json)))
+                .orElse(Collections.emptyList());
     }
 }

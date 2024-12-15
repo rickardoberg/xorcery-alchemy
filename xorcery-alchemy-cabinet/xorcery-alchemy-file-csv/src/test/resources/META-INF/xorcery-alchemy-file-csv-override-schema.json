@@ -73,15 +73,6 @@
           "type" : [ "boolean", "string" ],
           "default" : true,
           "description" : "Default: true"
-        },
-        "recipes" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "$ref" : "#/$defs/recipe"
-          }
-        },
-        "transmutations" : {
-          "type" : [ "array", "string" ]
         }
       }
     },
@@ -160,6 +151,10 @@
                   "type" : [ "boolean", "string" ],
                   "default" : false,
                   "description" : "Default: false"
+                },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
                 "context" : {
                   "type" : "object",

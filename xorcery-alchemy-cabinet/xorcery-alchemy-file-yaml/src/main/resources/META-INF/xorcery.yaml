@@ -3,11 +3,9 @@ jars:
     - jar: yaml
       name: yaml
       enabled: "{{ jars.enabled }}"
-      context:
-        sourceUrl: null
+      sourceUrl: null
   transmutejars:
     - jar: yaml
       name: yaml
       enabled: "{{ jars.enabled }}"
-      context:
-        resultUrl: null
+      resultUrl: null

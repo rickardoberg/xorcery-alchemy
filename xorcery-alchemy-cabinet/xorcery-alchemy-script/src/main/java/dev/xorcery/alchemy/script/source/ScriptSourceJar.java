@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
 import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.alchemy.jar.SourceJar;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.alchemy.script.ByteArrayOutputStreamWithoutNewLine;
 import dev.xorcery.alchemy.script.JavaScriptSynchronousSink;
 import dev.xorcery.alchemy.script.JsonNodeJSObject;
@@ -47,11 +47,11 @@ public class ScriptSourceJar
     }
 
     @Override
-    public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
         String engineName = jarConfiguration.getString("engine").orElse("nashorn");
         ScriptEngine engine = new ScriptEngineManager().getEngineByName(engineName);
         if (engine == null) {
-            return Flux.error(new JarException(jarConfiguration, recipeConfiguration, String.format("No script engine named '%s' found", engineName)));
+            return Flux.error(new JarException(jarConfiguration, transmutationConfiguration, String.format("No script engine named '%s' found", engineName)));
         }
 
         try {
@@ -59,10 +59,10 @@ public class ScriptSourceJar
             engine.getBindings(ScriptContext.GLOBAL_SCOPE).put("bindings", bindings);
             ByteArrayOutputStream out = new ByteArrayOutputStreamWithoutNewLine();
             engine.getContext().setWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
-            ScriptSource scriptSource = new ScriptSource(engine, jarConfiguration, recipeConfiguration, out, loggerContext.getLogger(jarConfiguration.getName().orElse("script")));
+            ScriptSource scriptSource = new ScriptSource(engine, jarConfiguration, transmutationConfiguration, out, loggerContext.getLogger(jarConfiguration.getName().orElse("script")));
             return Flux.generate(scriptSource, scriptSource).publishOn(Schedulers.boundedElastic());
         } catch (JsonProcessingException e) {
-            return Flux.error(new JarException(jarConfiguration, recipeConfiguration, "Cannot parse bindings", e));
+            return Flux.error(new JarException(jarConfiguration, transmutationConfiguration, "Cannot parse bindings", e));
         }
     }
 
@@ -77,9 +77,9 @@ public class ScriptSourceJar
 
         private final ScriptEngine engine;
         private final JarConfiguration configuration;
-        private final RecipeConfiguration recipeConfiguration;
+        private final TransmutationConfiguration transmutationConfiguration;
 
-        public ScriptSource(ScriptEngine engine, JarConfiguration configuration, RecipeConfiguration recipeConfiguration, ByteArrayOutputStream out, Logger logger) {
+        public ScriptSource(ScriptEngine engine, JarConfiguration configuration, TransmutationConfiguration transmutationConfiguration, ByteArrayOutputStream out, Logger logger) {
             this.out = out;
             this.logger = logger;
             this.subscribe = configuration.getString("subscribe").map(script -> ScriptExecutor.getScriptExecutor(engine, script)).orElse(null);
@@ -87,7 +87,7 @@ public class ScriptSourceJar
             this.engine = engine;
             engine.getContext().getWriter();
             this.configuration = configuration;
-            this.recipeConfiguration = recipeConfiguration;
+            this.transmutationConfiguration = transmutationConfiguration;
         }
 
         @Override
@@ -121,7 +121,7 @@ public class ScriptSourceJar
                     out.reset();
                 }
             } catch (Exception e) {
-                sink.error(new JarException(configuration, recipeConfiguration, e));
+                sink.error(new JarException(configuration, transmutationConfiguration, "Script failed", e));
             }
             return bindings;
         }

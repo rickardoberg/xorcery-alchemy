@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import dev.xorcery.alchemy.jar.*;
-import dev.xorcery.reactivestreams.api.ContextViewElement;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import org.jvnet.hk2.annotations.Service;
 import org.reactivestreams.Publisher;
@@ -26,14 +25,13 @@ public class YamlFileTransmuteJar
         implements TransmuteJar {
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
         return (flux, context) ->
         {
-            ContextViewElement contextViewElement = new ContextViewElement(context);
-            URI fileUrl = contextViewElement.getURI(JarContext.resultUrl).orElse(null);
+            URI fileUrl = jarConfiguration.getURI(JarContext.resultUrl).orElse(null);
 
             if (fileUrl == null) {
-                return Flux.error(new JarException(jarConfiguration, recipeConfiguration, "Could not find file"));
+                return Flux.error(new JarException(jarConfiguration, transmutationConfiguration, "Could not find file"));
             }
 
             if (fileUrl.getScheme().equals("file")) {
@@ -68,7 +66,7 @@ public class YamlFileTransmuteJar
                     }
                 });
             } catch (Throwable e) {
-                return Flux.error(new JarException(jarConfiguration, recipeConfiguration, e));
+                return Flux.error(new JarException(jarConfiguration, transmutationConfiguration, "Could not write YAML file", e));
             }
         };
     }

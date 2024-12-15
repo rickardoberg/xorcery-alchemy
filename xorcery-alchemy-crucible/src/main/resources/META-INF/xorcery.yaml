@@ -2,5 +2,5 @@ crucible:
   enabled: "{{ defaults.enabled }}"
   closeWhenDone: true
 
-  recipes: []
-  transmutations: []
+recipes: []
+transmutations: []

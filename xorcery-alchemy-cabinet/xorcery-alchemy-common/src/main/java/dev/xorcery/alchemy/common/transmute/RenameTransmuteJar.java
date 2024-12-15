@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.alchemy.jar.TransmuteJar;
 import dev.xorcery.configuration.Configuration;
 import dev.xorcery.metadata.Metadata;
@@ -28,7 +28,7 @@ public class RenameTransmuteJar
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration configuration, TransmutationConfiguration transmutationConfiguration) {
         Configuration metadataRenameConfiguration = configuration.configuration().getConfiguration("metadata");
         Map<String, String> renamedMetadata = new HashMap<>();
         for (Map.Entry<String, JsonNode> renamedField : metadataRenameConfiguration.json().properties()) {

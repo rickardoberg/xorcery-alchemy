@@ -10,9 +10,6 @@ crucible:
   enabled: true
   closeWhenDone: false
 
-opentelemetry:
-  enabled: true
-
 log4j2:
   Configuration:
     thresholdFilter:

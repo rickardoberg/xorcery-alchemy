@@ -79,15 +79,6 @@
           "type" : [ "boolean", "string" ],
           "default" : true,
           "description" : "Default: true"
-        },
-        "recipes" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "$ref" : "#/$defs/recipe"
-          }
-        },
-        "transmutations" : {
-          "type" : [ "array", "string" ]
         }
       }
     },
@@ -144,6 +135,22 @@
                   "type" : "string",
                   "default" : "opensearch",
                   "description" : "Default: opensearch"
+                },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "host" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "index" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
+                "alias" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
                 "context" : {
                   "type" : "object",

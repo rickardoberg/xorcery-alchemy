@@ -35,6 +35,10 @@
                   "default" : true,
                   "description" : "Default: true"
                 },
+                "projectionId" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,
@@ -70,6 +74,10 @@
                   "type" : [ "boolean", "string" ],
                   "default" : true,
                   "description" : "Default: true"
+                },
+                "projectionId" : {
+                  "default" : null,
+                  "description" : "Default: null"
                 },
                 "context" : {
                   "type" : "object",

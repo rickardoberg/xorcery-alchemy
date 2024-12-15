@@ -4,28 +4,21 @@ public class JarException
     extends RuntimeException
 {
     private final JarConfiguration jarConfiguration;
-    private final RecipeConfiguration recipeConfiguration;
+    private final TransmutationConfiguration transmutationConfiguration;
 
-    public JarException(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration, String message) {
+    public JarException(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration, String message) {
         super(message);
         this.jarConfiguration = jarConfiguration;
-        this.recipeConfiguration = recipeConfiguration;
+        this.transmutationConfiguration = transmutationConfiguration;
     }
-
-    public JarException(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration, Throwable cause) {
-        super(cause);
-        this.jarConfiguration = jarConfiguration;
-        this.recipeConfiguration = recipeConfiguration;
-    }
-
-    public JarException(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration, String message, Throwable cause) {
+    public JarException(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration, String message, Throwable cause) {
         super(message, cause);
         this.jarConfiguration = jarConfiguration;
-        this.recipeConfiguration = recipeConfiguration;
+        this.transmutationConfiguration = transmutationConfiguration;
     }
 
     @Override
     public String getMessage() {
-        return recipeConfiguration.getName().map(rn -> rn+".").orElse("")+jarConfiguration.getName().orElseGet(jarConfiguration::getJar)+":"+super.getMessage();
+        return transmutationConfiguration.getName().map(tn -> tn+".").orElse("")+jarConfiguration.getName().orElseGet(jarConfiguration::getJar)+":"+super.getMessage();
     }
 }

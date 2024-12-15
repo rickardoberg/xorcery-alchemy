@@ -24,11 +24,11 @@ public class CSVPublisher
         implements Publisher<MetadataJsonNode<JsonNode>> {
 
     private final JarConfiguration jarConfiguration;
-    private final RecipeConfiguration recipeConfiguration;
+    private final TransmutationConfiguration transmutationConfiguration;
 
-    public CSVPublisher(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public CSVPublisher(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
         this.jarConfiguration = jarConfiguration;
-        this.recipeConfiguration = recipeConfiguration;
+        this.transmutationConfiguration = transmutationConfiguration;
     }
 
     @Override
@@ -36,8 +36,7 @@ public class CSVPublisher
 
         if (s instanceof CoreSubscriber<? super MetadataJsonNode<JsonNode>> coreSubscriber) {
             try {
-                ContextViewElement contextViewElement = new ContextViewElement(coreSubscriber.currentContext());
-                Object sourceUrl = contextViewElement.get(JarContext.sourceUrl)
+                Object sourceUrl = jarConfiguration.get(JarContext.sourceUrl)
                         .orElseThrow(ContextViewElement.missing(JarContext.sourceUrl));
                 URL csvResource = sourceUrl instanceof URL url ? url : new URL(sourceUrl.toString());
                 String csvResourceUrl = csvResource.toExternalForm();
@@ -85,10 +84,10 @@ public class CSVPublisher
                     coreSubscriber.onSubscribe(new RowReaderStreamer(coreSubscriber, csvReader, objectReader));
                 }
             } catch (Throwable e) {
-                coreSubscriber.onError(new JarException(jarConfiguration, recipeConfiguration, e));
+                coreSubscriber.onError(new JarException(jarConfiguration, transmutationConfiguration, "CSV parsing failed", e));
             }
         } else {
-            s.onError(new JarException(jarConfiguration, recipeConfiguration, "Subscriber must implement CoreSubscriber"));
+            s.onError(new JarException(jarConfiguration, transmutationConfiguration, "Subscriber must implement CoreSubscriber"));
         }
     }
 }

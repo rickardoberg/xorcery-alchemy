@@ -73,15 +73,6 @@
           "type" : [ "boolean", "string" ],
           "default" : true,
           "description" : "Default: true"
-        },
-        "recipes" : {
-          "type" : [ "array", "string" ],
-          "items" : {
-            "$ref" : "#/$defs/recipe"
-          }
-        },
-        "transmutations" : {
-          "type" : [ "array", "string" ]
         }
       }
     },

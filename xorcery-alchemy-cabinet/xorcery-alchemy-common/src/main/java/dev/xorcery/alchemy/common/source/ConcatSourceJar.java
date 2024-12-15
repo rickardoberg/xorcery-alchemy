@@ -1,10 +1,10 @@
 package dev.xorcery.alchemy.common.source;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import dev.xorcery.alchemy.jar.Cabinet;
+import dev.xorcery.alchemy.crucible.Transmutations;
 import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
 import dev.xorcery.alchemy.jar.SourceJar;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.configuration.Configuration;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 import jakarta.inject.Inject;
@@ -18,19 +18,19 @@ import java.util.Optional;
 public class ConcatSourceJar
     implements SourceJar
 {
-    private final Cabinet cabinet;
+    private final Transmutations transmutations;
 
     @Inject
-    public ConcatSourceJar(Cabinet cabinet) {
-        this.cabinet = cabinet;
+    public ConcatSourceJar(Transmutations transmutations) {
+        this.transmutations = transmutations;
     }
 
     @Override
-    public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
+    public Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration configuration, TransmutationConfiguration transmutationConfiguration) {
         return configuration.configuration().getObjectListAs("sources", source -> new JarConfiguration(new Configuration(source))).map(sources ->
         {
             List<Flux<MetadataJsonNode<JsonNode>>> sourceFluxes = sources.stream()
-                    .map(source -> cabinet.newSourceFlux(source, recipeConfiguration))
+                    .map(source -> transmutations.newSourceFlux(source, transmutationConfiguration))
                     .filter(Optional::isPresent)
                     .map(Optional::get).toList();
             return Flux.concat(sourceFluxes);

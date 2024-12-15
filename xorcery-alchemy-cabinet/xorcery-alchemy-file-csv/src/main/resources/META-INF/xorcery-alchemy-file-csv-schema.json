@@ -53,6 +53,10 @@
                   "default" : false,
                   "description" : "Default: false"
                 },
+                "sourceUrl" : {
+                  "default" : null,
+                  "description" : "Default: null"
+                },
                 "context" : {
                   "type" : "object",
                   "additionalProperties" : false,

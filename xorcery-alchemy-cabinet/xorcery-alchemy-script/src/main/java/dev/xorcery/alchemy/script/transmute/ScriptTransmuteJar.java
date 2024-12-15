@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.xorcery.alchemy.jar.JarConfiguration;
 import dev.xorcery.alchemy.jar.JarException;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.alchemy.jar.TransmuteJar;
 import dev.xorcery.alchemy.script.ByteArrayOutputStreamWithoutNewLine;
 import dev.xorcery.alchemy.script.ScriptFlux;
@@ -44,7 +44,7 @@ public class ScriptTransmuteJar
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration) {
         String engineName = jarConfiguration.getString("engine").orElse("nashorn");
         ScriptEngine engine = new ScriptEngineManager().getEngineByName(engineName);
         if (engine == null) {
@@ -58,9 +58,9 @@ public class ScriptTransmuteJar
             ByteArrayOutputStream out = new ByteArrayOutputStreamWithoutNewLine();
             engine.getContext().setWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 
-            return new ScriptFlux(engine, jarConfiguration, recipeConfiguration, loggerContext.getLogger(jarConfiguration.getName().orElse("script")));
+            return new ScriptFlux(engine, jarConfiguration, transmutationConfiguration, loggerContext.getLogger(jarConfiguration.getName().orElse("script")));
         } catch (JsonProcessingException e) {
-            return (metadataJsonNodeFlux, contextView) -> Flux.error(new JarException(jarConfiguration, recipeConfiguration, "Cannot parse bindings", e));
+            return (metadataJsonNodeFlux, contextView) -> Flux.error(new JarException(jarConfiguration, transmutationConfiguration, "Cannot parse bindings", e));
         }
     }
 }

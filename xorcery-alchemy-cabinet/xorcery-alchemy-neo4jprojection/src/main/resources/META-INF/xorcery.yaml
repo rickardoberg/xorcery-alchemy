@@ -3,11 +3,9 @@ jars:
     - jar: projection
       name: projection
       enabled: "{{ jars.enabled }}"
-      context:
-        projectionId: null
+      projectionId: null
   transmutejars:
     - jar: projection
       name: projection
       enabled: "{{ jars.enabled }}"
-      context:
-        projectionId: null
+      projectionId: null

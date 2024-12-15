@@ -7,5 +7,5 @@ import reactor.core.publisher.Flux;
 public interface SourceJar
     extends Jar
 {
-    Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration jarConfiguration, RecipeConfiguration recipeConfiguration);
+    Flux<MetadataJsonNode<JsonNode>> newSource(JarConfiguration jarConfiguration, TransmutationConfiguration transmutationConfiguration);
 }

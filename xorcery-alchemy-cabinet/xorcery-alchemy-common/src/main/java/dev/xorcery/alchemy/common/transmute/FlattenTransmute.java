@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
 
 import java.util.Collections;
@@ -23,7 +23,7 @@ public class FlattenTransmute implements Function<MetadataJsonNode<JsonNode>, It
     private final String prefix;
 
 
-    public FlattenTransmute(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
+    public FlattenTransmute(JarConfiguration configuration, TransmutationConfiguration transmutationConfiguration) {
         includeKey = key -> true;
         nameMapper = n -> n;
         prefix = "";

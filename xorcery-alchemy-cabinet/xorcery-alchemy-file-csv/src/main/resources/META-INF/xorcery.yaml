@@ -7,5 +7,4 @@ jars:
     separator: null
     quote: null
     headers: false
-    context:
-      sourceUrl: null
+    sourceUrl: null

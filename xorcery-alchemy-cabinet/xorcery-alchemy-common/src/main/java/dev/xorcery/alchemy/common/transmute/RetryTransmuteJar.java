@@ -2,7 +2,7 @@ package dev.xorcery.alchemy.common.transmute;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import dev.xorcery.alchemy.jar.JarConfiguration;
-import dev.xorcery.alchemy.jar.RecipeConfiguration;
+import dev.xorcery.alchemy.jar.TransmutationConfiguration;
 import dev.xorcery.alchemy.jar.TransmuteJar;
 import dev.xorcery.collections.Element;
 import dev.xorcery.reactivestreams.api.MetadataJsonNode;
@@ -29,7 +29,7 @@ public class RetryTransmuteJar
     }
 
     @Override
-    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration configuration, RecipeConfiguration recipeConfiguration) {
+    public BiFunction<Flux<MetadataJsonNode<JsonNode>>, ContextView, Publisher<MetadataJsonNode<JsonNode>>> newTransmute(JarConfiguration configuration, TransmutationConfiguration transmutationConfiguration) {
         Retry retry = RetrySpec.backoff(
                         configuration.getLong("maxAttempts").filter(v -> v != -1).orElse(Long.MAX_VALUE),
                         Duration.parse("PT" + configuration.getString("minBackoff").orElseThrow(Element.missing("minBackoff"))))
